@@ -1,0 +1,554 @@
+<!DOCTYPE html>
+<html lang=zh>
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="utf-8">
+  
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, minimal-ui">
+  <meta name="renderer" content="webkit">
+  <meta http-equiv="Cache-Control" content="no-transform">
+  <meta http-equiv="Cache-Control" content="no-siteapp">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <meta name="format-detection" content="telephone=no,email=no,adress=no">
+  <!-- Color theme for statusbar -->
+  <meta name="theme-color" content="#000000">
+  <!-- 强制页面在当前窗口以独立页面显示,防止别人在框架里调用页面 -->
+  <meta http-equiv="window-target" content="_top">
+  
+  
+  <title>为什么浮点数在运算过程中会造成精度损失 | Dongfang&#39;s技术博客,iOS技术分享,逆向与安全,Cydia,底层原理,Swift,Objective-C</title>
+  <meta name="description" content="在日常程序开发中，很多时候我们需要用到实数，这时候我们就需要使用浮点数来表示了。现在我们先来看下面的代码： 1234let a: Float = 0.2let b: Float = 0.3let num = a * bprint(num)  这是一个最简单的Float乘法，你觉得打印结果是多少，0.06吗？实际上打印结果是0.060000002，看到这个结果你有没有吃惊，聪明的计算机竟然连最简单的">
+<meta property="og:type" content="article">
+<meta property="og:title" content="为什么浮点数在运算过程中会造成精度损失">
+<meta property="og:url" content="http://blog.weidongfang.online/2020/01/03/floating-point-details/index.html">
+<meta property="og:site_name" content="Dongfang&#39;s技术博客,iOS技术分享,逆向与安全,Cydia,底层原理,Swift,Objective-C">
+<meta property="og:description" content="在日常程序开发中，很多时候我们需要用到实数，这时候我们就需要使用浮点数来表示了。现在我们先来看下面的代码： 1234let a: Float = 0.2let b: Float = 0.3let num = a * bprint(num)  这是一个最简单的Float乘法，你觉得打印结果是多少，0.06吗？实际上打印结果是0.060000002，看到这个结果你有没有吃惊，聪明的计算机竟然连最简单的">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="http://blog.weidongfang.online/2020/01/03/resource/images/WX20200120-200630@2x.png">
+<meta property="og:image" content="http://blog.weidongfang.online/2020/01/03/resource/images/914b71bf1d85fb6ed76e1135f39b6941.jpg">
+<meta property="og:image" content="http://blog.weidongfang.online/2020/01/03/resource/images/WX20200120-202705@2x.png">
+<meta property="og:image" content="http://blog.weidongfang.online/2020/01/03/resource/images/f922249a89667c4d10239eb8840dc94c.jpg">
+<meta property="og:image" content="http://blog.weidongfang.online/2020/01/03/resource/images/WX20200120-210539@2x.png">
+<meta property="og:image" content="http://blog.weidongfang.online/2020/01/03/resource/images/WX20200120-211642@2x.png">
+<meta property="og:image" content="http://blog.weidongfang.online/2020/01/03/resource/images/WX20191224-190058.png">
+<meta property="og:image" content="http://blog.weidongfang.online/2020/01/03/resource/images/WX20200120-213249@2x.png">
+<meta property="og:updated_time" content="2020-01-20T14:17:09.421Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="为什么浮点数在运算过程中会造成精度损失">
+<meta name="twitter:description" content="在日常程序开发中，很多时候我们需要用到实数，这时候我们就需要使用浮点数来表示了。现在我们先来看下面的代码： 1234let a: Float = 0.2let b: Float = 0.3let num = a * bprint(num)  这是一个最简单的Float乘法，你觉得打印结果是多少，0.06吗？实际上打印结果是0.060000002，看到这个结果你有没有吃惊，聪明的计算机竟然连最简单的">
+<meta name="twitter:image" content="http://blog.weidongfang.online/2020/01/03/resource/images/WX20200120-200630@2x.png">
+  <!-- Canonical links -->
+  <link rel="canonical" href="http://blog.weidongfang.online/2020/01/03/floating-point-details/index.html">
+  
+    <link rel="alternate" href="/atom.xml" title="Dongfang&#39;s技术博客,iOS技术分享,逆向与安全,Cydia,底层原理,Swift,Objective-C" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/images/favicon.jpg" type="image/x-icon">
+  
+  <link rel="stylesheet" href="/css/style.css">
+  
+  
+    <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/gitment@0.0.3/style/default.min.css">
+  
+  
+  
+</head>
+
+
+<body class="main-right theme-purple no-sidebar" itemscope itemtype="http://schema.org/WebPage">
+  <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+  <div class="slimContent">
+    <div class="navbar-header">
+      
+      
+      <div class="profile-block text-center">
+        <a id="avatar" href="https://github.com/dev-dongfang" target="_blank">
+          <img class="img-circle img-rotate" src="/images/favicon.jpg" width="200" height="200">
+        </a>
+        <h2 id="name" class="hidden-xs hidden-sm">Dev-Dongfang</h2>
+        <h3 id="title" class="hidden-xs hidden-sm hidden-md">Keep Moving ！</h3>
+        <small id="location" class="text-muted hidden-xs hidden-sm"><i class="icon icon-map-marker"></i> Beijing, China</small>
+      </div>
+      
+      <div class="search" id="search-form-wrap">
+
+    <form class="search-form sidebar-form" method="GET" action="https://www.baidu.com/s?">
+	<div class="input-group">
+    	<input name="wd" type="text" class="form-control search-form-input" placeholder="搜索" />
+	    <span class="input-group-btn">
+	    	<button type="submit" class=" btn btn-flat search-form-submit"><i class="icon icon-search"></i></button>
+	    </span>
+    </div>
+</form>
+
+</div>
+      <button class="navbar-toggle collapsed" type="button" data-toggle="collapse" data-target="#main-navbar" aria-controls="main-navbar" aria-expanded="false">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+    </div>
+    <nav id="main-navbar" class="collapse navbar-collapse" itemscope itemtype="http://schema.org/SiteNavigationElement" role="navigation">
+      <ul class="nav navbar-nav main-nav menu-highlight">
+        
+        
+        <li class="menu-item menu-item-home">
+          <a href="/">
+            
+            <i class="icon icon-home-fill"></i>
+            
+            <span class="menu-title">首页</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives">
+            
+            <i class="icon icon-archives-fill"></i>
+            
+            <span class="menu-title">归档</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories">
+            
+            <i class="icon icon-folder"></i>
+            
+            <span class="menu-title">分类</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about">
+            
+            <i class="icon icon-cup-fill"></i>
+            
+            <span class="menu-title">关于</span>
+          </a>
+        </li>
+        
+      </ul>
+      
+	
+    <ul class="social-links">
+    	
+        <li><a href="https://github.com/dev-dongfang" target="_blank" title="Github" data-toggle=tooltip data-placement=top><i class="icon icon-github"></i></a></li>
+        
+        <li><a href="https://twitter.com/weidf" target="_blank" title="Twitter" data-toggle=tooltip data-placement=top><i class="icon icon-twitter"></i></a></li>
+        
+        <li><a href="mailto:dev.dongfang@gmail.com" target="_blank" title="Email" data-toggle=tooltip data-placement=top><i class="icon icon-email"></i></a></li>
+        
+    </ul>
+
+    </nav>
+  </div>
+</header>
+
+  
+    <aside class="sidebar" itemscope itemtype="http://schema.org/WPSideBar">
+  <div class="slimContent">
+    
+      <div class="widget">
+    <h3 class="widget-title">公告</h3>
+    <div class="widget-body">
+        <div id="board">
+            <div class="content">
+                <p>欢迎交流与分享经验!</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">分类</h3>
+    <div class="widget-body">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/Swift/">Swift</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Swift-算法/">Swift 算法</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/其它/">其它</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/算法/">算法</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/翻译/">翻译</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/逆向与安全/">逆向与安全</a><span class="category-list-count">1</span></li></ul>
+    </div>
+  </div>
+
+
+    
+      
+
+    
+      
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">归档</h3>
+    <div class="widget-body">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/01/">一月 2020</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/11/">十一月 2019</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/10/">十月 2019</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/09/">九月 2019</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/08/">八月 2019</a><span class="archive-list-count">1</span></li></ul>
+    </div>
+  </div>
+
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">最新文章</h3>
+    <div class="widget-body">
+      <ul class="recent-post-list list-unstyled no-thumbnail">
+        
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                <a class="category-link" href="/categories/逆向与安全/">逆向与安全</a>
+              </p>
+              <p class="item-title">
+                <a href="/2020/01/10/package-deb-from-app/" class="title">【逆】如何将App打包成deb安装包</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2020-01-10T12:21:45.000Z" itemprop="datePublished">2020-01-10</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                <a class="category-link" href="/categories/其它/">其它</a>
+              </p>
+              <p class="item-title">
+                <a href="/2020/01/03/floating-point-details/" class="title">为什么浮点数在运算过程中会造成精度损失</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2020-01-03T12:21:45.000Z" itemprop="datePublished">2020-01-03</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                <a class="category-link" href="/categories/翻译/">翻译</a>
+              </p>
+              <p class="item-title">
+                <a href="/2019/11/06/Get-started-with-SwiftUI/" class="title">【译】SwiftUI入门教程</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2019-11-06T10:23:49.000Z" itemprop="datePublished">2019-11-06</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                <a class="category-link" href="/categories/翻译/">翻译</a>
+              </p>
+              <p class="item-title">
+                <a href="/2019/11/03/Avoiding-near-duplicates-in-sets/" class="title">【译】如何在Set集合中避免重复元素</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2019-11-03T10:23:49.000Z" itemprop="datePublished">2019-11-03</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                <a class="category-link" href="/categories/Swift/">Swift</a>
+              </p>
+              <p class="item-title">
+                <a href="/2019/10/16/RxSwift-brief/" class="title">【笔记】RxSwift简介</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2019-10-16T07:22:35.000Z" itemprop="datePublished">2019-10-16</time>
+              </p>
+            </div>
+          </li>
+          
+      </ul>
+    </div>
+  </div>
+  
+
+    
+  </div>
+</aside>
+
+  
+  
+<main class="main" role="main">
+  <div class="content">
+  <article id="post-floating-point-details" class="article article-type-post" itemscope itemtype="http://schema.org/BlogPosting">
+    
+    <div class="article-header">
+      
+        
+  
+    <h1 class="article-title" itemprop="name">
+      为什么浮点数在运算过程中会造成精度损失
+    </h1>
+  
+
+      
+      <div class="article-meta">
+        <span class="article-date">
+    <i class="icon icon-calendar-check"></i>
+	<a href="/2020/01/03/floating-point-details/" class="article-date">
+	  <time datetime="2020-01-03T12:21:45.000Z" itemprop="datePublished">2020-01-03</time>
+	</a>
+</span>
+        
+  <span class="article-category">
+    <i class="icon icon-folder"></i>
+    <a class="article-category-link" href="/categories/其它/">其它</a>
+  </span>
+
+        
+
+        
+
+        <span class="post-comment"><i class="icon icon-comment"></i> <a href="/2020/01/03/floating-point-details/#comments" class="article-comment-link">评论</a></span>
+        
+	
+		<span class="post-wordcount hidden-xs" itemprop="wordCount">字数统计: 1.8k(字)</span>
+	
+	
+		<span class="post-readcount hidden-xs" itemprop="timeRequired">阅读时长: 6(分)</span>
+	
+
+      </div>
+    </div>
+    <div class="article-entry marked-body" itemprop="articleBody">
+      
+        <p>在日常程序开发中，很多时候我们需要用到实数，这时候我们就需要使用浮点数来表示了。现在我们先来看下面的代码：</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> a: <span class="type">Float</span> = <span class="number">0.2</span></span><br><span class="line"><span class="keyword">let</span> b: <span class="type">Float</span> = <span class="number">0.3</span></span><br><span class="line"><span class="keyword">let</span> num = a * b</span><br><span class="line"><span class="built_in">print</span>(num)</span><br></pre></td></tr></table></figure>
+
+<p>这是一个最简单的Float乘法，你觉得打印结果是多少，0.06吗？实际上打印结果是<code>0.060000002</code>，看到这个结果你有没有吃惊，聪明的计算机竟然连最简单的小数乘法都算不好。</p>
+<a id="more"></a>
+
+<p>你可以将上面代码翻译成Objective-C、C++、Java、JavaScript或者其它语言，我相信你会看到同样的结果。</p>
+<p>在回答是什么造成这个结果之前，我们先来思考一个 问题，32bit能够表示多少个数字？正常情况下是2^32个，大概三十多亿个数字，不能再多了。但是实数却是有无限个的，那么我们应该如何使用有限的bit位表示无限的实数呢？</p>
+<h1 id="1-定点数表示法-BCD码"><a href="#1-定点数表示法-BCD码" class="headerlink" title="1.定点数表示法-BCD码"></a>1.定点数表示法-BCD码</h1><p>BCD码是用4位二进制数表示1位十进制数中的0<del>9这10个数字，那么32bit能够表示8个这样的数字，表示范围是0</del>99999999，如果我们用最后两位表示小数，那么范围就是0~999999.99。</p>
+<p>例如，我们用BCD码表示123456.78，那么这个数字在内存中是这样的：</p>
+<p><img src="../resource/images/WX20200120-200630@2x.png" alt></p>
+<p>这种数字表示法就是BCD码表示法，用于超市收银、温度计数字、重量等较小的计数中还可以，但是一旦需要表示较大或者较小的数字，这种方法就无可奈何了。这种小数点位置固定的表示法，我成称之为<strong>定点数</strong>。</p>
+<p>这种数字表示法主要有两个缺点 ：</p>
+<ol>
+<li>这种表示方法有点浪费空间，本来32bit能够表示将近40亿个数字，使用BCD码方式却只能表示1亿个数字。</li>
+<li>这种表示法能够表示的范围有限。</li>
+</ol>
+<h1 id="2-浮点数表示法"><a href="#2-浮点数表示法" class="headerlink" title="2. 浮点数表示法"></a>2. 浮点数表示法</h1><p>事实上，程序开发中，很多时候我们既需要表示很大的数字，比如计算光速、地球质量、宇宙物质总质量等，又要表示很小的数，比如一个原子的质量、cpu一个晶体管长度、cpu的主频周期等。在日常生活中，我们一般会用科学计数法来表示这些数字，实际上，在计算机上我们同样可以使用<strong>科学计数法</strong>来表示这些数字。</p>
+<p>IEEE标准规定，计算机中的科学计数法分为两种，一种是32bit的叫做Float类型，另一种是64bit的叫做Double类型。这里主要讲Float类型，Double类型也是一样的道理。Float类型的bit位分布如下所示：</p>
+<p><img src="../resource/images/914b71bf1d85fb6ed76e1135f39b6941.jpg" alt></p>
+<ol>
+<li><strong>s=符号位</strong>：顾名思义，符号位表示一个数的符号，是正数还是负数。</li>
+<li><strong>e=指数位</strong>：指数位用来表示数字的指数部分，Float中指数位占8b。能够表示0<del>255的范围，这里使用1</del>254分别映射到-126~125上。（0和255另有用途）</li>
+<li><strong>f=有效数位</strong>：有效数位就是小数点后的数字。</li>
+</ol>
+<p>这样，我们就可以用科学计数法来表示一个数字了：</p>
+<p><img src="../resource/images/WX20200120-202705@2x.png" alt></p>
+<p>通过这个公式，我们无法表示0和其它特殊的数字，比如无穷大、无穷小，实际上这些数字需要使用钢材的0和255两个数字组合来表示了，如下所示：</p>
+<p><img src="../resource/images/f922249a89667c4d10239eb8840dc94c.jpg" alt></p>
+<p>在这样的浮点数表示下，32bit能够表示的范围扩大了很多，大约是<code>1.17\*10^-38</code>到<code>3.40\*10^38</code>正是因为这种表示法<strong>小数点的位置是变动的</strong>，因此才被叫做<strong>浮点数</strong>。</p>
+<h1 id="3-浮点数二进制转化"><a href="#3-浮点数二进制转化" class="headerlink" title="3. 浮点数二进制转化"></a>3. 浮点数二进制转化</h1><p>那么一个十进制数字到底是怎么被转换成浮点数的呢？下面我们以<code>11.3</code>为例，详细介绍它是怎么被转换成Float类型数字的。</p>
+<p>首先，我们先把这个数字的整数部分转换成二进制，<code>11</code>转换成二进制就是<code>1011</code>。</p>
+<p>接下来我们把小数部分转换成二进制，小数部分转换二进制的规则是这样的：<strong>小数部分乘以2，然后看是否超过1，如果超过1则记下1并记下小数部分，否则记下0，一直循环下去，直到小数 部分是0为止。</strong>那么0.3的转换就是这样的，如下所示：</p>
+<p><img src="../resource/images/WX20200120-210539@2x.png" alt></p>
+<p>我们发现，0.3转换成二进制是一个无限循环的数字：0.0100110011001……。</p>
+<p>最后我们将整数部分和小数部分拼接到一起：1011.0100110011001…，因为是科学计数法，小数点左移3位，最终就是：1.0110100110011…*2^3。也就是说，s=0，e=3，f=01100110011001100…(23位)。</p>
+<p>这也解释了开篇遇到的那个问题。0.2*0.3=0.060000002，因为0.06表示成Float是这样的：</p>
+<p><img src="../resource/images/WX20200120-211642@2x.png" alt></p>
+<h1 id="4-浮点数的精度丢失"><a href="#4-浮点数的精度丢失" class="headerlink" title="4. 浮点数的精度丢失"></a>4. 浮点数的精度丢失</h1><p>来看这个浮点数加法，两千万个Float类型1相加，你猜结果是多少，<strong>16777216.0</strong>，吃惊不😲？我相信其它语言也是同样的结果。下面咱们就一起来看看浮点数的加法到底是怎么运算的。</p>
+<p><img src="../resource/images/WX20191224-190058.png" alt></p>
+<p>浮点数加法原理非常简单，六个字：<strong>先对齐，再计算</strong>。就是说，如果两个浮点数的指数位如果不一样，我们要先把两个浮点数的指数位变成一样的，然后只计算有效位的加法即可。</p>
+<p>下面我们来看下<code>16777216.0+1</code>到底是怎么计算的。16777216和1的二进制表示如下图所示：</p>
+<p><img src="../resource/images/WX20200120-213249@2x.png" alt></p>
+<p>我们知道加法的原理是先对齐再计算，16777216的指数位是24，1的指数位是0，为了对齐指数位，1的小数点需要左移24位，由于Float类型的浮点数指数位只有23位，移动完毕后，1变成了0，因此，16777216之后对1的加法都是无效的。</p>
+<h1 id="5-Kahan-Summation算法"><a href="#5-Kahan-Summation算法" class="headerlink" title="5. Kahan Summation算法"></a>5. Kahan Summation算法</h1><p>面对Float精度丢失的问题，科学家们想出了一个解决办法，那就是Kahan Summation算法。</p>
+<p>这个算法主要是在每次计算过程中，都用一次减法，把加法计算中损失的数字记录下来，再做一次运算，<a href="https://en.wikipedia.org/wiki/Kahan_summation_algorithm" target="_blank" rel="noopener">wiki</a>里有这个算法的证明，感兴趣可以去阅读，下面是Kahan Summation算法计算上个章节中算法题目的代码，计算结果是<code>2e+07</code>，一点都不差，完美！</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">var sum: Float = 0</span><br><span class="line">var c: Float = 0</span><br><span class="line">for _ in 0..&lt;20000000 &#123;</span><br><span class="line">    let x: Float = 1</span><br><span class="line">    let y: Float = x - c</span><br><span class="line">    let t: Float = sum + y</span><br><span class="line">    c = (t - sum) - y</span><br><span class="line">    sum = t</span><br><span class="line">&#125;</span><br><span class="line">print(sum)</span><br><span class="line"></span><br><span class="line"><span class="meta">&gt;</span> 2e+07</span><br></pre></td></tr></table></figure>
+
+<h1 id="6-BigDecimal的浮点数精度解决方案"><a href="#6-BigDecimal的浮点数精度解决方案" class="headerlink" title="6. BigDecimal的浮点数精度解决方案"></a>6. BigDecimal的浮点数精度解决方案</h1><p>在java开发中，如果遇到高精度计算时候，我们需要使用BigDecimal类型，需要注意的是，我们需要将double、float等类型转换成String类型，然后使用BigDecimal的构造方法进行 构造，如果直接使用double或者 float类型构造BigDecimal，计算结果还是有精度误差的。</p>
+<p>具体BigDecimal是怎么处理的，且等我改天咨询一下java大神。</p>
+<blockquote>
+<p>Reference</p>
+<p><a href="https://time.geekbang.org/column/intro/170" target="_blank" rel="noopener">https://time.geekbang.org/column/intro/170</a></p>
+<p><a href="https://baike.baidu.com/item/BCD码/826461?fr=aladdin" target="_blank" rel="noopener">https://baike.baidu.com/item/BCD%E7%A0%81/826461?fr=aladdin</a></p>
+<p><a href="https://blog.csdn.net/m0_37482190/article/details/87218019" target="_blank" rel="noopener">https://blog.csdn.net/m0_37482190/article/details/87218019</a></p>
+<p><a href="https://en.wikipedia.org/wiki/Kahan_summation_algorithm" target="_blank" rel="noopener">https://en.wikipedia.org/wiki/Kahan_summation_algorithm</a></p>
+<p><a href="https://blog.csdn.net/yin_xing_ye/article/details/94596247" target="_blank" rel="noopener">https://blog.csdn.net/yin_xing_ye/article/details/94596247</a></p>
+</blockquote>
+
+      
+    </div>
+    <div class="article-footer">
+      <blockquote class="mt-2x">
+  <ul class="post-copyright list-unstyled">
+    
+    <li class="post-copyright-link hidden-xs">
+      <strong>本文链接：</strong>
+      <a href="http://blog.weidongfang.online/2020/01/03/floating-point-details/" title="为什么浮点数在运算过程中会造成精度损失" target="_blank" rel="external">http://blog.weidongfang.online/2020/01/03/floating-point-details/</a>
+    </li>
+    
+    <li class="post-copyright-license">
+      <strong>版权声明： </strong> 本博客所有文章除特别声明外，均采用 <a href="http://creativecommons.org/licenses/by/4.0/deed.zh" target="_blank" rel="external">CC BY 4.0 CN协议</a> 许可协议。转载请注明出处！
+    </li>
+  </ul>
+</blockquote>
+
+
+<div class="panel panel-default panel-badger">
+  <div class="panel-body">
+    <figure class="media">
+      <div class="media-left">
+        <a href="https://github.com/dev-dongfang" target="_blank" class="img-burn thumb-sm visible-lg">
+          <img src="/images/favicon.jpg" class="img-rounded w-full" alt="">
+        </a>
+      </div>
+      <div class="media-body">
+        <h3 class="media-heading"><a href="https://github.com/dev-dongfang" target="_blank"><span class="text-dark">Dev-Dongfang</span><small class="ml-1x">Keep Moving ！</small></a></h3>
+        <div>热爱计算机，热爱软件开发，iOS开发者，Swift开发者，熟悉iOS系统逆向与安全。熟悉常用的数据结构与算法，对计算机操作系统和编译过程比较感兴趣，目前仍在修炼。</div>
+      </div>
+    </figure>
+  </div>
+</div>
+
+
+    </div>
+  </article>
+  
+    
+  <section id="comments">
+  	
+
+    
+  </section>
+
+
+  
+</div>
+
+  <nav class="bar bar-footer clearfix" data-stick-bottom>
+  <div class="bar-inner">
+  
+  <ul class="pager pull-left">
+    
+    <li class="prev">
+      <a href="/2020/01/10/package-deb-from-app/" title="【逆】如何将App打包成deb安装包"><i class="icon icon-angle-left" aria-hidden="true"></i><span>&nbsp;&nbsp;上一篇</span></a>
+    </li>
+    
+    
+    <li class="next">
+      <a href="/2019/11/06/Get-started-with-SwiftUI/" title="【译】SwiftUI入门教程"><span>下一篇&nbsp;&nbsp;</span><i class="icon icon-angle-right" aria-hidden="true"></i></a>
+    </li>
+    
+    
+  </ul>
+  
+  
+  
+  <div class="bar-right">
+    
+    <div class="share-component" data-sites="wechat,twitter,qq,weibo" data-mobile-sites="wechat,twitter,qq,weibo"></div>
+    
+  </div>
+  </div>
+</nav>
+  
+
+
+</main>
+
+  <footer class="footer" itemscope itemtype="http://schema.org/WPFooter">
+	
+	
+    <ul class="social-links">
+    	
+        <li><a href="https://github.com/dev-dongfang" target="_blank" title="Github" data-toggle=tooltip data-placement=top><i class="icon icon-github"></i></a></li>
+        
+        <li><a href="https://twitter.com/weidf" target="_blank" title="Twitter" data-toggle=tooltip data-placement=top><i class="icon icon-twitter"></i></a></li>
+        
+        <li><a href="mailto:dev.dongfang@gmail.com" target="_blank" title="Email" data-toggle=tooltip data-placement=top><i class="icon icon-email"></i></a></li>
+        
+    </ul>
+
+    <div class="copyright">
+    	
+        <div class="publishby">
+        	Theme by <a href="https://github.com/cofess" target="_blank"> cofess </a>base on <a href="https://github.com/cofess/hexo-theme-pure" target="_blank">pure</a>.
+        </div>
+    </div>
+</footer>
+  <script src="//cdn.jsdelivr.net/npm/jquery@1.12.4/dist/jquery.min.js"></script>
+<script>
+window.jQuery || document.write('<script src="js/jquery.min.js"><\/script>')
+</script>
+<script src="/js/plugin.min.js"></script>
+<script src="/js/application.js"></script>
+
+
+    <script>
+(function ($) {
+    $('.search-form').on('submit', function (e) {
+        var keyword = $('.search-form-input[name="wd"]').val();
+        window.location = 'https://www.baidu.com/s?wd=site:blog.weidongfang.online ' + keyword;
+        return false;
+    });
+})(jQuery);
+</script>
+
+
+
+
+   
+
+
+
+
+   
+    
+<script src="//cdn.jsdelivr.net/npm/gitment@0.0.3/dist/gitment.browser.min.js"></script>
+<script>
+var gitment = new Gitment({
+  // id默认为当前页面url，如果url后带参数或锚点，gitment要重新初始化
+  // https://github.com/imsun/gitment/issues/55
+  // 解决方案：id:window.location.pathname,或者将id设置为当前页面标题
+  id: '为什么浮点数在运算过程中会造成精度损失', 
+  owner: 'hell03W', // 可以是你的GitHub用户名，也可以是github id
+  repo: 'https://github.com/hell03W/TechBlogComment',
+  oauth: {
+    client_id: '30db1eac28643da3f3ea',
+    client_secret: '7d19e8067df8a03bdb5d26e6e2b0490b778031cb',
+  }
+})
+gitment.render('comments')
+</script>
+
+
+
+
+
+
+
+
+    <script defer>
+var _hmt = _hmt || [];
+(function() {
+    var hm = document.createElement("script");
+    hm.src = "//hm.baidu.com/hm.js?9973e9eaf1485d0719cd19d7436e2fea";
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+
+
+</body>
+</html>

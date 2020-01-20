@@ -17,20 +17,22 @@
   <meta http-equiv="window-target" content="_top">
   
   
-  <title>Dongfang&#39;s技术博客,iOS技术分享,逆向与安全,Cydia,底层原理,Swift,Objective-C</title>
-  <meta name="description" content="For Presonal Blog">
-<meta property="og:type" content="website">
-<meta property="og:title" content="Dongfang&#39;s技术博客,iOS技术分享,逆向与安全,Cydia,底层原理,Swift,Objective-C">
-<meta property="og:url" content="http://blog.weidongfang.online/README.html">
+  <title>【译】如何在Set集合中避免重复元素 | Dongfang&#39;s技术博客,iOS技术分享,逆向与安全,Cydia,底层原理,Swift,Objective-C</title>
+  <meta name="description" content="文章翻译自 Avoiding near-duplicates in sets, 作者Paul Hudson @twostraws是一名优秀的Swifter。这是我第一次翻译，可能有翻译不到位的地方，如果有任何问题，欢迎反馈。学习学习再学习，加油💪！   Julian Schiavo写道：我想用Set集合来保证我的Array中元素是唯一的，但是Set集合中每个元素都包含一个Date类型的变量，当">
+<meta property="og:type" content="article">
+<meta property="og:title" content="【译】如何在Set集合中避免重复元素">
+<meta property="og:url" content="http://blog.weidongfang.online/2019/11/03/Avoiding-near-duplicates-in-sets/index.html">
 <meta property="og:site_name" content="Dongfang&#39;s技术博客,iOS技术分享,逆向与安全,Cydia,底层原理,Swift,Objective-C">
-<meta property="og:description" content="For Presonal Blog">
+<meta property="og:description" content="文章翻译自 Avoiding near-duplicates in sets, 作者Paul Hudson @twostraws是一名优秀的Swifter。这是我第一次翻译，可能有翻译不到位的地方，如果有任何问题，欢迎反馈。学习学习再学习，加油💪！   Julian Schiavo写道：我想用Set集合来保证我的Array中元素是唯一的，但是Set集合中每个元素都包含一个Date类型的变量，当">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2019-12-24T09:59:59.951Z">
+<meta property="og:image" content="http://blog.weidongfang.online/2019/11/03/resource/images/coding-man-2.jpg">
+<meta property="og:updated_time" content="2020-01-20T08:22:04.139Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Dongfang&#39;s技术博客,iOS技术分享,逆向与安全,Cydia,底层原理,Swift,Objective-C">
-<meta name="twitter:description" content="For Presonal Blog">
+<meta name="twitter:title" content="【译】如何在Set集合中避免重复元素">
+<meta name="twitter:description" content="文章翻译自 Avoiding near-duplicates in sets, 作者Paul Hudson @twostraws是一名优秀的Swifter。这是我第一次翻译，可能有翻译不到位的地方，如果有任何问题，欢迎反馈。学习学习再学习，加油💪！   Julian Schiavo写道：我想用Set集合来保证我的Array中元素是唯一的，但是Set集合中每个元素都包含一个Date类型的变量，当">
+<meta name="twitter:image" content="http://blog.weidongfang.online/2019/11/03/resource/images/coding-man-2.jpg">
   <!-- Canonical links -->
-  <link rel="canonical" href="http://blog.weidongfang.online/README.html">
+  <link rel="canonical" href="http://blog.weidongfang.online/2019/11/03/Avoiding-near-duplicates-in-sets/index.html">
   
     <link rel="alternate" href="/atom.xml" title="Dongfang&#39;s技术博客,iOS技术分享,逆向与安全,Cydia,底层原理,Swift,Objective-C" type="application/atom+xml">
   
@@ -276,36 +278,93 @@
   
 <main class="main" role="main">
   <div class="content">
-  <article id="page-" class="article article-type-page" itemscope itemtype="http://schema.org/BlogPosting">
+  <article id="post-Avoiding-near-duplicates-in-sets" class="article article-type-post" itemscope itemtype="http://schema.org/BlogPosting">
     
     <div class="article-header">
+      
+        
+  
+    <h1 class="article-title" itemprop="name">
+      【译】如何在Set集合中避免重复元素
+    </h1>
+  
+
       
       <div class="article-meta">
         <span class="article-date">
     <i class="icon icon-calendar-check"></i>
-	<a href="/README.html" class="article-date">
-	  <time datetime="2019-12-24T10:01:12.641Z" itemprop="datePublished">2019-12-24</time>
+	<a href="/2019/11/03/Avoiding-near-duplicates-in-sets/" class="article-date">
+	  <time datetime="2019-11-03T10:23:49.000Z" itemprop="datePublished">2019-11-03</time>
 	</a>
 </span>
         
-        
+  <span class="article-category">
+    <i class="icon icon-folder"></i>
+    <a class="article-category-link" href="/categories/翻译/">翻译</a>
+  </span>
 
         
 
-        <span class="post-comment"><i class="icon icon-comment"></i> <a href="/README.html#comments" class="article-comment-link">评论</a></span>
+        
+
+        <span class="post-comment"><i class="icon icon-comment"></i> <a href="/2019/11/03/Avoiding-near-duplicates-in-sets/#comments" class="article-comment-link">评论</a></span>
         
 	
-		<span class="post-wordcount hidden-xs" itemprop="wordCount">字数统计: 3(字)</span>
+		<span class="post-wordcount hidden-xs" itemprop="wordCount">字数统计: 1.4k(字)</span>
 	
 	
-		<span class="post-readcount hidden-xs" itemprop="timeRequired">阅读时长: 1(分)</span>
+		<span class="post-readcount hidden-xs" itemprop="timeRequired">阅读时长: 5(分)</span>
 	
 
       </div>
     </div>
     <div class="article-entry marked-body" itemprop="articleBody">
       
-        <h1 id="For-Presonal-Blog"><a href="#For-Presonal-Blog" class="headerlink" title="For Presonal Blog"></a>For Presonal Blog</h1>
+        <blockquote>
+<p>文章翻译自 <a href="https://www.hackingwithswift.com/articles/199/avoiding-near-duplicates-in-sets" target="_blank" rel="noopener">Avoiding near-duplicates in sets</a>, 作者<a href="https://www.hackingwithswift.com/about" target="_blank" rel="noopener">Paul Hudson</a> <a href="https://twitter.com/twostraws" target="_blank" rel="noopener">@twostraws</a>是一名优秀的Swifter。<br>这是我第一次翻译，可能有翻译不到位的地方，如果有任何问题，欢迎反馈。学习学习再学习，加油💪！</p>
+</blockquote>
+<p><img src="../resource/images/coding-man-2.jpg" alt="img"></p>
+<p>Julian Schiavo写道：我想用Set集合来保证我的Array中元素是唯一的，但是Set集合中每个元素都包含一个Date类型的变量，当两个不同元素仅仅是Date变量不同的时候，实际上Set中可以同时保存这两个元素，这就出现了重复元素。这种问题该怎么解决呢？</p>
+<a id="more"></a>
+
+<p>这是个好问题，实际上Swift的协议给我们提供了很聪明的解决方案。</p>
+<p>首先，我们先看下下面示例代码。结构体<code>NewsStory</code>有三个属性：id、title、date：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">struct NewsStory &#123;</span><br><span class="line">    var id: Int</span><br><span class="line">    var title: String</span><br><span class="line">    var date = Date()</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>如上代码所示，结构体实例初始化时候会自动将当前时间赋值给date属性。</p>
+<p>我们可以用上面的结构体创建三个对象，如下代码所示：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">let story1 = NewsStory(id: 1, title: &quot;What&apos;s new in Swift 5.1?&quot;)</span><br><span class="line">let story2 = NewsStory(id: 2, title: &quot;What&apos;s new in Swift 6.0?&quot;)</span><br><span class="line">let story3 = NewsStory(id: 3, title: &quot;What&apos;s new in Swift 6.1?&quot;)</span><br></pre></td></tr></table></figure>
+
+<p>Julian想要保存这些新的对象到一个Set集合而不是数组中，这是一个很明智的选择。因此我们写下如下的代码：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">var stories = Set&lt;NewsStory&gt;()</span><br><span class="line">stories.insert(story1)</span><br><span class="line">stories.insert(story2)</span><br><span class="line">stories.insert(story3)</span><br><span class="line">print(stories)</span><br></pre></td></tr></table></figure>
+
+<p>如上代码所示，创建一个保存故事对象的Set，然后将我们创建的对象添加到Set集合中，然后打印这个Set集合。然而上面的代码无法通过编译：为了每个元素在Set中都有唯一的标识，我们需要让<code>NewStory</code>对象遵守<code>Hashable</code>协议，Hashable协议能够产生唯一的hash值来标识唯一的一个对象。</p>
+<p>Swift语言这点做得非常好，我们只需要让一个包含Hashable属性的类型遵守<code>Hashable</code>协议即可，Hashable协议会自动帮我们计算这个对象的哈希值。因此我们需要更新<code>NewStory</code>结构体如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">struct NewsStory: Hashable &#123;</span><br><span class="line">    var id: Int</span><br><span class="line">    var title: String</span><br><span class="line">    var date = Date()</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>到现在，我们的代码终于能够正常的跑起来啦！</p>
+<p>然后，Julian遇到的问题并没有解决，如下代码所以：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">let story4 = NewsStory(id: 1, title: &quot;What&apos;s new in Swift 5.1?&quot;)</span><br><span class="line">stories.insert(story4)</span><br><span class="line">print(stories)</span><br></pre></td></tr></table></figure>
+
+<p>当我们创建一个和已存在对象相同ID和title的NewStory对象，并添加到set集合中，然后打印集合的内容，你会发现现在集合中包含4个对象，并且其中有一个是重复的。</p>
+<p>就像前面写的那样，当一个类型遵守Hashable协议并且其属性也都遵守Hashable协议的时候，Swift会帮我们自动计算这个对象的hash值。计算方法是这样的：获取对象中所有属性的hash值并将它们结合在一起。</p>
+<p>因此，我们以为两个对象是相同的，因为他们有相同的ID和title，但是在Swift看来他们是不同的，因为他们的date并不相同。</p>
+<p>我们需要做的就是给Swift提供一个自定义的hash计算规则，告诉Swift说”如果两个stories对象的ID和title是相同的，那么他们就是相同的，请忽略date属性。”</p>
+<p>为了自定义hash计算规则，我们需要在<code>NewStory</code>中实现两个方法：一个是自定义计算hash值，两一个是检查两个对象的唯一标识看是否相等。</p>
+<p>第一个方法只使用ID来计算一个story对象的hash值，如下所示：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">func hash(into hasher: inout Hasher) &#123;</span><br><span class="line">    hasher.combine(id)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>第二个方法使用运算符重载来实现一个自定义的<code>==</code>方法来比较两个story对象是否相同。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">static func ==(lhs: NewsStory, rhs: NewsStory) -&gt; Bool &#123;</span><br><span class="line">    return lhs.id == rhs.id</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>到此为止，完美解决问题！我们实现Hashable版本比Swift自动生成的方法的版本更快，因为我们的hash函数只计算了ID的hash值，而Swift的版本计算了所有属性的hash值。</p>
+<p>示例中我们只使用了id这个属性值，但是你在项目中也可以使用更多的属性来保证你的对象是不同的。</p>
+<p>最终<code>NewsStory</code>代码如下所示：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">struct NewsStory: Hashable &#123;</span><br><span class="line">    var id: Int</span><br><span class="line">    var title: String</span><br><span class="line">    var date = Date()</span><br><span class="line"></span><br><span class="line">    func hash(into hasher: inout Hasher) &#123;</span><br><span class="line">        hasher.combine(id)</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    static func ==(lhs: NewsStory, rhs: NewsStory) -&gt; Bool &#123;</span><br><span class="line">        return lhs.id == rhs.id</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>在我们的文章结束之前，需要提醒一点， 其实是<a href="https://twitter.com/cocoaphony/status/1174655727878758400" target="_blank" rel="noopener">Rob Napier</a>的提醒：相等意味着可替换——任何两个相等的对象在代码中都可以相互替换。如果你只比较了<code>id</code>，那就意味着”如果两个对象有相同的id，但是其它属性是不同的，我不关心其它属性是什么样的，算法可以自由的返回其中的任意一个。”</p>
+<p>最后，也是最重要的一点：如果两个对象相等(因为自定义的<code>==</code>返回true)，那么Swift会自由选择。Swift可能总是选择第一个对象，也可能总是选择第二个对象，或者每次随机选择两个中的一个——这种表现在未来的Swift版本中可能会发生改变。记住这点，因为我们告诉Swift两个对象是相同的，才会发生这个问题，如果关于对象的选择对你来说很重要，你需要注意这个问题。</p>
+
       
     </div>
     <div class="article-footer">
@@ -314,7 +373,7 @@
     
     <li class="post-copyright-link hidden-xs">
       <strong>本文链接：</strong>
-      <a href="http://blog.weidongfang.online/README.html" title="" target="_blank" rel="external">http://blog.weidongfang.online/README.html</a>
+      <a href="http://blog.weidongfang.online/2019/11/03/Avoiding-near-duplicates-in-sets/" title="【译】如何在Set集合中避免重复元素" target="_blank" rel="external">http://blog.weidongfang.online/2019/11/03/Avoiding-near-duplicates-in-sets/</a>
     </li>
     
     <li class="post-copyright-license">
@@ -357,6 +416,20 @@
 
   <nav class="bar bar-footer clearfix" data-stick-bottom>
   <div class="bar-inner">
+  
+  <ul class="pager pull-left">
+    
+    <li class="prev">
+      <a href="/2019/11/06/Get-started-with-SwiftUI/" title="【译】SwiftUI入门教程"><i class="icon icon-angle-left" aria-hidden="true"></i><span>&nbsp;&nbsp;上一篇</span></a>
+    </li>
+    
+    
+    <li class="next">
+      <a href="/2019/10/16/RxSwift-brief/" title="【笔记】RxSwift简介"><span>下一篇&nbsp;&nbsp;</span><i class="icon icon-angle-right" aria-hidden="true"></i></a>
+    </li>
+    
+    
+  </ul>
   
   
   
@@ -413,6 +486,10 @@ window.jQuery || document.write('<script src="js/jquery.min.js"><\/script>')
 
 
 
+   
+
+
+
 
    
     
@@ -422,7 +499,7 @@ var gitment = new Gitment({
   // id默认为当前页面url，如果url后带参数或锚点，gitment要重新初始化
   // https://github.com/imsun/gitment/issues/55
   // 解决方案：id:window.location.pathname,或者将id设置为当前页面标题
-  id: '', 
+  id: '【译】如何在Set集合中避免重复元素', 
   owner: 'hell03W', // 可以是你的GitHub用户名，也可以是github id
   repo: 'https://github.com/hell03W/TechBlogComment',
   oauth: {

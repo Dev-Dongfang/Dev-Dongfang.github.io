@@ -1,0 +1,525 @@
+<!DOCTYPE html>
+<html lang=zh>
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="utf-8">
+  
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, minimal-ui">
+  <meta name="renderer" content="webkit">
+  <meta http-equiv="Cache-Control" content="no-transform">
+  <meta http-equiv="Cache-Control" content="no-siteapp">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <meta name="format-detection" content="telephone=no,email=no,adress=no">
+  <!-- Color theme for statusbar -->
+  <meta name="theme-color" content="#000000">
+  <!-- 强制页面在当前窗口以独立页面显示,防止别人在框架里调用页面 -->
+  <meta http-equiv="window-target" content="_top">
+  
+  
+  <title>Leetcode精选-持续更新中 | Dongfang&#39;s技术博客,iOS技术分享,逆向与安全,Cydia,底层原理,Swift,Objective-C</title>
+  <meta name="description" content="1. 反转单链表21234567Reverse a linked list from position m to n. Do it in one-pass.Note: 1 ≤ m ≤ n ≤ length of list.Example:Input: 1-&amp;gt;2-&amp;gt;3-&amp;gt;4-&amp;gt;5-&amp;gt;NULL, m = 2, n = 4Output: 1-&amp;gt;4-&amp;gt;3-&amp;gt;">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Leetcode精选-持续更新中">
+<meta property="og:url" content="http://blog.weidongfang.online/2019/09/10/Leetcode-choiceness/index.html">
+<meta property="og:site_name" content="Dongfang&#39;s技术博客,iOS技术分享,逆向与安全,Cydia,底层原理,Swift,Objective-C">
+<meta property="og:description" content="1. 反转单链表21234567Reverse a linked list from position m to n. Do it in one-pass.Note: 1 ≤ m ≤ n ≤ length of list.Example:Input: 1-&amp;gt;2-&amp;gt;3-&amp;gt;4-&amp;gt;5-&amp;gt;NULL, m = 2, n = 4Output: 1-&amp;gt;4-&amp;gt;3-&amp;gt;">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2020-01-20T07:50:35.613Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Leetcode精选-持续更新中">
+<meta name="twitter:description" content="1. 反转单链表21234567Reverse a linked list from position m to n. Do it in one-pass.Note: 1 ≤ m ≤ n ≤ length of list.Example:Input: 1-&amp;gt;2-&amp;gt;3-&amp;gt;4-&amp;gt;5-&amp;gt;NULL, m = 2, n = 4Output: 1-&amp;gt;4-&amp;gt;3-&amp;gt;">
+  <!-- Canonical links -->
+  <link rel="canonical" href="http://blog.weidongfang.online/2019/09/10/Leetcode-choiceness/index.html">
+  
+    <link rel="alternate" href="/atom.xml" title="Dongfang&#39;s技术博客,iOS技术分享,逆向与安全,Cydia,底层原理,Swift,Objective-C" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/images/favicon.jpg" type="image/x-icon">
+  
+  <link rel="stylesheet" href="/css/style.css">
+  
+  
+    <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/gitment@0.0.3/style/default.min.css">
+  
+  
+  
+</head>
+
+
+<body class="main-right theme-purple no-sidebar" itemscope itemtype="http://schema.org/WebPage">
+  <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+  <div class="slimContent">
+    <div class="navbar-header">
+      
+      
+      <div class="profile-block text-center">
+        <a id="avatar" href="https://github.com/dev-dongfang" target="_blank">
+          <img class="img-circle img-rotate" src="/images/favicon.jpg" width="200" height="200">
+        </a>
+        <h2 id="name" class="hidden-xs hidden-sm">Dev-Dongfang</h2>
+        <h3 id="title" class="hidden-xs hidden-sm hidden-md">Keep Moving ！</h3>
+        <small id="location" class="text-muted hidden-xs hidden-sm"><i class="icon icon-map-marker"></i> Beijing, China</small>
+      </div>
+      
+      <div class="search" id="search-form-wrap">
+
+    <form class="search-form sidebar-form" method="GET" action="https://www.baidu.com/s?">
+	<div class="input-group">
+    	<input name="wd" type="text" class="form-control search-form-input" placeholder="搜索" />
+	    <span class="input-group-btn">
+	    	<button type="submit" class=" btn btn-flat search-form-submit"><i class="icon icon-search"></i></button>
+	    </span>
+    </div>
+</form>
+
+</div>
+      <button class="navbar-toggle collapsed" type="button" data-toggle="collapse" data-target="#main-navbar" aria-controls="main-navbar" aria-expanded="false">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+    </div>
+    <nav id="main-navbar" class="collapse navbar-collapse" itemscope itemtype="http://schema.org/SiteNavigationElement" role="navigation">
+      <ul class="nav navbar-nav main-nav menu-highlight">
+        
+        
+        <li class="menu-item menu-item-home">
+          <a href="/">
+            
+            <i class="icon icon-home-fill"></i>
+            
+            <span class="menu-title">首页</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives">
+            
+            <i class="icon icon-archives-fill"></i>
+            
+            <span class="menu-title">归档</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories">
+            
+            <i class="icon icon-folder"></i>
+            
+            <span class="menu-title">分类</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about">
+            
+            <i class="icon icon-cup-fill"></i>
+            
+            <span class="menu-title">关于</span>
+          </a>
+        </li>
+        
+      </ul>
+      
+	
+    <ul class="social-links">
+    	
+        <li><a href="https://github.com/dev-dongfang" target="_blank" title="Github" data-toggle=tooltip data-placement=top><i class="icon icon-github"></i></a></li>
+        
+        <li><a href="https://twitter.com/weidf" target="_blank" title="Twitter" data-toggle=tooltip data-placement=top><i class="icon icon-twitter"></i></a></li>
+        
+        <li><a href="mailto:dev.dongfang@gmail.com" target="_blank" title="Email" data-toggle=tooltip data-placement=top><i class="icon icon-email"></i></a></li>
+        
+    </ul>
+
+    </nav>
+  </div>
+</header>
+
+  
+    <aside class="sidebar" itemscope itemtype="http://schema.org/WPSideBar">
+  <div class="slimContent">
+    
+      <div class="widget">
+    <h3 class="widget-title">公告</h3>
+    <div class="widget-body">
+        <div id="board">
+            <div class="content">
+                <p>欢迎交流与分享经验!</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">分类</h3>
+    <div class="widget-body">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/Swift/">Swift</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Swift-算法/">Swift 算法</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/其它/">其它</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/算法/">算法</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/翻译/">翻译</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/逆向与安全/">逆向与安全</a><span class="category-list-count">1</span></li></ul>
+    </div>
+  </div>
+
+
+    
+      
+
+    
+      
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">归档</h3>
+    <div class="widget-body">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/01/">一月 2020</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/11/">十一月 2019</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/10/">十月 2019</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/09/">九月 2019</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/08/">八月 2019</a><span class="archive-list-count">1</span></li></ul>
+    </div>
+  </div>
+
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">最新文章</h3>
+    <div class="widget-body">
+      <ul class="recent-post-list list-unstyled no-thumbnail">
+        
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                <a class="category-link" href="/categories/逆向与安全/">逆向与安全</a>
+              </p>
+              <p class="item-title">
+                <a href="/2020/01/10/package-deb-from-app/" class="title">【逆】如何将App打包成deb安装包</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2020-01-10T12:21:45.000Z" itemprop="datePublished">2020-01-10</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                <a class="category-link" href="/categories/其它/">其它</a>
+              </p>
+              <p class="item-title">
+                <a href="/2020/01/03/floating-point-details/" class="title">为什么浮点数在运算过程中会造成精度损失</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2020-01-03T12:21:45.000Z" itemprop="datePublished">2020-01-03</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                <a class="category-link" href="/categories/翻译/">翻译</a>
+              </p>
+              <p class="item-title">
+                <a href="/2019/11/06/Get-started-with-SwiftUI/" class="title">【译】SwiftUI入门教程</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2019-11-06T10:23:49.000Z" itemprop="datePublished">2019-11-06</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                <a class="category-link" href="/categories/翻译/">翻译</a>
+              </p>
+              <p class="item-title">
+                <a href="/2019/11/03/Avoiding-near-duplicates-in-sets/" class="title">【译】如何在Set集合中避免重复元素</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2019-11-03T10:23:49.000Z" itemprop="datePublished">2019-11-03</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                <a class="category-link" href="/categories/Swift/">Swift</a>
+              </p>
+              <p class="item-title">
+                <a href="/2019/10/16/RxSwift-brief/" class="title">【笔记】RxSwift简介</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2019-10-16T07:22:35.000Z" itemprop="datePublished">2019-10-16</time>
+              </p>
+            </div>
+          </li>
+          
+      </ul>
+    </div>
+  </div>
+  
+
+    
+  </div>
+</aside>
+
+  
+  
+<main class="main" role="main">
+  <div class="content">
+  <article id="post-Leetcode-choiceness" class="article article-type-post" itemscope itemtype="http://schema.org/BlogPosting">
+    
+    <div class="article-header">
+      
+        
+  
+    <h1 class="article-title" itemprop="name">
+      Leetcode精选-持续更新中
+    </h1>
+  
+
+      
+      <div class="article-meta">
+        <span class="article-date">
+    <i class="icon icon-calendar-check"></i>
+	<a href="/2019/09/10/Leetcode-choiceness/" class="article-date">
+	  <time datetime="2019-09-10T02:09:23.000Z" itemprop="datePublished">2019-09-10</time>
+	</a>
+</span>
+        
+  <span class="article-category">
+    <i class="icon icon-folder"></i>
+    <a class="article-category-link" href="/categories/算法/">算法</a>
+  </span>
+
+        
+
+        
+
+        <span class="post-comment"><i class="icon icon-comment"></i> <a href="/2019/09/10/Leetcode-choiceness/#comments" class="article-comment-link">评论</a></span>
+        
+	
+		<span class="post-wordcount hidden-xs" itemprop="wordCount">字数统计: 1.6k(字)</span>
+	
+	
+		<span class="post-readcount hidden-xs" itemprop="timeRequired">阅读时长: 7(分)</span>
+	
+
+      </div>
+    </div>
+    <div class="article-entry marked-body" itemprop="articleBody">
+      
+        <h1 id="1-反转单链表2"><a href="#1-反转单链表2" class="headerlink" title="1. 反转单链表2"></a>1. <a href="https://leetcode.com/problems/reverse-linked-list-ii/" target="_blank" rel="noopener">反转单链表2</a></h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">Reverse a linked list from position m to n. Do it in one-pass.</span><br><span class="line"></span><br><span class="line">Note: 1 ≤ m ≤ n ≤ length of list.</span><br><span class="line"></span><br><span class="line">Example:</span><br><span class="line">Input: 1-&gt;2-&gt;3-&gt;4-&gt;5-&gt;NULL, m = 2, n = 4</span><br><span class="line">Output: 1-&gt;4-&gt;3-&gt;2-&gt;5-&gt;NULL</span><br></pre></td></tr></table></figure>
+
+<p>这个题目看似和反转链表一样的简单, 但是实现起来并没有那么容易, 边界条件比反转链表多一点. 解决方案:</p>
+<p>1.先顺序遍历找到需要反转的结点的前一个结点标记为pre, 找到需要插入的第一个结点的前一个结点标记start, 需要反转的第二个结点标记then. 解决思路就是, <strong>将them插入到pre的后面, 将then从start的后面删除.</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">//反转链表的m~n</span><br><span class="line">func reverseBetween(_ head: ListNode?, _ m: Int, _ n: Int) -&gt; ListNode? &#123;</span><br><span class="line">    guard let head = head else &#123; return nil &#125;</span><br><span class="line">    let dummy = ListNode(0)</span><br><span class="line">    dummy.next = head</span><br><span class="line">    var pre: ListNode? = dummy</span><br><span class="line">    for _ in 1..&lt;m &#123;</span><br><span class="line">        pre = pre?.next</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    let start = pre?.next</span><br><span class="line">    var then = start?.next</span><br><span class="line">    for _ in m..&lt;n &#123;</span><br><span class="line">        start?.next = then?.next</span><br><span class="line">        then?.next = pre?.next</span><br><span class="line">        pre?.next = then</span><br><span class="line">        then = start?.next</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    return dummy.next</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h1 id="2-判断二叉树是否是二叉搜索树"><a href="#2-判断二叉树是否是二叉搜索树" class="headerlink" title="2. 判断二叉树是否是二叉搜索树"></a>2. <a href="https://leetcode.com/problems/validate-binary-search-tree/" target="_blank" rel="noopener">判断二叉树是否是二叉搜索树</a></h1><p>二叉搜索树: 在树的任意一个结点, 其左子树每个结点的值都小于这个结点的值, 其右子树每个结点的值都小于这个结点的值.  </p>
+<p>乍一看, 只需比较结点左子树小于结点, 右子树大于结点即可, 实际上这种解法是不正确的, 比如<code>[10,5,15,null,null,6,20]</code>. 要解决这个问题, 需要转换一下思维, 解决思路还是递归, 我们还是从根节点开始, <strong>根节点的值, 在其左子树中一定是最大的, 在其右子树中一定是最小的.</strong> 基于这个事实, 我们可以编写出如下的解决方案: </p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">class Problem98Solution1 &#123;</span><br><span class="line">    func isValidBST(_ root: TreeNode?) -&gt; Bool &#123;</span><br><span class="line">        return judge(node: root, lowwer: nil, upper: nil)</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    private func judge(node: TreeNode?, lowwer: Int?, upper: Int?) -&gt; Bool &#123;</span><br><span class="line">        guard let node = node else &#123; return true &#125;</span><br><span class="line">        </span><br><span class="line">        let val = node.val</span><br><span class="line">        if let lowwer = lowwer, lowwer &gt;= val &#123; return false &#125;</span><br><span class="line">        if let upper = upper, upper &lt;= val &#123; return false &#125;</span><br><span class="line">        </span><br><span class="line">        let leftValid = judge(node: node.left, lowwer: lowwer, upper: val)</span><br><span class="line">        let rightValid = judge(node: node.right, lowwer: val, upper: upper)</span><br><span class="line">        </span><br><span class="line">        return leftValid &amp;&amp; rightValid</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h1 id="3-按层遍历二叉树"><a href="#3-按层遍历二叉树" class="headerlink" title="3. 按层遍历二叉树"></a>3. <a href="https://leetcode.com/problems/binary-tree-level-order-traversal/" target="_blank" rel="noopener">按层遍历二叉树</a></h1><p>Given a binary tree, return the level order traversal of its nodes’ values. (ie, from left to right, level by level).</p>
+<p>For example:<br>Given binary tree [3,9,20,null,null,15,7],<br>    3<br>   / <br>  9  20<br>    /  <br>   15   7<br>return its level order traversal as:<br>[<br>  [3],<br>  [9,20],<br>  [15,7]<br>]</p>
+<p><strong>解决1:</strong>遍历, 将每一层的数据存储起来存储每层的结点和每层结点的结果, 最终返回.</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line">class Problem102Solution1 &#123;</span><br><span class="line">    func levelOrder(_ root: TreeNode?) -&gt; [[Int]] &#123;</span><br><span class="line">        var results = [[Int]]()</span><br><span class="line">        guard let root = root else &#123; return results &#125;</span><br><span class="line">        travelLayer(result: &amp;results, nodes: [root])</span><br><span class="line">        return results</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    func travelLayer(result: inout [[Int]], nodes: [TreeNode]) &#123;</span><br><span class="line">        guard !nodes.isEmpty else &#123; return &#125;</span><br><span class="line">        var layerResult = [Int]()</span><br><span class="line">        var nextLayerNodes = [TreeNode]()</span><br><span class="line">        for node in nodes &#123;</span><br><span class="line">            layerResult.append(node.val)</span><br><span class="line">            if let leftNode = node.left &#123;</span><br><span class="line">                nextLayerNodes.append(leftNode)</span><br><span class="line">            &#125;</span><br><span class="line">            if let rightNode = node.right &#123;</span><br><span class="line">                nextLayerNodes.append(rightNode)</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        </span><br><span class="line">        if layerResult.isEmpty == false &#123;</span><br><span class="line">            result.append(layerResult)</span><br><span class="line">        &#125;</span><br><span class="line">        if nextLayerNodes.isEmpty == false &#123;</span><br><span class="line">            travelLayer(result: &amp;result, nodes: nextLayerNodes)</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><strong>解决2</strong>: 解法2的时间复杂度优于解法1,但是事实上并没有快多少. 优雅的递归解决方案: 深度优先遍历, 遍历时候判断如果存放结果的结点存在则将结果放在对应的结果集中, 如果不存在则创建对应的集合并放入结果集中, 最后递归遍历左子树和右子树. 代码如下所示.</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">class Solution &#123;</span><br><span class="line">    func levelOrder(_ root: TreeNode?) -&gt; [[Int]] &#123;</span><br><span class="line">        var results = [[Int]]()</span><br><span class="line">        guard let root = root else &#123; return results &#125;</span><br><span class="line">        travelLayer(result: &amp;results, node: root, height: 0)</span><br><span class="line">        return results</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    func travelLayer(result: inout [[Int]], node: TreeNode?, height: Int) &#123;</span><br><span class="line">        guard let node = node else &#123; return &#125;</span><br><span class="line">        if height &gt;= result.count &#123;</span><br><span class="line">            result.append([Int]())</span><br><span class="line">        &#125;</span><br><span class="line">        result[height].append(node.val)</span><br><span class="line">        travelLayer(result: &amp;result, node: node.left, height: height + 1)</span><br><span class="line">        travelLayer(result: &amp;result, node: node.right, height: height + 1)</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>参考了leetcode上其它的解法, 发现耗时短的算法基本上是基于第一种思路,使用循环实现的代码.<strong>进一步证明了循环比递归更快</strong>, 递归比较慢的原因是递归需要开辟新的堆栈,创建临时变量,销毁堆栈返回. 代码指令条数要多于循环,所占用栈空间也要比循环多.</p>
+<h1 id="4-二叉树最大深度"><a href="#4-二叉树最大深度" class="headerlink" title="4. 二叉树最大深度"></a>4. <a href="https://leetcode.com/problems/maximum-depth-of-binary-tree/" target="_blank" rel="noopener">二叉树最大深度</a></h1><p> Given a binary tree, find its maximum depth.</p>
+<p> The maximum depth is the number of nodes along the longest path from the root node down to the farthest leaf node.</p>
+<p> Note: A leaf is a node with no children.</p>
+<p> Example:</p>
+<p> Given binary tree [3,9,20,null,null,15,7],</p>
+<p> 3<br> / <br> 9  20<br> /  <br> 15   7<br> return its depth = 3.</p>
+<p> <strong>递归解决方案:</strong></p>
+<p> <strong>分解问题:</strong> 第一层深度等一第二层的深度+1, 第二层深度等于第三层深度+1, 如果结点没有子结点, 则是最大深度.</p>
+<p> 代码如下所示: 先判断左子树深度, 再判断右子树深度, 比较两个深度最大的就是这个结点的最大深度, 依次递归查找.</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">class Problem104Solution1 &#123;</span><br><span class="line">    func maxDepth(_ root: TreeNode?) -&gt; Int &#123;</span><br><span class="line">        guard let root = root else &#123; return 0 &#125;</span><br><span class="line">        </span><br><span class="line">        return maxDepth(root, depth: 1)</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    func maxDepth(_ root: TreeNode?, depth: Int) -&gt; Int &#123;</span><br><span class="line">        guard let root = root else &#123; return depth - 1 &#125;</span><br><span class="line">        </span><br><span class="line">        let leftDepth = maxDepth(root.left, depth: depth + 1)</span><br><span class="line">        let rightDepth = maxDepth(root.right, depth: depth + 1)</span><br><span class="line">        return max(leftDepth, rightDepth)</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h1 id="5-颜色排序"><a href="#5-颜色排序" class="headerlink" title="5. 颜色排序"></a>5. <a href="https://leetcode.com/tag/two-pointers/" target="_blank" rel="noopener">颜色排序</a></h1><p>乍一看是一个挺简单的题目, 思路也比较简单. 两个指针指向数组, 一个在前面,一个在后面,依次遍历数组,如果遍历到0则与前面元素交换,如果遍历到2这与后面的交换.这里有很多的边界条件需要考虑. swift代码如下所示:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">/// 3.两个指针,一前一后,遍历指针从头开始遍历,如果数字是0这和第一个交换,如果是2这和最后一个交换,原地排序.</span><br><span class="line">class Problem75Solution2 &#123;</span><br><span class="line">    func sortColors(_ nums: inout [Int]) &#123;</span><br><span class="line">        guard nums.count &gt; 1 else &#123; return&#125;</span><br><span class="line">        var left = 0, right = nums.count - 1, i = 0</span><br><span class="line">        while i &lt;= right &#123;</span><br><span class="line">            if nums[i] == 0 &#123;</span><br><span class="line">                nums.swapAt(i, left)</span><br><span class="line">                left += 1</span><br><span class="line">            &#125;else if nums[i] == 2&#123;</span><br><span class="line">                nums.swapAt(i, right)</span><br><span class="line">                right -= 1</span><br><span class="line">                i -= 1</span><br><span class="line">            &#125;</span><br><span class="line">            i += 1</span><br><span class="line">            print(nums)</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>需要特别注意的是:</p>
+<ol>
+<li>如果i与后面的元素进行交换,则交换过来的数字是多少是不清楚的,因此这时候i不能加1; </li>
+<li>循环终止的条件:<code>i&lt;=right</code>. 当遍历到右边界时候,循环需要终止;</li>
+</ol>
+
+      
+    </div>
+    <div class="article-footer">
+      <blockquote class="mt-2x">
+  <ul class="post-copyright list-unstyled">
+    
+    <li class="post-copyright-link hidden-xs">
+      <strong>本文链接：</strong>
+      <a href="http://blog.weidongfang.online/2019/09/10/Leetcode-choiceness/" title="Leetcode精选-持续更新中" target="_blank" rel="external">http://blog.weidongfang.online/2019/09/10/Leetcode-choiceness/</a>
+    </li>
+    
+    <li class="post-copyright-license">
+      <strong>版权声明： </strong> 本博客所有文章除特别声明外，均采用 <a href="http://creativecommons.org/licenses/by/4.0/deed.zh" target="_blank" rel="external">CC BY 4.0 CN协议</a> 许可协议。转载请注明出处！
+    </li>
+  </ul>
+</blockquote>
+
+
+<div class="panel panel-default panel-badger">
+  <div class="panel-body">
+    <figure class="media">
+      <div class="media-left">
+        <a href="https://github.com/dev-dongfang" target="_blank" class="img-burn thumb-sm visible-lg">
+          <img src="/images/favicon.jpg" class="img-rounded w-full" alt="">
+        </a>
+      </div>
+      <div class="media-body">
+        <h3 class="media-heading"><a href="https://github.com/dev-dongfang" target="_blank"><span class="text-dark">Dev-Dongfang</span><small class="ml-1x">Keep Moving ！</small></a></h3>
+        <div>热爱计算机，热爱软件开发，iOS开发者，Swift开发者，熟悉iOS系统逆向与安全。熟悉常用的数据结构与算法，对计算机操作系统和编译过程比较感兴趣，目前仍在修炼。</div>
+      </div>
+    </figure>
+  </div>
+</div>
+
+
+    </div>
+  </article>
+  
+    
+  <section id="comments">
+  	
+
+    
+  </section>
+
+
+  
+</div>
+
+  <nav class="bar bar-footer clearfix" data-stick-bottom>
+  <div class="bar-inner">
+  
+  <ul class="pager pull-left">
+    
+    <li class="prev">
+      <a href="/2019/10/16/RxSwift-brief/" title="【笔记】RxSwift简介"><i class="icon icon-angle-left" aria-hidden="true"></i><span>&nbsp;&nbsp;上一篇</span></a>
+    </li>
+    
+    
+    <li class="next">
+      <a href="/2019/08/22/safe-swift-queue-stack/" title="Swift实现线程安全的栈和队列"><span>下一篇&nbsp;&nbsp;</span><i class="icon icon-angle-right" aria-hidden="true"></i></a>
+    </li>
+    
+    
+  </ul>
+  
+  
+  
+  <div class="bar-right">
+    
+    <div class="share-component" data-sites="wechat,twitter,qq,weibo" data-mobile-sites="wechat,twitter,qq,weibo"></div>
+    
+  </div>
+  </div>
+</nav>
+  
+
+
+</main>
+
+  <footer class="footer" itemscope itemtype="http://schema.org/WPFooter">
+	
+	
+    <ul class="social-links">
+    	
+        <li><a href="https://github.com/dev-dongfang" target="_blank" title="Github" data-toggle=tooltip data-placement=top><i class="icon icon-github"></i></a></li>
+        
+        <li><a href="https://twitter.com/weidf" target="_blank" title="Twitter" data-toggle=tooltip data-placement=top><i class="icon icon-twitter"></i></a></li>
+        
+        <li><a href="mailto:dev.dongfang@gmail.com" target="_blank" title="Email" data-toggle=tooltip data-placement=top><i class="icon icon-email"></i></a></li>
+        
+    </ul>
+
+    <div class="copyright">
+    	
+        <div class="publishby">
+        	Theme by <a href="https://github.com/cofess" target="_blank"> cofess </a>base on <a href="https://github.com/cofess/hexo-theme-pure" target="_blank">pure</a>.
+        </div>
+    </div>
+</footer>
+  <script src="//cdn.jsdelivr.net/npm/jquery@1.12.4/dist/jquery.min.js"></script>
+<script>
+window.jQuery || document.write('<script src="js/jquery.min.js"><\/script>')
+</script>
+<script src="/js/plugin.min.js"></script>
+<script src="/js/application.js"></script>
+
+
+    <script>
+(function ($) {
+    $('.search-form').on('submit', function (e) {
+        var keyword = $('.search-form-input[name="wd"]').val();
+        window.location = 'https://www.baidu.com/s?wd=site:blog.weidongfang.online ' + keyword;
+        return false;
+    });
+})(jQuery);
+</script>
+
+
+
+
+   
+
+
+
+
+   
+    
+<script src="//cdn.jsdelivr.net/npm/gitment@0.0.3/dist/gitment.browser.min.js"></script>
+<script>
+var gitment = new Gitment({
+  // id默认为当前页面url，如果url后带参数或锚点，gitment要重新初始化
+  // https://github.com/imsun/gitment/issues/55
+  // 解决方案：id:window.location.pathname,或者将id设置为当前页面标题
+  id: 'Leetcode精选-持续更新中', 
+  owner: 'hell03W', // 可以是你的GitHub用户名，也可以是github id
+  repo: 'https://github.com/hell03W/TechBlogComment',
+  oauth: {
+    client_id: '30db1eac28643da3f3ea',
+    client_secret: '7d19e8067df8a03bdb5d26e6e2b0490b778031cb',
+  }
+})
+gitment.render('comments')
+</script>
+
+
+
+
+
+
+
+
+    <script defer>
+var _hmt = _hmt || [];
+(function() {
+    var hm = document.createElement("script");
+    hm.src = "//hm.baidu.com/hm.js?9973e9eaf1485d0719cd19d7436e2fea";
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+
+
+</body>
+</html>
