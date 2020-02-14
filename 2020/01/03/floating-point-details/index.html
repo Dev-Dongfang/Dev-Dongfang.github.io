@@ -25,19 +25,19 @@
 <meta property="og:site_name" content="Dongfang&#39;s技术博客,iOS技术分享,逆向与安全,Cydia,底层原理,Swift,Objective-C">
 <meta property="og:description" content="在日常程序开发中，很多时候我们需要用到实数，这时候我们就需要使用浮点数来表示了。现在我们先来看下面的代码： 1234let a: Float = 0.2let b: Float = 0.3let num = a * bprint(num)  这是一个最简单的Float乘法，你觉得打印结果是多少，0.06吗？实际上打印结果是0.060000002，看到这个结果你有没有吃惊，聪明的计算机竟然连最简单的">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:image" content="http://blog.weidongfang.online/2020/01/03/resource/images/WX20200120-200630@2x.png">
-<meta property="og:image" content="http://blog.weidongfang.online/2020/01/03/resource/images/914b71bf1d85fb6ed76e1135f39b6941.jpg">
-<meta property="og:image" content="http://blog.weidongfang.online/2020/01/03/resource/images/WX20200120-202705@2x.png">
-<meta property="og:image" content="http://blog.weidongfang.online/2020/01/03/resource/images/f922249a89667c4d10239eb8840dc94c.jpg">
-<meta property="og:image" content="http://blog.weidongfang.online/2020/01/03/resource/images/WX20200120-210539@2x.png">
-<meta property="og:image" content="http://blog.weidongfang.online/2020/01/03/resource/images/WX20200120-211642@2x.png">
-<meta property="og:image" content="http://blog.weidongfang.online/2020/01/03/resource/images/WX20191224-190058.png">
-<meta property="og:image" content="http://blog.weidongfang.online/2020/01/03/resource/images/WX20200120-213249@2x.png">
-<meta property="og:updated_time" content="2020-01-20T14:17:09.421Z">
+<meta property="og:image" content="http://blog.weidongfang.online/resource/images/WX20200120-200630@2x.png">
+<meta property="og:image" content="http://blog.weidongfang.online/resource/images/914b71bf1d85fb6ed76e1135f39b6941.jpg">
+<meta property="og:image" content="http://blog.weidongfang.online/resource/images/WX20200120-202705@2x.png">
+<meta property="og:image" content="http://blog.weidongfang.online/resource/images/f922249a89667c4d10239eb8840dc94c.jpg">
+<meta property="og:image" content="http://blog.weidongfang.online/resource/images/WX20200120-210539@2x.png">
+<meta property="og:image" content="http://blog.weidongfang.online/resource/images/WX20200120-211642@2x.png">
+<meta property="og:image" content="http://blog.weidongfang.online/resource/images/WX20191224-190058.png">
+<meta property="og:image" content="http://blog.weidongfang.online/resource/images/WX20200120-213249@2x.png">
+<meta property="og:updated_time" content="2020-02-14T15:41:17.662Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="为什么浮点数在运算过程中会造成精度损失">
 <meta name="twitter:description" content="在日常程序开发中，很多时候我们需要用到实数，这时候我们就需要使用浮点数来表示了。现在我们先来看下面的代码： 1234let a: Float = 0.2let b: Float = 0.3let num = a * bprint(num)  这是一个最简单的Float乘法，你觉得打印结果是多少，0.06吗？实际上打印结果是0.060000002，看到这个结果你有没有吃惊，聪明的计算机竟然连最简单的">
-<meta name="twitter:image" content="http://blog.weidongfang.online/2020/01/03/resource/images/WX20200120-200630@2x.png">
+<meta name="twitter:image" content="http://blog.weidongfang.online/resource/images/WX20200120-200630@2x.png">
   <!-- Canonical links -->
   <link rel="canonical" href="http://blog.weidongfang.online/2020/01/03/floating-point-details/index.html">
   
@@ -170,7 +170,7 @@
   <div class="widget">
     <h3 class="widget-title">分类</h3>
     <div class="widget-body">
-      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/Swift/">Swift</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Swift-算法/">Swift 算法</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/其它/">其它</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/算法/">算法</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/翻译/">翻译</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/逆向与安全/">逆向与安全</a><span class="category-list-count">1</span></li></ul>
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/Swift/">Swift</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Swift-算法/">Swift 算法</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/其它/">其它</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/算法/">算法</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/翻译/">翻译</a><span class="category-list-count">3</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/逆向与安全/">逆向与安全</a><span class="category-list-count">1</span></li></ul>
     </div>
   </div>
 
@@ -185,7 +185,7 @@
   <div class="widget">
     <h3 class="widget-title">归档</h3>
     <div class="widget-body">
-      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/01/">一月 2020</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/11/">十一月 2019</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/10/">十月 2019</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/09/">九月 2019</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/08/">八月 2019</a><span class="archive-list-count">1</span></li></ul>
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/02/">二月 2020</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/01/">一月 2020</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/11/">十一月 2019</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/10/">十月 2019</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/09/">九月 2019</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/08/">八月 2019</a><span class="archive-list-count">1</span></li></ul>
     </div>
   </div>
 
@@ -197,6 +197,21 @@
     <div class="widget-body">
       <ul class="recent-post-list list-unstyled no-thumbnail">
         
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                <a class="category-link" href="/categories/翻译/">翻译</a>
+              </p>
+              <p class="item-title">
+                <a href="/2020/02/14/Unsafe-Swift-Using-Pointers-and-Interacting-With-C/" class="title">【译】不安全的Swift：Swift指针与C交互</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2020-02-14T14:42:54.000Z" itemprop="datePublished">2020-02-14</time>
+              </p>
+            </div>
+          </li>
+          
           <li>
             
             <div class="item-inner">
@@ -257,21 +272,6 @@
             </div>
           </li>
           
-          <li>
-            
-            <div class="item-inner">
-              <p class="item-category">
-                <a class="category-link" href="/categories/Swift/">Swift</a>
-              </p>
-              <p class="item-title">
-                <a href="/2019/10/16/RxSwift-brief/" class="title">【笔记】RxSwift简介</a>
-              </p>
-              <p class="item-date">
-                <time datetime="2019-10-16T07:22:35.000Z" itemprop="datePublished">2019-10-16</time>
-              </p>
-            </div>
-          </li>
-          
       </ul>
     </div>
   </div>
@@ -317,10 +317,10 @@
         <span class="post-comment"><i class="icon icon-comment"></i> <a href="/2020/01/03/floating-point-details/#comments" class="article-comment-link">评论</a></span>
         
 	
-		<span class="post-wordcount hidden-xs" itemprop="wordCount">字数统计: 1.8k(字)</span>
+		<span class="post-wordcount hidden-xs" itemprop="wordCount">字数统计: 2.4k(字)</span>
 	
 	
-		<span class="post-readcount hidden-xs" itemprop="timeRequired">阅读时长: 6(分)</span>
+		<span class="post-readcount hidden-xs" itemprop="timeRequired">阅读时长: 9(分)</span>
 	
 
       </div>
@@ -337,7 +337,7 @@
 <p>在回答是什么造成这个结果之前，我们先来思考一个 问题，32bit能够表示多少个数字？正常情况下是2^32个，大概三十多亿个数字，不能再多了。但是实数却是有无限个的，那么我们应该如何使用有限的bit位表示无限的实数呢？</p>
 <h1 id="1-定点数表示法-BCD码"><a href="#1-定点数表示法-BCD码" class="headerlink" title="1.定点数表示法-BCD码"></a>1.定点数表示法-BCD码</h1><p>BCD码是用4位二进制数表示1位十进制数中的0<del>9这10个数字，那么32bit能够表示8个这样的数字，表示范围是0</del>99999999，如果我们用最后两位表示小数，那么范围就是0~999999.99。</p>
 <p>例如，我们用BCD码表示123456.78，那么这个数字在内存中是这样的：</p>
-<p><img src="../resource/images/WX20200120-200630@2x.png" alt></p>
+<p><img src="/resource/images/WX20200120-200630@2x.png" alt></p>
 <p>这种数字表示法就是BCD码表示法，用于超市收银、温度计数字、重量等较小的计数中还可以，但是一旦需要表示较大或者较小的数字，这种方法就无可奈何了。这种小数点位置固定的表示法，我成称之为<strong>定点数</strong>。</p>
 <p>这种数字表示法主要有两个缺点 ：</p>
 <ol>
@@ -346,37 +346,54 @@
 </ol>
 <h1 id="2-浮点数表示法"><a href="#2-浮点数表示法" class="headerlink" title="2. 浮点数表示法"></a>2. 浮点数表示法</h1><p>事实上，程序开发中，很多时候我们既需要表示很大的数字，比如计算光速、地球质量、宇宙物质总质量等，又要表示很小的数，比如一个原子的质量、cpu一个晶体管长度、cpu的主频周期等。在日常生活中，我们一般会用科学计数法来表示这些数字，实际上，在计算机上我们同样可以使用<strong>科学计数法</strong>来表示这些数字。</p>
 <p>IEEE标准规定，计算机中的科学计数法分为两种，一种是32bit的叫做Float类型，另一种是64bit的叫做Double类型。这里主要讲Float类型，Double类型也是一样的道理。Float类型的bit位分布如下所示：</p>
-<p><img src="../resource/images/914b71bf1d85fb6ed76e1135f39b6941.jpg" alt></p>
+<p><img src="/resource/images/914b71bf1d85fb6ed76e1135f39b6941.jpg" alt></p>
 <ol>
 <li><strong>s=符号位</strong>：顾名思义，符号位表示一个数的符号，是正数还是负数。</li>
 <li><strong>e=指数位</strong>：指数位用来表示数字的指数部分，Float中指数位占8b。能够表示0<del>255的范围，这里使用1</del>254分别映射到-126~125上。（0和255另有用途）</li>
 <li><strong>f=有效数位</strong>：有效数位就是小数点后的数字。</li>
 </ol>
 <p>这样，我们就可以用科学计数法来表示一个数字了：</p>
-<p><img src="../resource/images/WX20200120-202705@2x.png" alt></p>
+<p><img src="/resource/images/WX20200120-202705@2x.png" alt></p>
 <p>通过这个公式，我们无法表示0和其它特殊的数字，比如无穷大、无穷小，实际上这些数字需要使用钢材的0和255两个数字组合来表示了，如下所示：</p>
-<p><img src="../resource/images/f922249a89667c4d10239eb8840dc94c.jpg" alt></p>
+<p><img src="/resource/images/f922249a89667c4d10239eb8840dc94c.jpg" alt></p>
 <p>在这样的浮点数表示下，32bit能够表示的范围扩大了很多，大约是<code>1.17\*10^-38</code>到<code>3.40\*10^38</code>正是因为这种表示法<strong>小数点的位置是变动的</strong>，因此才被叫做<strong>浮点数</strong>。</p>
 <h1 id="3-浮点数二进制转化"><a href="#3-浮点数二进制转化" class="headerlink" title="3. 浮点数二进制转化"></a>3. 浮点数二进制转化</h1><p>那么一个十进制数字到底是怎么被转换成浮点数的呢？下面我们以<code>11.3</code>为例，详细介绍它是怎么被转换成Float类型数字的。</p>
 <p>首先，我们先把这个数字的整数部分转换成二进制，<code>11</code>转换成二进制就是<code>1011</code>。</p>
 <p>接下来我们把小数部分转换成二进制，小数部分转换二进制的规则是这样的：<strong>小数部分乘以2，然后看是否超过1，如果超过1则记下1并记下小数部分，否则记下0，一直循环下去，直到小数 部分是0为止。</strong>那么0.3的转换就是这样的，如下所示：</p>
-<p><img src="../resource/images/WX20200120-210539@2x.png" alt></p>
+<p><img src="/resource/images/WX20200120-210539@2x.png" alt></p>
 <p>我们发现，0.3转换成二进制是一个无限循环的数字：0.0100110011001……。</p>
 <p>最后我们将整数部分和小数部分拼接到一起：1011.0100110011001…，因为是科学计数法，小数点左移3位，最终就是：1.0110100110011…*2^3。也就是说，s=0，e=3，f=01100110011001100…(23位)。</p>
 <p>这也解释了开篇遇到的那个问题。0.2*0.3=0.060000002，因为0.06表示成Float是这样的：</p>
-<p><img src="../resource/images/WX20200120-211642@2x.png" alt></p>
+<p><img src="/resource/images/WX20200120-211642@2x.png" alt></p>
 <h1 id="4-浮点数的精度丢失"><a href="#4-浮点数的精度丢失" class="headerlink" title="4. 浮点数的精度丢失"></a>4. 浮点数的精度丢失</h1><p>来看这个浮点数加法，两千万个Float类型1相加，你猜结果是多少，<strong>16777216.0</strong>，吃惊不😲？我相信其它语言也是同样的结果。下面咱们就一起来看看浮点数的加法到底是怎么运算的。</p>
-<p><img src="../resource/images/WX20191224-190058.png" alt></p>
+<p><img src="/resource/images/WX20191224-190058.png" alt></p>
 <p>浮点数加法原理非常简单，六个字：<strong>先对齐，再计算</strong>。就是说，如果两个浮点数的指数位如果不一样，我们要先把两个浮点数的指数位变成一样的，然后只计算有效位的加法即可。</p>
 <p>下面我们来看下<code>16777216.0+1</code>到底是怎么计算的。16777216和1的二进制表示如下图所示：</p>
-<p><img src="../resource/images/WX20200120-213249@2x.png" alt></p>
+<p><img src="/resource/images/WX20200120-213249@2x.png" alt></p>
 <p>我们知道加法的原理是先对齐再计算，16777216的指数位是24，1的指数位是0，为了对齐指数位，1的小数点需要左移24位，由于Float类型的浮点数指数位只有23位，移动完毕后，1变成了0，因此，16777216之后对1的加法都是无效的。</p>
 <h1 id="5-Kahan-Summation算法"><a href="#5-Kahan-Summation算法" class="headerlink" title="5. Kahan Summation算法"></a>5. Kahan Summation算法</h1><p>面对Float精度丢失的问题，科学家们想出了一个解决办法，那就是Kahan Summation算法。</p>
 <p>这个算法主要是在每次计算过程中，都用一次减法，把加法计算中损失的数字记录下来，再做一次运算，<a href="https://en.wikipedia.org/wiki/Kahan_summation_algorithm" target="_blank" rel="noopener">wiki</a>里有这个算法的证明，感兴趣可以去阅读，下面是Kahan Summation算法计算上个章节中算法题目的代码，计算结果是<code>2e+07</code>，一点都不差，完美！</p>
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">var sum: Float = 0</span><br><span class="line">var c: Float = 0</span><br><span class="line">for _ in 0..&lt;20000000 &#123;</span><br><span class="line">    let x: Float = 1</span><br><span class="line">    let y: Float = x - c</span><br><span class="line">    let t: Float = sum + y</span><br><span class="line">    c = (t - sum) - y</span><br><span class="line">    sum = t</span><br><span class="line">&#125;</span><br><span class="line">print(sum)</span><br><span class="line"></span><br><span class="line"><span class="meta">&gt;</span> 2e+07</span><br></pre></td></tr></table></figure>
 
-<h1 id="6-BigDecimal的浮点数精度解决方案"><a href="#6-BigDecimal的浮点数精度解决方案" class="headerlink" title="6. BigDecimal的浮点数精度解决方案"></a>6. BigDecimal的浮点数精度解决方案</h1><p>在java开发中，如果遇到高精度计算时候，我们需要使用BigDecimal类型，需要注意的是，我们需要将double、float等类型转换成String类型，然后使用BigDecimal的构造方法进行 构造，如果直接使用double或者 float类型构造BigDecimal，计算结果还是有精度误差的。</p>
-<p>具体BigDecimal是怎么处理的，且等我改天咨询一下java大神。</p>
+<h1 id="6-BigDecimal的浮点数精度解决方案"><a href="#6-BigDecimal的浮点数精度解决方案" class="headerlink" title="6. BigDecimal的浮点数精度解决方案"></a>6. BigDecimal的浮点数精度解决方案</h1><p>在java开发中，如果遇到高精度计算时候，我们需要使用BigDecimal类型，需要注意的是，我们需要将double、float等类型转换成String类型，然后使用BigDecimal的构造方法进行构造，如果直接使用double或者 float类型构造BigDecimal，计算结果还是有精度误差的。</p>
+<p>BigDecimal源码可以<a href="/resource/files/BigDecimal.java">点这里</a>下载。</p>
+<p>首先我们先来看看BigDecimal的String构造函数式怎么实现的：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="title">BigDecimal</span><span class="params">(String val)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">this</span>(val.toCharArray(), <span class="number">0</span>, val.length());</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>通过这个入口函数，我们发现，最终真正干活的构造方法是第389行的<code>public BigDecimal(char[] in, int offset, int len, MathContext mc)</code>，这个方法还是比较复杂的，洋洋洒洒几百行代码。</p>
+<p>简单看下，我们发现，这几百行代码还是做了很多事情的。由于这里参数传过来的是字符数组，所以我们需要对每一位进行计算和判断，比如判断正负号、判断小数点位置、判断精度等等。</p>
+<p>BigDecimal最终会将一个浮点数有效数位转换成long整数，并在其它变量中记录小数点的位置。</p>
+<p>这个初始化方法，计算的最终结果是得到四个值分别是：</p>
+<ol>
+<li><strong>scale</strong>：表示这个数字被放大的倍数。</li>
+<li><strong>precision</strong>：小数的精度。</li>
+<li><strong>intCompact</strong>：所有的有效数位表示的整数。</li>
+<li><strong>intVal</strong>：放大之前的int数值。</li>
+</ol>
+<p>接下来我们再来看看具体运算过程是怎么进行的，这里以<code>add</code>方法为例:</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> BigDecimal <span class="title">add</span><span class="params">(BigDecimal augend)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (<span class="keyword">this</span>.intCompact != INFLATED) &#123;</span><br><span class="line">        <span class="keyword">if</span> ((augend.intCompact != INFLATED)) &#123;</span><br><span class="line">            <span class="keyword">return</span> add(<span class="keyword">this</span>.intCompact, <span class="keyword">this</span>.scale, augend.intCompact, augend.scale);</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            <span class="keyword">return</span> add(<span class="keyword">this</span>.intCompact, <span class="keyword">this</span>.scale, augend.intVal, augend.scale);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        <span class="keyword">if</span> ((augend.intCompact != INFLATED)) &#123;</span><br><span class="line">            <span class="keyword">return</span> add(augend.intCompact, augend.scale, <span class="keyword">this</span>.intVal, <span class="keyword">this</span>.scale);</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            <span class="keyword">return</span> add(<span class="keyword">this</span>.intVal, <span class="keyword">this</span>.scale, augend.intVal, augend.scale);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">static</span> BigDecimal <span class="title">add</span><span class="params">(<span class="keyword">final</span> <span class="keyword">long</span> xs, <span class="keyword">int</span> scale1, <span class="keyword">final</span> <span class="keyword">long</span> ys, <span class="keyword">int</span> scale2)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">long</span> sdiff = (<span class="keyword">long</span>) scale1 - scale2;</span><br><span class="line">    <span class="keyword">if</span> (sdiff == <span class="number">0</span>) &#123;</span><br><span class="line">        <span class="keyword">return</span> add(xs, ys, scale1);</span><br><span class="line">    &#125; <span class="keyword">else</span> <span class="keyword">if</span> (sdiff &lt; <span class="number">0</span>) &#123;</span><br><span class="line">        <span class="keyword">int</span> raise = checkScale(xs,-sdiff);</span><br><span class="line">        <span class="keyword">long</span> scaledX = longMultiplyPowerTen(xs, raise);</span><br><span class="line">        <span class="keyword">if</span> (scaledX != INFLATED) &#123;</span><br><span class="line">            <span class="keyword">return</span> add(scaledX, ys, scale2);</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            BigInteger bigsum = bigMultiplyPowerTen(xs,raise).add(ys);</span><br><span class="line">            <span class="keyword">return</span> ((xs^ys)&gt;=<span class="number">0</span>) ? <span class="comment">// same sign test</span></span><br><span class="line">                <span class="keyword">new</span> BigDecimal(bigsum, INFLATED, scale2, <span class="number">0</span>)</span><br><span class="line">                : valueOf(bigsum, scale2, <span class="number">0</span>);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        <span class="keyword">int</span> raise = checkScale(ys,sdiff);</span><br><span class="line">        <span class="keyword">long</span> scaledY = longMultiplyPowerTen(ys, raise);</span><br><span class="line">        <span class="keyword">if</span> (scaledY != INFLATED) &#123;</span><br><span class="line">            <span class="keyword">return</span> add(xs, scaledY, scale1);</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            BigInteger bigsum = bigMultiplyPowerTen(ys,raise).add(xs);</span><br><span class="line">            <span class="keyword">return</span> ((xs^ys)&gt;=<span class="number">0</span>) ?</span><br><span class="line">                <span class="keyword">new</span> BigDecimal(bigsum, INFLATED, scale1, <span class="number">0</span>)</span><br><span class="line">                : valueOf(bigsum, scale1, <span class="number">0</span>);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>我们发现，加法计算中，BigDecimal先获取到加数和被加数的有效数位和放大值，然后对齐放大倍数，最后将两个BigDecimal的有效数位相加，把结果和放大倍数保存到一个新的BigDecimal。</p>
 <blockquote>
 <p>Reference</p>
 <p><a href="https://time.geekbang.org/column/intro/170" target="_blank" rel="noopener">https://time.geekbang.org/column/intro/170</a></p>
