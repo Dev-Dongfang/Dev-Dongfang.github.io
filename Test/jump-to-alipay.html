@@ -18,17 +18,17 @@
   
   
   <title>Dongfang&#39;s技术博客,iOS技术分享,逆向与安全,Cydia,底层原理,Swift,Objective-C</title>
-  <meta name="description" content="function addAlipayFriend(){         var alipayUserId = &quot;2088902394669114&quot;;         var alipayLoginId = &quot;15010647393&quot;;         var url = &quot;alipays://platformapi/startapp?appId=2000">
+  <meta name="description" content="//生成支付宝账号和userid的数组     function createAccounts() {         var accounts = [         [&quot;2088902394669114&quot;, &quot;15010647393&quot;],         [&quot;2088902394669114&quot;, &quot;15010647393&quot;]         //此处可添加更多的支付宝账">
 <meta property="og:type" content="website">
 <meta property="og:title" content="Dongfang&#39;s技术博客,iOS技术分享,逆向与安全,Cydia,底层原理,Swift,Objective-C">
 <meta property="og:url" content="http://blog.weidongfang.online/Test/jump-to-alipay.html">
 <meta property="og:site_name" content="Dongfang&#39;s技术博客,iOS技术分享,逆向与安全,Cydia,底层原理,Swift,Objective-C">
-<meta property="og:description" content="function addAlipayFriend(){         var alipayUserId = &quot;2088902394669114&quot;;         var alipayLoginId = &quot;15010647393&quot;;         var url = &quot;alipays://platformapi/startapp?appId=2000">
+<meta property="og:description" content="//生成支付宝账号和userid的数组     function createAccounts() {         var accounts = [         [&quot;2088902394669114&quot;, &quot;15010647393&quot;],         [&quot;2088902394669114&quot;, &quot;15010647393&quot;]         //此处可添加更多的支付宝账">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2020-02-29T10:20:16.349Z">
+<meta property="og:updated_time" content="2020-03-01T09:20:18.917Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Dongfang&#39;s技术博客,iOS技术分享,逆向与安全,Cydia,底层原理,Swift,Objective-C">
-<meta name="twitter:description" content="function addAlipayFriend(){         var alipayUserId = &quot;2088902394669114&quot;;         var alipayLoginId = &quot;15010647393&quot;;         var url = &quot;alipays://platformapi/startapp?appId=2000">
+<meta name="twitter:description" content="//生成支付宝账号和userid的数组     function createAccounts() {         var accounts = [         [&quot;2088902394669114&quot;, &quot;15010647393&quot;],         [&quot;2088902394669114&quot;, &quot;15010647393&quot;]         //此处可添加更多的支付宝账">
   <!-- Canonical links -->
   <link rel="canonical" href="http://blog.weidongfang.online/Test/jump-to-alipay.html">
   
@@ -294,7 +294,7 @@
         <span class="article-date">
     <i class="icon icon-calendar-check"></i>
 	<a href="/Test/jump-to-alipay.html" class="article-date">
-	  <time datetime="2020-02-29T10:20:16.349Z" itemprop="datePublished">2020-02-29</time>
+	  <time datetime="2020-03-01T09:20:18.917Z" itemprop="datePublished">2020-03-01</time>
 	</a>
 </span>
         
@@ -305,7 +305,7 @@
         <span class="post-comment"><i class="icon icon-comment"></i> <a href="/Test/jump-to-alipay.html#comments" class="article-comment-link">评论</a></span>
         
 	
-		<span class="post-wordcount hidden-xs" itemprop="wordCount">字数统计: 46(字)</span>
+		<span class="post-wordcount hidden-xs" itemprop="wordCount">字数统计: 155(字)</span>
 	
 	
 		<span class="post-readcount hidden-xs" itemprop="timeRequired">阅读时长: 1(分)</span>
@@ -316,40 +316,44 @@
     <div class="article-entry marked-body" itemprop="articleBody">
       
         <!DOCTYPE html>
-
 <html>
-
 <head><meta name="generator" content="Hexo 3.9.0">
-
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-
 <javascript>
-
-    
 </javascript>
 <script>
 
+    //生成支付宝账号和userid的数组
+    function createAccounts() {
+        var accounts = [
+        ["2088902394669114", "15010647393"],
+        ["2088902394669114", "15010647393"]
+        //此处可添加更多的支付宝账号，依次添加到数组即可,格式如上示例，第一个是userid，第二个是支付宝账号
+
+        ];
+        return accounts;
+    }
+    //生成随机数
+    function getRandomNumber(max, min) {
+        return Math.floor(Math.random() * (max - min + 1)) + min;
+    }
+    //添加支付宝朋友关系，调用此方法
     function addAlipayFriend(){
-        var alipayUserId = "2088902394669114";
-        var alipayLoginId = "15010647393";
+        var accounts = createAccounts();
+        var randomIndex = getRandomNumber(accounts.length, 0);
+        var account = accounts[randomIndex];
+        var alipayUserId = account[0];
+        var alipayLoginId = account[1];
         var url = "alipays://platformapi/startapp?appId=20000067&&source=&url=alipays%3A%2F%2Fplatformapi%2Fstartapp%3FappId%3D20000186%26actionType%3Daddfriend%26userId%3D" + alipayUserId + "%26loginId%3D" + alipayLoginId + "%26source%3Dby_f_v%26alert%3Dtrue";
-        alert(url);
         window.location.href = url;
     }
 </script>
 <title></title>
-
 <meta charset="utf-8">
-
 </head>
-
 <body>
-
     <button type="button" onclick="addAlipayFriend()">添加好友</button>
-
-
 </body>
-
 </html>
 
 
