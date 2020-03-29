@@ -1,0 +1,472 @@
+<!DOCTYPE html>
+<html lang=zh>
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="utf-8">
+  
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, minimal-ui">
+  <meta name="renderer" content="webkit">
+  <meta http-equiv="Cache-Control" content="no-transform">
+  <meta http-equiv="Cache-Control" content="no-siteapp">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <meta name="format-detection" content="telephone=no,email=no,adress=no">
+  <!-- Color theme for statusbar -->
+  <meta name="theme-color" content="#000000">
+  <!-- 强制页面在当前窗口以独立页面显示,防止别人在框架里调用页面 -->
+  <meta http-equiv="window-target" content="_top">
+  
+  
+  <title>Dongfang&#39;s技术博客,iOS技术分享,逆向与安全,Cydia,底层原理,Swift,Objective-C</title>
+  <meta name="description" content="深入解析Mac OS X &amp;amp; iOS操作系统 学习Mac OS X &amp;amp; iOS内核及子系统不用愁，不仅涉及开源XNU核心内容，而且涵盖关于iOS的闭源XNU核心内容，以及逆向工程在苹果越狱中的应用。">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Dongfang&#39;s技术博客,iOS技术分享,逆向与安全,Cydia,底层原理,Swift,Objective-C">
+<meta property="og:url" content="http://blog.weidongfang.online/surprise/tech-books.html">
+<meta property="og:site_name" content="Dongfang&#39;s技术博客,iOS技术分享,逆向与安全,Cydia,底层原理,Swift,Objective-C">
+<meta property="og:description" content="深入解析Mac OS X &amp;amp; iOS操作系统 学习Mac OS X &amp;amp; iOS内核及子系统不用愁，不仅涉及开源XNU核心内容，而且涵盖关于iOS的闭源XNU核心内容，以及逆向工程在苹果越狱中的应用。">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="http://blog.weidongfang.online/resource/images/rBEhVVNUvLcIAAAAAAMQPJgovu0AAMVigEPgYMAAxBU040.jpg">
+<meta property="og:updated_time" content="2020-03-29T09:16:58.110Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Dongfang&#39;s技术博客,iOS技术分享,逆向与安全,Cydia,底层原理,Swift,Objective-C">
+<meta name="twitter:description" content="深入解析Mac OS X &amp;amp; iOS操作系统 学习Mac OS X &amp;amp; iOS内核及子系统不用愁，不仅涉及开源XNU核心内容，而且涵盖关于iOS的闭源XNU核心内容，以及逆向工程在苹果越狱中的应用。">
+<meta name="twitter:image" content="http://blog.weidongfang.online/resource/images/rBEhVVNUvLcIAAAAAAMQPJgovu0AAMVigEPgYMAAxBU040.jpg">
+  <!-- Canonical links -->
+  <link rel="canonical" href="http://blog.weidongfang.online/surprise/tech-books.html">
+  
+    <link rel="alternate" href="/atom.xml" title="Dongfang&#39;s技术博客,iOS技术分享,逆向与安全,Cydia,底层原理,Swift,Objective-C" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/images/favicon.jpg" type="image/x-icon">
+  
+  <link rel="stylesheet" href="/css/style.css">
+  
+  
+    <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/gitment@0.0.3/style/default.min.css">
+  
+  
+  
+</head>
+
+
+<body class="main-right theme-purple no-sidebar" itemscope itemtype="http://schema.org/WebPage">
+  <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+  <div class="slimContent">
+    <div class="navbar-header">
+      
+      
+      <div class="profile-block text-center">
+        <a id="avatar" href="https://github.com/dev-dongfang" target="_blank">
+          <img class="img-circle img-rotate" src="/images/favicon.jpg" width="200" height="200">
+        </a>
+        <h2 id="name" class="hidden-xs hidden-sm">Dev-Dongfang</h2>
+        <h3 id="title" class="hidden-xs hidden-sm hidden-md">Keep Moving ！</h3>
+        <small id="location" class="text-muted hidden-xs hidden-sm"><i class="icon icon-map-marker"></i> Beijing, China</small>
+      </div>
+      
+      <div class="search" id="search-form-wrap">
+
+    <form class="search-form sidebar-form" method="GET" action="https://www.baidu.com/s?">
+	<div class="input-group">
+    	<input name="wd" type="text" class="form-control search-form-input" placeholder="搜索" />
+	    <span class="input-group-btn">
+	    	<button type="submit" class=" btn btn-flat search-form-submit"><i class="icon icon-search"></i></button>
+	    </span>
+    </div>
+</form>
+
+</div>
+      <button class="navbar-toggle collapsed" type="button" data-toggle="collapse" data-target="#main-navbar" aria-controls="main-navbar" aria-expanded="false">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+    </div>
+    <nav id="main-navbar" class="collapse navbar-collapse" itemscope itemtype="http://schema.org/SiteNavigationElement" role="navigation">
+      <ul class="nav navbar-nav main-nav menu-highlight">
+        
+        
+        <li class="menu-item menu-item-home">
+          <a href="/">
+            
+            <i class="icon icon-home-fill"></i>
+            
+            <span class="menu-title">首页</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-learningnote">
+          <a href="/learningnote">
+            
+            <i class="icon icon-book-fill"></i>
+            
+            <span class="menu-title">学习笔记</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives">
+            
+            <i class="icon icon-archives-fill"></i>
+            
+            <span class="menu-title">归档</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories">
+            
+            <i class="icon icon-folder"></i>
+            
+            <span class="menu-title">分类</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about">
+            
+            <i class="icon icon-cup-fill"></i>
+            
+            <span class="menu-title">关于</span>
+          </a>
+        </li>
+        
+      </ul>
+      
+	
+    <ul class="social-links">
+    	
+        <li><a href="https://github.com/dev-dongfang" target="_blank" title="Github" data-toggle=tooltip data-placement=top><i class="icon icon-github"></i></a></li>
+        
+        <li><a href="https://twitter.com/weidf" target="_blank" title="Twitter" data-toggle=tooltip data-placement=top><i class="icon icon-twitter"></i></a></li>
+        
+        <li><a href="mailto:dev.dongfang@gmail.com" target="_blank" title="Email" data-toggle=tooltip data-placement=top><i class="icon icon-email"></i></a></li>
+        
+    </ul>
+
+    </nav>
+  </div>
+</header>
+
+  
+    <aside class="sidebar" itemscope itemtype="http://schema.org/WPSideBar">
+  <div class="slimContent">
+    
+      <div class="widget">
+    <h3 class="widget-title">公告</h3>
+    <div class="widget-body">
+        <div id="board">
+            <div class="content">
+                <p>欢迎交流与分享经验!</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">分类</h3>
+    <div class="widget-body">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/Swift/">Swift</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Swift-算法/">Swift 算法</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/其它/">其它</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/算法/">算法</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/翻译/">翻译</a><span class="category-list-count">3</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/逆向/">逆向</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/逆向与安全/">逆向与安全</a><span class="category-list-count">1</span></li></ul>
+    </div>
+  </div>
+
+
+    
+      
+
+    
+      
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">归档</h3>
+    <div class="widget-body">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/02/">二月 2020</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/01/">一月 2020</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/11/">十一月 2019</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/10/">十月 2019</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/09/">九月 2019</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/08/">八月 2019</a><span class="archive-list-count">1</span></li></ul>
+    </div>
+  </div>
+
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">最新文章</h3>
+    <div class="widget-body">
+      <ul class="recent-post-list list-unstyled no-thumbnail">
+        
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                <a class="category-link" href="/categories/逆向/">逆向</a>
+              </p>
+              <p class="item-title">
+                <a href="/2020/02/24/crack-dingtalk-location-practice/" class="title">【逆】逆向分析实践-钉钉打卡/钉钉签到/钉钉定位/远程打卡功能</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2020-02-24T15:41:34.000Z" itemprop="datePublished">2020-02-24</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                <a class="category-link" href="/categories/翻译/">翻译</a>
+              </p>
+              <p class="item-title">
+                <a href="/2020/02/14/Unsafe-Swift-Using-Pointers-and-Interacting-With-C/" class="title">【译】不安全的Swift：Swift指针与C交互</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2020-02-14T14:42:54.000Z" itemprop="datePublished">2020-02-14</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                <a class="category-link" href="/categories/逆向与安全/">逆向与安全</a>
+              </p>
+              <p class="item-title">
+                <a href="/2020/01/10/package-deb-from-app/" class="title">【逆】如何将App打包成deb安装包</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2020-01-10T12:21:45.000Z" itemprop="datePublished">2020-01-10</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                <a class="category-link" href="/categories/其它/">其它</a>
+              </p>
+              <p class="item-title">
+                <a href="/2020/01/03/floating-point-details/" class="title">为什么浮点数在运算过程中会造成精度损失</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2020-01-03T12:21:45.000Z" itemprop="datePublished">2020-01-03</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                <a class="category-link" href="/categories/翻译/">翻译</a>
+              </p>
+              <p class="item-title">
+                <a href="/2019/11/06/Get-started-with-SwiftUI/" class="title">【译】SwiftUI入门教程</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2019-11-06T10:23:49.000Z" itemprop="datePublished">2019-11-06</time>
+              </p>
+            </div>
+          </li>
+          
+      </ul>
+    </div>
+  </div>
+  
+
+    
+  </div>
+</aside>
+
+  
+  
+<main class="main" role="main">
+  <div class="content">
+  <article id="page-" class="article article-type-page" itemscope itemtype="http://schema.org/BlogPosting">
+    
+    <div class="article-header">
+      
+      <div class="article-meta">
+        <span class="article-date">
+    <i class="icon icon-calendar-check"></i>
+	<a href="/surprise/tech-books.html" class="article-date">
+	  <time datetime="2020-03-29T09:16:58.110Z" itemprop="datePublished">2020-03-29</time>
+	</a>
+</span>
+        
+        
+
+        
+
+        <span class="post-comment"><i class="icon icon-comment"></i> <a href="/surprise/tech-books.html#comments" class="article-comment-link">评论</a></span>
+        
+	
+		<span class="post-wordcount hidden-xs" itemprop="wordCount">字数统计: 69(字)</span>
+	
+	
+		<span class="post-readcount hidden-xs" itemprop="timeRequired">阅读时长: 1(分)</span>
+	
+
+      </div>
+    </div>
+    <div class="article-entry marked-body" itemprop="articleBody">
+      
+        <p><strong>深入解析Mac OS X &amp; iOS操作系统</strong><br><img src="../resource/images/rBEhVVNUvLcIAAAAAAMQPJgovu0AAMVigEPgYMAAxBU040.jpg" alt></p>
+<p>学习Mac OS X &amp; iOS内核及子系统不用愁，不仅涉及开源XNU核心内容，而且涵盖关于iOS的闭源XNU核心内容，以及逆向工程在苹果越狱中的应用。</p>
+
+      
+    </div>
+    <div class="article-footer">
+      
+        <blockquote class="mt-2x">
+  <ul class="post-copyright list-unstyled">
+    
+    <li class="post-copyright-link hidden-xs">
+      <strong>本文链接：</strong>
+      <a href="http://blog.weidongfang.online/surprise/tech-books.html" title="" target="_blank" rel="external">http://blog.weidongfang.online/surprise/tech-books.html</a>
+    </li>
+    
+    <li class="post-copyright-license">
+      <strong>版权声明： </strong> 本博客所有文章除特别声明外，均采用 <a href="http://creativecommons.org/licenses/by/4.0/deed.zh" target="_blank" rel="external">CC BY 4.0 CN协议</a> 许可协议。转载请注明出处！
+    </li>
+  </ul>
+</blockquote>
+
+
+<div class="panel panel-default panel-badger">
+  <div class="panel-body">
+    <figure class="media">
+      <div class="media-left">
+        <a href="https://github.com/dev-dongfang" target="_blank" class="img-burn thumb-sm visible-lg">
+          <img src="/images/favicon.jpg" class="img-rounded w-full" alt="">
+        </a>
+      </div>
+      <div class="media-body">
+        <h3 class="media-heading"><a href="https://github.com/dev-dongfang" target="_blank"><span class="text-dark">Dev-Dongfang</span><small class="ml-1x">Keep Moving ！</small></a></h3>
+        <div>热爱计算机，热爱软件开发，iOS开发者，Swift开发者，熟悉iOS系统逆向与安全。熟悉常用的数据结构与算法，对计算机操作系统和编译过程比较感兴趣，目前仍在修炼。</div>
+      </div>
+    </figure>
+  </div>
+</div>
+
+
+      
+    </div>
+  </article>
+  
+    
+  <section id="comments">
+  	
+
+    
+  </section>
+
+
+  
+</div>
+
+  <nav class="bar bar-footer clearfix" data-stick-bottom>
+  <div class="bar-inner">
+  
+  
+  
+  <div class="bar-right">
+    
+    <div class="share-component" data-sites="wechat,twitter,qq,weibo" data-mobile-sites="wechat,twitter,qq,weibo"></div>
+    
+  </div>
+  </div>
+</nav>
+  
+
+
+</main>
+
+  <footer class="footer" itemscope itemtype="http://schema.org/WPFooter">
+	
+	
+    <ul class="social-links">
+    	
+        <li><a href="https://github.com/dev-dongfang" target="_blank" title="Github" data-toggle=tooltip data-placement=top><i class="icon icon-github"></i></a></li>
+        
+        <li><a href="https://twitter.com/weidf" target="_blank" title="Twitter" data-toggle=tooltip data-placement=top><i class="icon icon-twitter"></i></a></li>
+        
+        <li><a href="mailto:dev.dongfang@gmail.com" target="_blank" title="Email" data-toggle=tooltip data-placement=top><i class="icon icon-email"></i></a></li>
+        
+    </ul>
+
+    <div class="copyright">
+    	
+        <div class="publishby">
+        	Theme by <a href="https://github.com/cofess" target="_blank"> cofess </a>base on <a href="https://github.com/cofess/hexo-theme-pure" target="_blank">pure</a>.
+        </div>
+    </div>
+</footer>
+  <script src="//cdn.jsdelivr.net/npm/jquery@1.12.4/dist/jquery.min.js"></script>
+<script>
+window.jQuery || document.write('<script src="js/jquery.min.js"><\/script>')
+</script>
+<script src="/js/plugin.min.js"></script>
+<script src="/js/application.js"></script>
+
+
+    <script>
+(function ($) {
+    $('.search-form').on('submit', function (e) {
+        var keyword = $('.search-form-input[name="wd"]').val();
+        window.location = 'https://www.baidu.com/s?wd=site:blog.weidongfang.online ' + keyword;
+        return false;
+    });
+})(jQuery);
+</script>
+
+
+
+
+
+   
+    
+<script src="//cdn.jsdelivr.net/npm/gitment@0.0.3/dist/gitment.browser.min.js"></script>
+<script>
+var gitment = new Gitment({
+  // id默认为当前页面url，如果url后带参数或锚点，gitment要重新初始化
+  // https://github.com/imsun/gitment/issues/55
+  // 解决方案：id:window.location.pathname,或者将id设置为当前页面标题
+  id: '', 
+  owner: 'hell03W', // 可以是你的GitHub用户名，也可以是github id
+  repo: 'TechBlogComment',
+  oauth: {
+    client_id: '30db1eac28643da3f3ea',
+    client_secret: '7d19e8067df8a03bdb5d26e6e2b0490b778031cb',
+  }
+})
+gitment.render('comments')
+</script>
+
+
+
+
+
+
+
+
+    <script defer>
+var _hmt = _hmt || [];
+(function() {
+    var hm = document.createElement("script");
+    hm.src = "//hm.baidu.com/hm.js?9973e9eaf1485d0719cd19d7436e2fea";
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+
+
+</body>
+</html>
