@@ -18,18 +18,18 @@
   
   
   <title>区块链技术-笔记 | Dongfang&#39;s技术博客,iOS技术分享,逆向与安全,Cydia,底层原理,Swift,Objective-C</title>
-  <meta name="description" content="[TOC] 区块链技术的本质1.区块链技术的革命性 1.去中心化 2.数据防篡改 3.固定的发行量  2.技术概要 1.首先交易用户将交易上传网络中. 2.网络上负责记账的机器,通过比拼算力获得记账权. 3.获得记账权的节点会把交易进行打包向全部网络节点推送, 收到消息的节点验证合法性并将节点存放到自己的区块中.  3.工作量证明共识机制 1.使得修改变得几乎不可能 2.能掌握51%的算力的人变得">
+  <meta name="description" content="不可否认，区块链技术是一个很有想象力的新技术，区块链技术的革命性在于去中心化，但区块链技术的发展却越来约中心化，这像极了整个人类历史的发展。人类的聚集形式从部落到村落再到国家、全球化，区块链技术也从Pow到Pos再到DPos，区块链的发展似乎再次证明了中心化的优越性。 区块链技术到底是怎么回事呢？">
 <meta property="og:type" content="article">
 <meta property="og:title" content="区块链技术-笔记">
 <meta property="og:url" content="http://blog.weidongfang.online/2020/04/08/block-chain-details/index.html">
 <meta property="og:site_name" content="Dongfang&#39;s技术博客,iOS技术分享,逆向与安全,Cydia,底层原理,Swift,Objective-C">
-<meta property="og:description" content="[TOC] 区块链技术的本质1.区块链技术的革命性 1.去中心化 2.数据防篡改 3.固定的发行量  2.技术概要 1.首先交易用户将交易上传网络中. 2.网络上负责记账的机器,通过比拼算力获得记账权. 3.获得记账权的节点会把交易进行打包向全部网络节点推送, 收到消息的节点验证合法性并将节点存放到自己的区块中.  3.工作量证明共识机制 1.使得修改变得几乎不可能 2.能掌握51%的算力的人变得">
+<meta property="og:description" content="不可否认，区块链技术是一个很有想象力的新技术，区块链技术的革命性在于去中心化，但区块链技术的发展却越来约中心化，这像极了整个人类历史的发展。人类的聚集形式从部落到村落再到国家、全球化，区块链技术也从Pow到Pos再到DPos，区块链的发展似乎再次证明了中心化的优越性。 区块链技术到底是怎么回事呢？">
 <meta property="og:locale" content="zh-CN">
 <meta property="og:image" content="https://walden-image.oss-cn-beijing.aliyuncs.com/img/block-chain-xmind-note-2020-05-0714:45:06.png">
-<meta property="og:updated_time" content="2020-05-07T07:01:29.106Z">
+<meta property="og:updated_time" content="2020-05-07T07:32:24.544Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="区块链技术-笔记">
-<meta name="twitter:description" content="[TOC] 区块链技术的本质1.区块链技术的革命性 1.去中心化 2.数据防篡改 3.固定的发行量  2.技术概要 1.首先交易用户将交易上传网络中. 2.网络上负责记账的机器,通过比拼算力获得记账权. 3.获得记账权的节点会把交易进行打包向全部网络节点推送, 收到消息的节点验证合法性并将节点存放到自己的区块中.  3.工作量证明共识机制 1.使得修改变得几乎不可能 2.能掌握51%的算力的人变得">
+<meta name="twitter:description" content="不可否认，区块链技术是一个很有想象力的新技术，区块链技术的革命性在于去中心化，但区块链技术的发展却越来约中心化，这像极了整个人类历史的发展。人类的聚集形式从部落到村落再到国家、全球化，区块链技术也从Pow到Pos再到DPos，区块链的发展似乎再次证明了中心化的优越性。 区块链技术到底是怎么回事呢？">
 <meta name="twitter:image" content="https://walden-image.oss-cn-beijing.aliyuncs.com/img/block-chain-xmind-note-2020-05-0714:45:06.png">
   <!-- Canonical links -->
   <link rel="canonical" href="http://blog.weidongfang.online/2020/04/08/block-chain-details/index.html">
@@ -320,7 +320,7 @@
         <span class="post-comment"><i class="icon icon-comment"></i> <a href="/2020/04/08/block-chain-details/#comments" class="article-comment-link">评论</a></span>
         
 	
-		<span class="post-wordcount hidden-xs" itemprop="wordCount">字数统计: 2.9k(字)</span>
+		<span class="post-wordcount hidden-xs" itemprop="wordCount">字数统计: 3k(字)</span>
 	
 	
 		<span class="post-readcount hidden-xs" itemprop="timeRequired">阅读时长: 10(分)</span>
@@ -330,7 +330,10 @@
     </div>
     <div class="article-entry marked-body" itemprop="articleBody">
       
-        <p>[TOC]</p>
+        <p>不可否认，区块链技术是一个很有想象力的新技术，区块链技术的革命性在于去中心化，但区块链技术的发展却越来约中心化，这像极了整个人类历史的发展。人类的聚集形式从部落到村落再到国家、全球化，区块链技术也从Pow到Pos再到DPos，区块链的发展似乎再次证明了中心化的优越性。</p>
+<p>区块链技术到底是怎么回事呢？</p>
+<a id="more"></a>
+
 <h2 id="区块链技术的本质"><a href="#区块链技术的本质" class="headerlink" title="区块链技术的本质"></a>区块链技术的本质</h2><h3 id="1-区块链技术的革命性"><a href="#1-区块链技术的革命性" class="headerlink" title="1.区块链技术的革命性"></a>1.区块链技术的革命性</h3><ul>
 <li>1.去中心化</li>
 <li>2.数据防篡改</li>
