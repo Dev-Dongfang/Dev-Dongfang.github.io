@@ -1,0 +1,544 @@
+<!DOCTYPE html>
+<html lang=zh>
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="utf-8">
+  
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, minimal-ui">
+  <meta name="renderer" content="webkit">
+  <meta http-equiv="Cache-Control" content="no-transform">
+  <meta http-equiv="Cache-Control" content="no-siteapp">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <meta name="format-detection" content="telephone=no,email=no,adress=no">
+  <!-- Color theme for statusbar -->
+  <meta name="theme-color" content="#000000">
+  <!-- 强制页面在当前窗口以独立页面显示,防止别人在框架里调用页面 -->
+  <meta http-equiv="window-target" content="_top">
+  
+  
+  <title>【算法】二分查找详解 | Dongfang&#39;s技术博客,iOS技术分享,逆向与安全,Cydia,底层原理,Swift,Objective-C</title>
+  <meta name="description" content="二分查找也称折半查找，是一种效率较高的查找方法，但是。折半查找要求线性表必须采取顺序存储结构，而且表中袁旭按关键字有序排列。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="【算法】二分查找详解">
+<meta property="og:url" content="http://blog.weidongfang.online/2020/03/31/binary-search/index.html">
+<meta property="og:site_name" content="Dongfang&#39;s技术博客,iOS技术分享,逆向与安全,Cydia,底层原理,Swift,Objective-C">
+<meta property="og:description" content="二分查找也称折半查找，是一种效率较高的查找方法，但是。折半查找要求线性表必须采取顺序存储结构，而且表中袁旭按关键字有序排列。">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2020-03-31T15:46:32.112Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="【算法】二分查找详解">
+<meta name="twitter:description" content="二分查找也称折半查找，是一种效率较高的查找方法，但是。折半查找要求线性表必须采取顺序存储结构，而且表中袁旭按关键字有序排列。">
+  <!-- Canonical links -->
+  <link rel="canonical" href="http://blog.weidongfang.online/2020/03/31/binary-search/index.html">
+  
+    <link rel="alternate" href="/atom.xml" title="Dongfang&#39;s技术博客,iOS技术分享,逆向与安全,Cydia,底层原理,Swift,Objective-C" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/images/favicon.jpg" type="image/x-icon">
+  
+  <link rel="stylesheet" href="/css/style.css">
+  
+  
+    <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/gitment@0.0.3/style/default.min.css">
+  
+  
+  
+</head>
+
+
+<body class="main-right theme-purple no-sidebar" itemscope itemtype="http://schema.org/WebPage">
+  <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+  <div class="slimContent">
+    <div class="navbar-header">
+      
+      
+      <div class="profile-block text-center">
+        <a id="avatar" href="https://github.com/dev-dongfang" target="_blank">
+          <img class="img-circle img-rotate" src="/images/favicon.jpg" width="200" height="200">
+        </a>
+        <h2 id="name" class="hidden-xs hidden-sm">Dev-Dongfang</h2>
+        <h3 id="title" class="hidden-xs hidden-sm hidden-md">Keep Moving ！</h3>
+        <small id="location" class="text-muted hidden-xs hidden-sm"><i class="icon icon-map-marker"></i> Beijing, China</small>
+      </div>
+      
+      <div class="search" id="search-form-wrap">
+
+    <form class="search-form sidebar-form" method="GET" action="https://www.baidu.com/s?">
+	<div class="input-group">
+    	<input name="wd" type="text" class="form-control search-form-input" placeholder="搜索" />
+	    <span class="input-group-btn">
+	    	<button type="submit" class=" btn btn-flat search-form-submit"><i class="icon icon-search"></i></button>
+	    </span>
+    </div>
+</form>
+
+</div>
+      <button class="navbar-toggle collapsed" type="button" data-toggle="collapse" data-target="#main-navbar" aria-controls="main-navbar" aria-expanded="false">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+    </div>
+    <nav id="main-navbar" class="collapse navbar-collapse" itemscope itemtype="http://schema.org/SiteNavigationElement" role="navigation">
+      <ul class="nav navbar-nav main-nav menu-highlight">
+        
+        
+        <li class="menu-item menu-item-home">
+          <a href="/">
+            
+            <i class="icon icon-home-fill"></i>
+            
+            <span class="menu-title">首页</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-learningnote">
+          <a href="/LearningNote">
+            
+            <i class="icon icon-book-fill"></i>
+            
+            <span class="menu-title">学习笔记</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives">
+            
+            <i class="icon icon-archives-fill"></i>
+            
+            <span class="menu-title">归档</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories">
+            
+            <i class="icon icon-folder"></i>
+            
+            <span class="menu-title">分类</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about">
+            
+            <i class="icon icon-cup-fill"></i>
+            
+            <span class="menu-title">关于</span>
+          </a>
+        </li>
+        
+      </ul>
+      
+	
+    <ul class="social-links">
+    	
+        <li><a href="https://github.com/dev-dongfang" target="_blank" title="Github" data-toggle=tooltip data-placement=top><i class="icon icon-github"></i></a></li>
+        
+        <li><a href="https://twitter.com/weidf" target="_blank" title="Twitter" data-toggle=tooltip data-placement=top><i class="icon icon-twitter"></i></a></li>
+        
+        <li><a href="mailto:dev.dongfang@gmail.com" target="_blank" title="Email" data-toggle=tooltip data-placement=top><i class="icon icon-email"></i></a></li>
+        
+    </ul>
+
+    </nav>
+  </div>
+</header>
+
+  
+    <aside class="sidebar" itemscope itemtype="http://schema.org/WPSideBar">
+  <div class="slimContent">
+    
+      <div class="widget">
+    <h3 class="widget-title">公告</h3>
+    <div class="widget-body">
+        <div id="board">
+            <div class="content">
+                <p>欢迎交流与分享经验!</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">分类</h3>
+    <div class="widget-body">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/Swift/">Swift</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/其它/">其它</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/区块链/">区块链</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/算法/">算法</a><span class="category-list-count">4</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/翻译/">翻译</a><span class="category-list-count">3</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/逆向/">逆向</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/逆向与安全/">逆向与安全</a><span class="category-list-count">1</span></li></ul>
+    </div>
+  </div>
+
+
+    
+      
+
+    
+      
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">归档</h3>
+    <div class="widget-body">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/04/">四月 2020</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/03/">三月 2020</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/02/">二月 2020</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/01/">一月 2020</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/11/">十一月 2019</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/10/">十月 2019</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/09/">九月 2019</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/08/">八月 2019</a><span class="archive-list-count">1</span></li></ul>
+    </div>
+  </div>
+
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">最新文章</h3>
+    <div class="widget-body">
+      <ul class="recent-post-list list-unstyled no-thumbnail">
+        
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                <a class="category-link" href="/categories/区块链/">区块链</a>
+              </p>
+              <p class="item-title">
+                <a href="/2020/04/08/block-chain-details/" class="title">区块链技术-笔记</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2020-04-08T11:16:07.000Z" itemprop="datePublished">2020-04-08</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                <a class="category-link" href="/categories/算法/">算法</a>
+              </p>
+              <p class="item-title">
+                <a href="/2020/04/03/string-sorting-algorithm/" class="title">【算法】手撕五花八门的字符串匹配算法</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2020-04-03T04:29:49.000Z" itemprop="datePublished">2020-04-03</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                <a class="category-link" href="/categories/算法/">算法</a>
+              </p>
+              <p class="item-title">
+                <a href="/2020/03/31/binary-search/" class="title">【算法】二分查找详解</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2020-03-31T14:35:33.000Z" itemprop="datePublished">2020-03-31</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                <a class="category-link" href="/categories/逆向/">逆向</a>
+              </p>
+              <p class="item-title">
+                <a href="/2020/02/24/crack-dingtalk-location-practice/" class="title">【逆】逆向分析实践-钉钉打卡/钉钉签到/钉钉定位/远程打卡功能</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2020-02-24T15:41:34.000Z" itemprop="datePublished">2020-02-24</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                <a class="category-link" href="/categories/翻译/">翻译</a>
+              </p>
+              <p class="item-title">
+                <a href="/2020/02/14/Unsafe-Swift-Using-Pointers-and-Interacting-With-C/" class="title">【译】不安全的Swift：Swift指针与C交互</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2020-02-14T14:42:54.000Z" itemprop="datePublished">2020-02-14</time>
+              </p>
+            </div>
+          </li>
+          
+      </ul>
+    </div>
+  </div>
+  
+
+    
+  </div>
+</aside>
+
+  
+  
+<main class="main" role="main">
+  <div class="content">
+  <article id="post-binary-search" class="article article-type-post" itemscope itemtype="http://schema.org/BlogPosting">
+    
+    <div class="article-header">
+      
+        
+  
+    <h1 class="article-title" itemprop="name">
+      【算法】二分查找详解
+    </h1>
+  
+
+      
+      <div class="article-meta">
+        <span class="article-date">
+    <i class="icon icon-calendar-check"></i>
+	<a href="/2020/03/31/binary-search/" class="article-date">
+	  <time datetime="2020-03-31T14:35:33.000Z" itemprop="datePublished">2020-03-31</time>
+	</a>
+</span>
+        
+  <span class="article-category">
+    <i class="icon icon-folder"></i>
+    <a class="article-category-link" href="/categories/算法/">算法</a>
+  </span>
+
+        
+
+        
+
+        <span class="post-comment"><i class="icon icon-comment"></i> <a href="/2020/03/31/binary-search/#comments" class="article-comment-link">评论</a></span>
+        
+	
+		<span class="post-wordcount hidden-xs" itemprop="wordCount">字数统计: 1.9k(字)</span>
+	
+	
+		<span class="post-readcount hidden-xs" itemprop="timeRequired">阅读时长: 8(分)</span>
+	
+
+      </div>
+    </div>
+    <div class="article-entry marked-body" itemprop="articleBody">
+      
+        <p>二分查找也称折半查找，是一种效率较高的查找方法，但是。折半查找要求线性表必须采取顺序存储结构，而且表中袁旭按关键字有序排列。</p>
+<a id="more"></a>
+
+<h1 id="1-高效的二分查找"><a href="#1-高效的二分查找" class="headerlink" title="1.高效的二分查找"></a>1.高效的二分查找</h1><p>二分查找原理非常简单，查找思想有点类似分治思想，每次都通过跟区间中间元素做对比，将待查找区间缩小为之前的一半，直到找到要查找的元素，或者区间被缩小为0。二分查找的时间复杂度是对数复杂度，也就是O<strong>(log n)</strong>。</p>
+<p>最简单的情况就是，有序数组中不存在任何重复元素，我们用二分查找元素等于给定值的数据，这里我用swift实现了一个简单的二分查找，如下所示：</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">binarySearch</span><span class="params">(nums: [Int], value: Int)</span></span> -&gt; <span class="type">Int?</span> &#123;</span><br><span class="line">    <span class="keyword">var</span>  l = <span class="number">0</span>, h = nums.<span class="built_in">count</span> - <span class="number">1</span></span><br><span class="line">    <span class="keyword">while</span> l &lt;= h &#123;</span><br><span class="line">        <span class="keyword">let</span> mid = l + (h - l) &gt;&gt; <span class="number">1</span></span><br><span class="line">        <span class="keyword">if</span> nums[mid] == value &#123;</span><br><span class="line">            <span class="keyword">return</span> mid</span><br><span class="line">        &#125;<span class="keyword">else</span> <span class="keyword">if</span> nums[mid] &gt; value&#123;</span><br><span class="line">            h = mid - <span class="number">1</span></span><br><span class="line">        &#125;<span class="keyword">else</span>&#123;</span><br><span class="line">            l = mid + <span class="number">1</span></span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="literal">nil</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>二分查找中有三点需要特别注意：</p>
+<ol>
+<li><strong>循环退出条件</strong>：<code>l &lt;= h</code>，如果写成了<code>l &lt; h</code>可能造成死循环。</li>
+<li><strong>mid的取值</strong>：如果写成<code>l + (l + h) / 2</code>有可能会溢出，因此应该写成<code>l + (h - l) &gt;&gt; 1</code>。</li>
+<li><strong>l和h的更新</strong>，如果直接写<code>l = mid</code>或者<code>h = mid</code>，可能导致死循环，因此这里需要写成<code>mid - 1</code>、<code>mid + 1</code>。</li>
+</ol>
+<p><strong>二分查找的局限性</strong></p>
+<ol>
+<li><strong>二分查找依赖的是顺序表结构，简单说就是数组。</strong>因为数组随机访问的特性，我们可以O(1)方法数组内任意一个元素，如果是链表就达不到这种效果。</li>
+<li><strong>二分查找针对的是有序数据。</strong>二分查找对数据要求比较苛刻，数据必须是有序的，如果数据是 无需的，那么必须排序后才能使用二分查找。如果针对静态数据，没有频繁的插入删除操作，一次排序、多次查找也是可以的，但是如果有频繁的插入和删除操作，二分查找就力不从心了。</li>
+<li><strong>数据量太小不太适合二分查找。</strong>如果要处理的数据量太小，完全没必要使用二分查找，顺序遍历就够了，比如一个10个元素的数组，不管是二分查找还是顺序遍历，查找速度相差不大。</li>
+<li><strong>数据量太大也不适合二分查找。</strong>因为二分查找依赖数组这样的数据结构，利用数组随机访问的特性才能达到O(log n)的效率。而数组要求连续的内存空间，如果数据量太大，系统可能找不到足够多的连续空间。</li>
+</ol>
+<h1 id="2-二分查找的变体"><a href="#2-二分查找的变体" class="headerlink" title="2.二分查找的变体"></a>2.二分查找的变体</h1><p>简单二分查找要求数组中不能有重复的数据，但是在实际项目中有重复数据的数组就不能使用二分查找了吗？其实二分查找还有很多变体，使用二分查找的变体，我们一样可以愉快的使用二分查找！</p>
+<h2 id="2-1-查找第一个值等于给定值的元素"><a href="#2-1-查找第一个值等于给定值的元素" class="headerlink" title="2.1 查找第一个值等于给定值的元素"></a>2.1 查找第一个值等于给定值的元素</h2><figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">///查找第一个等于给定值的index,目标可以在数组中出现多次</span></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">binarySearchFirstIndex</span><span class="params">(nums: [Int], value: Int)</span></span> -&gt; <span class="type">Int?</span> &#123;</span><br><span class="line">    <span class="keyword">var</span> l = <span class="number">0</span>, h = nums.<span class="built_in">count</span> - <span class="number">1</span></span><br><span class="line">    <span class="keyword">while</span> l &lt;= h &#123;</span><br><span class="line">        <span class="keyword">let</span> mid = l + (h - l) &gt;&gt; <span class="number">1</span></span><br><span class="line">        <span class="keyword">if</span> nums[mid] &gt; value &#123;</span><br><span class="line">            h = mid - <span class="number">1</span></span><br><span class="line">        &#125;<span class="keyword">else</span> <span class="keyword">if</span> nums[mid] &lt; value&#123;</span><br><span class="line">            l = mid + <span class="number">1</span></span><br><span class="line">        &#125;<span class="keyword">else</span>&#123;</span><br><span class="line">            <span class="keyword">if</span> mid == <span class="number">0</span> || nums[mid - <span class="number">1</span>] != value &#123;</span><br><span class="line">                <span class="keyword">return</span> mid</span><br><span class="line">            &#125;<span class="keyword">else</span>&#123;</span><br><span class="line">                h = mid - <span class="number">1</span></span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="literal">nil</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>这份代码和简单二分查找代码的区别在于找到等于给定值时候的处理，简单二分查找中直接return返回即可，但是这里因为有重复的元素，因此我们需要判断找到的这个元素是否是第一个值等于给定值的元素。如果<code>mid == 0 || nums[mid - 1] != value</code>那么当前的mid就一定是第一个等于给定值的元素，否则我们要查找的目标元素一定在前面，因此重置<code>h = mid - 1</code>继续遍历即可。</p>
+<h2 id="2-2-查找最后一个值等于给定值的元素"><a href="#2-2-查找最后一个值等于给定值的元素" class="headerlink" title="2.2 查找最后一个值等于给定值的元素"></a>2.2 查找最后一个值等于给定值的元素</h2><figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">///查找最后一个等于给定值的index, 目标可以在数组中出现多次</span></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">binarySearchLastIndex</span><span class="params">(nums: [Int], value: Int)</span></span> -&gt; <span class="type">Int?</span> &#123;</span><br><span class="line">    <span class="keyword">var</span> l = <span class="number">0</span>, h = nums.<span class="built_in">count</span> - <span class="number">1</span></span><br><span class="line">    <span class="keyword">while</span> l &lt;= h &#123;</span><br><span class="line">        <span class="keyword">let</span> mid = l + (h - l) / <span class="number">2</span></span><br><span class="line">        <span class="keyword">if</span> nums[mid] &gt; value &#123;</span><br><span class="line">            h = mid - <span class="number">1</span></span><br><span class="line">        &#125;<span class="keyword">else</span> <span class="keyword">if</span> nums[mid] &lt; value &#123;</span><br><span class="line">            l = mid + <span class="number">1</span></span><br><span class="line">        &#125;<span class="keyword">else</span>&#123;</span><br><span class="line">          	<span class="comment">//判断当前元素是否是最后一个元素，或者mid之后元素不等于给定值</span></span><br><span class="line">            <span class="keyword">if</span> mid == nums.<span class="built_in">count</span> - <span class="number">1</span> || nums[mid + <span class="number">1</span>] != value &#123;</span><br><span class="line">                <span class="keyword">return</span> mid</span><br><span class="line">            &#125;<span class="keyword">else</span>&#123;</span><br><span class="line">              	<span class="comment">//更新l</span></span><br><span class="line">                l = mid + <span class="number">1</span></span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="literal">nil</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>查找最后一个值等于给定值元素和查找第一个等于给定值类似的原理，区别在于判断是否是当前mid的判断条件和更新区间上，详情参考代码注释。</p>
+<h2 id="2-3-查找第一个大于等于给定值的元素"><a href="#2-3-查找第一个大于等于给定值的元素" class="headerlink" title="2.3 查找第一个大于等于给定值的元素"></a>2.3 查找第一个大于等于给定值的元素</h2><figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/// 查找第一个大于等于给定值的元素位置</span></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">binarySearchFirstMoreThanOrEquelIndex</span><span class="params">(nums: [Int], value: Int)</span></span> -&gt; <span class="type">Int?</span> &#123;</span><br><span class="line">    <span class="keyword">var</span> l = <span class="number">0</span>, h = nums.<span class="built_in">count</span> - <span class="number">1</span></span><br><span class="line">    <span class="keyword">while</span> l &lt;= h &#123;</span><br><span class="line">        <span class="keyword">let</span> mid = l + (h - l) &gt;&gt; <span class="number">2</span></span><br><span class="line">        <span class="keyword">if</span> nums[mid] &gt;= value &#123;</span><br><span class="line">            <span class="keyword">if</span> mid == <span class="number">0</span> || nums[mid - <span class="number">1</span>] &lt; value &#123;</span><br><span class="line">                <span class="keyword">return</span> mid</span><br><span class="line">            &#125;<span class="keyword">else</span>&#123;</span><br><span class="line">                h = mid - <span class="number">1</span></span><br><span class="line">            &#125;</span><br><span class="line">        &#125;<span class="keyword">else</span>&#123;</span><br><span class="line">            l = mid + <span class="number">1</span></span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="literal">nil</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>例如给定序列<code>3,4,6,7,8,9</code>，查找第一个大于等于给定值的元素，如果查找的是5，那么返回的应该 是6，如果查找的是6，那么返回的还是6。</p>
+<p>这个算法的关键是，当mid位置的值<code>&gt;=</code>value时候，判断当前mid是否是我们寻找的mid，如果不是继续更新查找区间即可。</p>
+<h2 id="2-4-查找最后一个小于等于给定值的元素"><a href="#2-4-查找最后一个小于等于给定值的元素" class="headerlink" title="2.4 查找最后一个小于等于给定值的元素"></a>2.4 查找最后一个小于等于给定值的元素</h2><figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/// 查找最后一个小于等于给定值的元素位置</span></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">binarySearchFirstLessThanOrEquelIndex</span><span class="params">(nums: [Int], value: Int)</span></span> -&gt; <span class="type">Int?</span> &#123;</span><br><span class="line">    <span class="keyword">var</span> l = <span class="number">0</span>, h = nums.<span class="built_in">count</span> - <span class="number">1</span></span><br><span class="line">    <span class="keyword">while</span> l &lt;= h &#123;</span><br><span class="line">        <span class="keyword">let</span> mid = l + (h - l) &gt;&gt; <span class="number">2</span></span><br><span class="line">        <span class="keyword">if</span> nums[mid] &lt;= value &#123;</span><br><span class="line">            <span class="keyword">if</span> mid == nums.<span class="built_in">count</span> - <span class="number">1</span> || nums[mid + <span class="number">1</span>] &gt; value &#123;</span><br><span class="line">                <span class="keyword">return</span> mid</span><br><span class="line">            &#125;<span class="keyword">else</span>&#123;</span><br><span class="line">                l = mid + <span class="number">1</span></span><br><span class="line">            &#125;</span><br><span class="line">        &#125;<span class="keyword">else</span>&#123;</span><br><span class="line">            h = mid - <span class="number">1</span></span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="literal">nil</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>这个算法思想类似<code>2.3 查找第一个大于等于给定值的元素</code>，区别在于判断当前值是否是要查找的目标元素。</p>
+<h2 id="2-5-查找第一个大于给定值的元素"><a href="#2-5-查找第一个大于给定值的元素" class="headerlink" title="2.5 查找第一个大于给定值的元素"></a>2.5 查找第一个大于给定值的元素</h2><figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/// 查找第一个大于给定值 的元素位置</span></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">binarySearchFirstMoreThanIndex</span><span class="params">(nums: [Int], value: Int)</span></span> -&gt; <span class="type">Int?</span> &#123;</span><br><span class="line">    <span class="keyword">var</span> l = <span class="number">0</span>, h = nums.<span class="built_in">count</span> - <span class="number">1</span></span><br><span class="line">    <span class="keyword">while</span> l &lt;= h &#123;</span><br><span class="line">        <span class="keyword">let</span> mid = l + (h - l) / <span class="number">2</span></span><br><span class="line">        <span class="keyword">if</span>(nums[mid] &gt; value)&#123;</span><br><span class="line">            <span class="keyword">if</span> mid == <span class="number">0</span> || nums[mid - <span class="number">1</span>] &lt;= value &#123;</span><br><span class="line">                <span class="keyword">return</span> mid</span><br><span class="line">            &#125;<span class="keyword">else</span>&#123;</span><br><span class="line">                h = mid - <span class="number">1</span>;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;<span class="keyword">else</span>&#123;</span><br><span class="line">            l = mid + <span class="number">1</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="literal">nil</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>这个问题是<code>2.3</code>中问题的拓展，在代码上唯一的区别在于<code>nums[mid] &gt; value</code>。</p>
+<h2 id="2-6-查找第一个小于给定值的元素"><a href="#2-6-查找第一个小于给定值的元素" class="headerlink" title="2.6 查找第一个小于给定值的元素"></a>2.6 查找第一个小于给定值的元素</h2><figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/// 查找第一个小于给定值的元素位置</span></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">binarySearchFirstLessThanIndex</span><span class="params">(nums: [Int], value: Int)</span></span> -&gt; <span class="type">Int?</span> &#123;</span><br><span class="line">    <span class="keyword">var</span> l = <span class="number">0</span>, h = nums.<span class="built_in">count</span> - <span class="number">1</span></span><br><span class="line">    <span class="keyword">while</span> l &lt;= h &#123;</span><br><span class="line">        <span class="keyword">let</span> mid = l + (h - l) &gt;&gt; <span class="number">2</span></span><br><span class="line">        <span class="keyword">if</span>(nums[mid] &lt; value)&#123;</span><br><span class="line">            <span class="keyword">if</span> mid == nums.<span class="built_in">count</span> - <span class="number">1</span> || nums[mid + <span class="number">1</span>] &gt;= value &#123;</span><br><span class="line">                <span class="keyword">return</span> mid</span><br><span class="line">            &#125;<span class="keyword">else</span>&#123;</span><br><span class="line">                l = mid + <span class="number">1</span>;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;<span class="keyword">else</span>&#123;</span><br><span class="line">            h = mid - <span class="number">1</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="literal">nil</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>类似于<code>2.4</code>，区别在于if条件判断<code>nums[mid] &lt; value</code>。</p>
+<blockquote>
+<p>Reference</p>
+<p><a href="https://time.geekbang.org/column/article/42520" target="_blank" rel="noopener">https://time.geekbang.org/column/article/42520</a>   </p>
+<p>注：王争老师《数据结构与算法之美》课程真正做到了深入浅出，复杂的算法在他的讲解下变得简单起来，简单的算法在他的笔下变得更加深刻，推荐！</p>
+</blockquote>
+
+      
+    </div>
+    <div class="article-footer">
+      
+        <blockquote class="mt-2x">
+  <ul class="post-copyright list-unstyled">
+    
+    <li class="post-copyright-link hidden-xs">
+      <strong>本文链接：</strong>
+      <a href="http://blog.weidongfang.online/2020/03/31/binary-search/" title="【算法】二分查找详解" target="_blank" rel="external">http://blog.weidongfang.online/2020/03/31/binary-search/</a>
+    </li>
+    
+    <li class="post-copyright-license">
+      <strong>版权声明： </strong> 本博客所有文章除特别声明外，均采用 <a href="http://creativecommons.org/licenses/by/4.0/deed.zh" target="_blank" rel="external">CC BY 4.0 CN协议</a> 许可协议。转载请注明出处！
+    </li>
+  </ul>
+</blockquote>
+
+
+<div class="panel panel-default panel-badger">
+  <div class="panel-body">
+    <figure class="media">
+      <div class="media-left">
+        <a href="https://github.com/dev-dongfang" target="_blank" class="img-burn thumb-sm visible-lg">
+          <img src="/images/favicon.jpg" class="img-rounded w-full" alt="">
+        </a>
+      </div>
+      <div class="media-body">
+        <h3 class="media-heading"><a href="https://github.com/dev-dongfang" target="_blank"><span class="text-dark">Dev-Dongfang</span><small class="ml-1x">Keep Moving ！</small></a></h3>
+        <div>热爱计算机，热爱软件开发，iOS开发者，Swift开发者，熟悉iOS系统逆向与安全。熟悉常用的数据结构与算法，对计算机操作系统和编译过程比较感兴趣，目前仍在修炼。</div>
+      </div>
+    </figure>
+  </div>
+</div>
+
+
+      
+    </div>
+  </article>
+  
+    
+  <section id="comments">
+  	
+
+    
+  </section>
+
+
+  
+</div>
+
+  <nav class="bar bar-footer clearfix" data-stick-bottom>
+  <div class="bar-inner">
+  
+  <ul class="pager pull-left">
+    
+    <li class="prev">
+      <a href="/2020/04/03/string-sorting-algorithm/" title="【算法】手撕五花八门的字符串匹配算法"><i class="icon icon-angle-left" aria-hidden="true"></i><span>&nbsp;&nbsp;上一篇</span></a>
+    </li>
+    
+    
+    <li class="next">
+      <a href="/2020/02/24/crack-dingtalk-location-practice/" title="【逆】逆向分析实践-钉钉打卡/钉钉签到/钉钉定位/远程打卡功能"><span>下一篇&nbsp;&nbsp;</span><i class="icon icon-angle-right" aria-hidden="true"></i></a>
+    </li>
+    
+    
+  </ul>
+  
+  
+  
+  <div class="bar-right">
+    
+    <div class="share-component" data-sites="wechat,twitter,qq,weibo" data-mobile-sites="wechat,twitter,qq,weibo"></div>
+    
+  </div>
+  </div>
+</nav>
+  
+
+
+</main>
+
+  <footer class="footer" itemscope itemtype="http://schema.org/WPFooter">
+	
+	
+    <ul class="social-links">
+    	
+        <li><a href="https://github.com/dev-dongfang" target="_blank" title="Github" data-toggle=tooltip data-placement=top><i class="icon icon-github"></i></a></li>
+        
+        <li><a href="https://twitter.com/weidf" target="_blank" title="Twitter" data-toggle=tooltip data-placement=top><i class="icon icon-twitter"></i></a></li>
+        
+        <li><a href="mailto:dev.dongfang@gmail.com" target="_blank" title="Email" data-toggle=tooltip data-placement=top><i class="icon icon-email"></i></a></li>
+        
+    </ul>
+
+    <div class="copyright">
+    	
+        <div class="publishby">
+        	Theme by <a href="https://github.com/cofess" target="_blank"> cofess </a>base on <a href="https://github.com/cofess/hexo-theme-pure" target="_blank">pure</a>.
+        </div>
+    </div>
+</footer>
+  <script src="//cdn.jsdelivr.net/npm/jquery@1.12.4/dist/jquery.min.js"></script>
+<script>
+window.jQuery || document.write('<script src="js/jquery.min.js"><\/script>')
+</script>
+<script src="/js/plugin.min.js"></script>
+<script src="/js/application.js"></script>
+
+
+    <script>
+(function ($) {
+    $('.search-form').on('submit', function (e) {
+        var keyword = $('.search-form-input[name="wd"]').val();
+        window.location = 'https://www.baidu.com/s?wd=site:blog.weidongfang.online ' + keyword;
+        return false;
+    });
+})(jQuery);
+</script>
+
+
+
+
+   
+
+
+
+
+   
+    
+<script src="//cdn.jsdelivr.net/npm/gitment@0.0.3/dist/gitment.browser.min.js"></script>
+<script>
+var gitment = new Gitment({
+  // id默认为当前页面url，如果url后带参数或锚点，gitment要重新初始化
+  // https://github.com/imsun/gitment/issues/55
+  // 解决方案：id:window.location.pathname,或者将id设置为当前页面标题
+  id: '【算法】二分查找详解', 
+  owner: 'hell03W', // 可以是你的GitHub用户名，也可以是github id
+  repo: 'TechBlogComment',
+  oauth: {
+    client_id: '30db1eac28643da3f3ea',
+    client_secret: '7d19e8067df8a03bdb5d26e6e2b0490b778031cb',
+  }
+})
+gitment.render('comments')
+</script>
+
+
+
+
+
+
+
+
+    <script defer>
+var _hmt = _hmt || [];
+(function() {
+    var hm = document.createElement("script");
+    hm.src = "//hm.baidu.com/hm.js?9973e9eaf1485d0719cd19d7436e2fea";
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+
+
+</body>
+</html>

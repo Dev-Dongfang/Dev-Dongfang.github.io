@@ -1,0 +1,602 @@
+<!DOCTYPE html>
+<html lang=zh>
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="utf-8">
+  
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, minimal-ui">
+  <meta name="renderer" content="webkit">
+  <meta http-equiv="Cache-Control" content="no-transform">
+  <meta http-equiv="Cache-Control" content="no-siteapp">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <meta name="format-detection" content="telephone=no,email=no,adress=no">
+  <!-- Color theme for statusbar -->
+  <meta name="theme-color" content="#000000">
+  <!-- 强制页面在当前窗口以独立页面显示,防止别人在框架里调用页面 -->
+  <meta http-equiv="window-target" content="_top">
+  
+  
+  <title>【算法】手撕五花八门的字符串匹配算法 | Dongfang&#39;s技术博客,iOS技术分享,逆向与安全,Cydia,底层原理,Swift,Objective-C</title>
+  <meta name="description" content="字符串匹配在计算机领域是个老生常谈的问题，对于任何一个开发工程师来说应该都不陌生，我们常用的各种语言一般都提供有字符串查找相关的方法，比如swift语言String相关的contains、hasPrefix、first(where:)等方法，他们底层的实现就是依赖字符串匹配算法的。 字符串匹配算法有很多，这里只讲单模式串匹配算法，包括：BF算法、RK算法、BM算法、KMP算法。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="【算法】手撕五花八门的字符串匹配算法">
+<meta property="og:url" content="http://blog.weidongfang.online/2020/04/03/string-sorting-algorithm/index.html">
+<meta property="og:site_name" content="Dongfang&#39;s技术博客,iOS技术分享,逆向与安全,Cydia,底层原理,Swift,Objective-C">
+<meta property="og:description" content="字符串匹配在计算机领域是个老生常谈的问题，对于任何一个开发工程师来说应该都不陌生，我们常用的各种语言一般都提供有字符串查找相关的方法，比如swift语言String相关的contains、hasPrefix、first(where:)等方法，他们底层的实现就是依赖字符串匹配算法的。 字符串匹配算法有很多，这里只讲单模式串匹配算法，包括：BF算法、RK算法、BM算法、KMP算法。">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="http://blog.weidongfang.online/resource/images/015c85a9c2a4adc11236f9a40c6d57ee.jpg">
+<meta property="og:image" content="http://blog.weidongfang.online/resource/images/540809418354024206d9989cb6cdd89e.jpg">
+<meta property="og:image" content="http://blog.weidongfang.online/resource/images/8f520fb9d9cec0f6ea641d4181eb432e.jpg">
+<meta property="og:image" content="http://blog.weidongfang.online/resource/images/d78990dbcb794d1aa2cf4a3c646ae58a.jpg">
+<meta property="og:image" content="http://blog.weidongfang.online/resource/images/b9785be3e91e34bbc23961f67c234b63.jpg">
+<meta property="og:image" content="http://blog.weidongfang.online/resource/images/99a6cfadf2f9a713401ba8feac2484c2.jpg">
+<meta property="og:image" content="http://blog.weidongfang.online/resource/images/279be7d64e6254dac1a32d2f6d1a2383.jpg">
+<meta property="og:image" content="http://blog.weidongfang.online/resource/images/f4ef2c1e6ce5915e1c6460c2e26c9469.jpg">
+<meta property="og:updated_time" content="2020-04-06T13:22:00.338Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="【算法】手撕五花八门的字符串匹配算法">
+<meta name="twitter:description" content="字符串匹配在计算机领域是个老生常谈的问题，对于任何一个开发工程师来说应该都不陌生，我们常用的各种语言一般都提供有字符串查找相关的方法，比如swift语言String相关的contains、hasPrefix、first(where:)等方法，他们底层的实现就是依赖字符串匹配算法的。 字符串匹配算法有很多，这里只讲单模式串匹配算法，包括：BF算法、RK算法、BM算法、KMP算法。">
+<meta name="twitter:image" content="http://blog.weidongfang.online/resource/images/015c85a9c2a4adc11236f9a40c6d57ee.jpg">
+  <!-- Canonical links -->
+  <link rel="canonical" href="http://blog.weidongfang.online/2020/04/03/string-sorting-algorithm/index.html">
+  
+    <link rel="alternate" href="/atom.xml" title="Dongfang&#39;s技术博客,iOS技术分享,逆向与安全,Cydia,底层原理,Swift,Objective-C" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/images/favicon.jpg" type="image/x-icon">
+  
+  <link rel="stylesheet" href="/css/style.css">
+  
+  
+    <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/gitment@0.0.3/style/default.min.css">
+  
+  
+  
+</head>
+
+
+<body class="main-right theme-purple no-sidebar" itemscope itemtype="http://schema.org/WebPage">
+  <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+  <div class="slimContent">
+    <div class="navbar-header">
+      
+      
+      <div class="profile-block text-center">
+        <a id="avatar" href="https://github.com/dev-dongfang" target="_blank">
+          <img class="img-circle img-rotate" src="/images/favicon.jpg" width="200" height="200">
+        </a>
+        <h2 id="name" class="hidden-xs hidden-sm">Dev-Dongfang</h2>
+        <h3 id="title" class="hidden-xs hidden-sm hidden-md">Keep Moving ！</h3>
+        <small id="location" class="text-muted hidden-xs hidden-sm"><i class="icon icon-map-marker"></i> Beijing, China</small>
+      </div>
+      
+      <div class="search" id="search-form-wrap">
+
+    <form class="search-form sidebar-form" method="GET" action="https://www.baidu.com/s?">
+	<div class="input-group">
+    	<input name="wd" type="text" class="form-control search-form-input" placeholder="搜索" />
+	    <span class="input-group-btn">
+	    	<button type="submit" class=" btn btn-flat search-form-submit"><i class="icon icon-search"></i></button>
+	    </span>
+    </div>
+</form>
+
+</div>
+      <button class="navbar-toggle collapsed" type="button" data-toggle="collapse" data-target="#main-navbar" aria-controls="main-navbar" aria-expanded="false">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+    </div>
+    <nav id="main-navbar" class="collapse navbar-collapse" itemscope itemtype="http://schema.org/SiteNavigationElement" role="navigation">
+      <ul class="nav navbar-nav main-nav menu-highlight">
+        
+        
+        <li class="menu-item menu-item-home">
+          <a href="/">
+            
+            <i class="icon icon-home-fill"></i>
+            
+            <span class="menu-title">首页</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-learningnote">
+          <a href="/LearningNote">
+            
+            <i class="icon icon-book-fill"></i>
+            
+            <span class="menu-title">学习笔记</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives">
+            
+            <i class="icon icon-archives-fill"></i>
+            
+            <span class="menu-title">归档</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories">
+            
+            <i class="icon icon-folder"></i>
+            
+            <span class="menu-title">分类</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about">
+            
+            <i class="icon icon-cup-fill"></i>
+            
+            <span class="menu-title">关于</span>
+          </a>
+        </li>
+        
+      </ul>
+      
+	
+    <ul class="social-links">
+    	
+        <li><a href="https://github.com/dev-dongfang" target="_blank" title="Github" data-toggle=tooltip data-placement=top><i class="icon icon-github"></i></a></li>
+        
+        <li><a href="https://twitter.com/weidf" target="_blank" title="Twitter" data-toggle=tooltip data-placement=top><i class="icon icon-twitter"></i></a></li>
+        
+        <li><a href="mailto:dev.dongfang@gmail.com" target="_blank" title="Email" data-toggle=tooltip data-placement=top><i class="icon icon-email"></i></a></li>
+        
+    </ul>
+
+    </nav>
+  </div>
+</header>
+
+  
+    <aside class="sidebar" itemscope itemtype="http://schema.org/WPSideBar">
+  <div class="slimContent">
+    
+      <div class="widget">
+    <h3 class="widget-title">公告</h3>
+    <div class="widget-body">
+        <div id="board">
+            <div class="content">
+                <p>欢迎交流与分享经验!</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">分类</h3>
+    <div class="widget-body">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/Swift/">Swift</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/其它/">其它</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/区块链/">区块链</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/算法/">算法</a><span class="category-list-count">4</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/翻译/">翻译</a><span class="category-list-count">3</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/逆向/">逆向</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/逆向与安全/">逆向与安全</a><span class="category-list-count">1</span></li></ul>
+    </div>
+  </div>
+
+
+    
+      
+
+    
+      
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">归档</h3>
+    <div class="widget-body">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/04/">四月 2020</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/03/">三月 2020</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/02/">二月 2020</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/01/">一月 2020</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/11/">十一月 2019</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/10/">十月 2019</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/09/">九月 2019</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/08/">八月 2019</a><span class="archive-list-count">1</span></li></ul>
+    </div>
+  </div>
+
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">最新文章</h3>
+    <div class="widget-body">
+      <ul class="recent-post-list list-unstyled no-thumbnail">
+        
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                <a class="category-link" href="/categories/区块链/">区块链</a>
+              </p>
+              <p class="item-title">
+                <a href="/2020/04/08/block-chain-details/" class="title">区块链技术-笔记</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2020-04-08T11:16:07.000Z" itemprop="datePublished">2020-04-08</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                <a class="category-link" href="/categories/算法/">算法</a>
+              </p>
+              <p class="item-title">
+                <a href="/2020/04/03/string-sorting-algorithm/" class="title">【算法】手撕五花八门的字符串匹配算法</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2020-04-03T04:29:49.000Z" itemprop="datePublished">2020-04-03</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                <a class="category-link" href="/categories/算法/">算法</a>
+              </p>
+              <p class="item-title">
+                <a href="/2020/03/31/binary-search/" class="title">【算法】二分查找详解</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2020-03-31T14:35:33.000Z" itemprop="datePublished">2020-03-31</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                <a class="category-link" href="/categories/逆向/">逆向</a>
+              </p>
+              <p class="item-title">
+                <a href="/2020/02/24/crack-dingtalk-location-practice/" class="title">【逆】逆向分析实践-钉钉打卡/钉钉签到/钉钉定位/远程打卡功能</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2020-02-24T15:41:34.000Z" itemprop="datePublished">2020-02-24</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                <a class="category-link" href="/categories/翻译/">翻译</a>
+              </p>
+              <p class="item-title">
+                <a href="/2020/02/14/Unsafe-Swift-Using-Pointers-and-Interacting-With-C/" class="title">【译】不安全的Swift：Swift指针与C交互</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2020-02-14T14:42:54.000Z" itemprop="datePublished">2020-02-14</time>
+              </p>
+            </div>
+          </li>
+          
+      </ul>
+    </div>
+  </div>
+  
+
+    
+  </div>
+</aside>
+
+  
+  
+<main class="main" role="main">
+  <div class="content">
+  <article id="post-string-sorting-algorithm" class="article article-type-post" itemscope itemtype="http://schema.org/BlogPosting">
+    
+    <div class="article-header">
+      
+        
+  
+    <h1 class="article-title" itemprop="name">
+      【算法】手撕五花八门的字符串匹配算法
+    </h1>
+  
+
+      
+      <div class="article-meta">
+        <span class="article-date">
+    <i class="icon icon-calendar-check"></i>
+	<a href="/2020/04/03/string-sorting-algorithm/" class="article-date">
+	  <time datetime="2020-04-03T04:29:49.000Z" itemprop="datePublished">2020-04-03</time>
+	</a>
+</span>
+        
+  <span class="article-category">
+    <i class="icon icon-folder"></i>
+    <a class="article-category-link" href="/categories/算法/">算法</a>
+  </span>
+
+        
+
+        
+
+        <span class="post-comment"><i class="icon icon-comment"></i> <a href="/2020/04/03/string-sorting-algorithm/#comments" class="article-comment-link">评论</a></span>
+        
+	
+		<span class="post-wordcount hidden-xs" itemprop="wordCount">字数统计: 5.4k(字)</span>
+	
+	
+		<span class="post-readcount hidden-xs" itemprop="timeRequired">阅读时长: 22(分)</span>
+	
+
+      </div>
+    </div>
+    <div class="article-entry marked-body" itemprop="articleBody">
+      
+        <p>字符串匹配在计算机领域是个老生常谈的问题，对于任何一个开发工程师来说应该都不陌生，我们常用的各种语言一般都提供有字符串查找相关的方法，比如swift语言String相关的<code>contains</code>、<code>hasPrefix</code>、<code>first(where:)</code>等方法，他们底层的实现就是依赖字符串匹配算法的。</p>
+<p>字符串匹配算法有很多，这里只讲单模式串匹配算法，包括：BF算法、RK算法、BM算法、KMP算法。</p>
+<a id="more"></a>
+
+<p>在开始之前这里先定义几个概念：</p>
+<p><strong>主串</strong>和<strong>模式串</strong>。比如我们要在字符串A中查找字符串B，那么字符串B就是模式串，字符串A就是主串。</p>
+<h1 id="1-BF（Brute-Force）算法"><a href="#1-BF（Brute-Force）算法" class="headerlink" title="1.BF（Brute Force）算法"></a>1.BF（Brute Force）算法</h1><p>BF算法又叫做暴力匹配算法，顾名思义，它匹配字符串的方法很暴力，但是也很好懂，很容易实现，不足之处在于它的性能。</p>
+<p>BF算法很简单，从主串和模式串的第一位开始比较，然后第二位、第三位，如果遇到模式串和主串不相等的字符，则模式串向后移动一位，继续比较模式串和对应主串字符。</p>
+<p><strong>BF字符串匹配算法（swift）：</strong></p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/// 1.BF算法，暴力破解算法，从头到尾以此匹配</span></span><br><span class="line"><span class="class"><span class="keyword">extension</span> <span class="title">SearchInString</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">func</span> <span class="title">bruteForce</span><span class="params">(str: String, pattern: String)</span></span> -&gt; <span class="type">Int?</span> &#123;</span><br><span class="line">        <span class="keyword">let</span> strChars = <span class="type">Array</span>&lt;<span class="type">Character</span>&gt;(str)</span><br><span class="line">        <span class="keyword">let</span> patternChars = <span class="type">Array</span>&lt;<span class="type">Character</span>&gt;(pattern)</span><br><span class="line">        <span class="keyword">for</span> i <span class="keyword">in</span> <span class="number">0</span>...(strChars.<span class="built_in">count</span> - patternChars.<span class="built_in">count</span>) &#123;</span><br><span class="line">            <span class="keyword">var</span> currentIndex = <span class="number">0</span></span><br><span class="line">            <span class="keyword">while</span> currentIndex &lt; patternChars.<span class="built_in">count</span> &amp;&amp; strChars[currentIndex + i] == patternChars[currentIndex] &#123;</span><br><span class="line">                currentIndex += <span class="number">1</span></span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">if</span> currentIndex &gt;= patternChars.<span class="built_in">count</span> &#123;</span><br><span class="line">                <span class="keyword">return</span> i</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">nil</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>理论上，BF算法的时间复杂度很高，O(n*m)，但在实际开发中，它是个比较常用的字符串匹配算法，原因有两点：</p>
+<ol>
+<li>实际开发中，大部分场景下，主串和模式串的长度都不会太长，并且每次比较遇到不相等字符时候匹配就停止了，不需要把m个字符都比较以便，算法实际的效率要远高于O(n*m)。</li>
+<li>BF算法思想简单，代码实现也很简单。简单意味着不会出错，如果有bug也很容易暴露和修改，而这一点在软件工程中是相当重要的。</li>
+</ol>
+<h1 id="2-RK（Rabin-Karp）算法"><a href="#2-RK（Rabin-Karp）算法" class="headerlink" title="2.RK（Rabin-Karp）算法"></a>2.RK（Rabin-Karp）算法</h1><p>RK算法算是BF算法的改进版，BF算法的核心是匹配模式串和主串上对应的每一位，而RK算法引入了哈希算法，使主串和模式串的匹配立马降低很多。</p>
+<p>RK算法的思路是这样的，我们通过哈希算法分别对主串中的n-m+1个子串求哈希值，然后逐个比较子串和模式串的哈希值，如果某个子串哈希值和模式串相等，那就说明对应的子串和模式串匹配了（哈希冲突问题稍后解决）。由于哈希值是数字，数字之间比较是非常快的，所以模式串和子串比较的效率就提高了。</p>
+<p><img src="/resource/images/015c85a9c2a4adc11236f9a40c6d57ee.jpg" alt></p>
+<p>RK算法中，最关键的是哈希算法，如果我们使用常规的哈希算法，计算哈希值需要对字符串遍历多次，这样的RK不但不能提高效率，反而增加了字符串比较的成本。</p>
+<p>RK算法设计的非常有技巧，我们假设要匹配的字符串的字符集中只包含 K 个字符，我们可以用一个 K 进制数来表示一个子串，这个 K 进制数转化成十进制数，作为子串的哈希值。</p>
+<p>比如要处理的字符串只包含 a～z 这 26 个小写字母，那我们就用二十六进制来表示一个字符串。我们把 a～z 这 26 个字符映射到 0～25 这 26 个数字，a 就表示 0，b 就表示 1，以此类推，z 表示 25。</p>
+<p>第二种方法是，先建立一个每个字符对应唯一一个整形数字的哈希表，然后将字符串中字符对应的数字相加作为哈希值（本文代码将参照这种格式）。</p>
+<p>以上两种方法有一个特点，那就是当我们计算下一个子串哈希值时候并不需要遍历整个子串，只需要减去第一个字符的值，再加上子串尾部的值，使用这种方法计算哈希值效率就会提高很多。</p>
+<p>下面我们用第二种方法实现RK算法，我们假设已经创建好了哈希字典，核心代码如下所示：</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//RK算法</span></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">rabinKarp</span><span class="params">(str: String, pattern: String)</span></span> -&gt; <span class="type">Int?</span> &#123;</span><br><span class="line">    <span class="keyword">let</span> pattern = <span class="type">Array</span>&lt;<span class="type">Character</span>&gt;(pattern)</span><br><span class="line">    <span class="keyword">let</span> str = <span class="type">Array</span>&lt;<span class="type">Character</span>&gt;(str)</span><br><span class="line">    <span class="comment">//1.计算模式串哈希值</span></span><br><span class="line">    <span class="keyword">let</span> hashPattern = pattern.<span class="built_in">reduce</span>(<span class="number">0</span>) &#123;$<span class="number">0</span> + <span class="type">SearchInString</span>.dict[$<span class="number">1</span>]!&#125;</span><br><span class="line">    <span class="comment">//2.计算主串前n个字符的哈希值</span></span><br><span class="line">    <span class="keyword">var</span> hashCurrent = str.<span class="keyword">prefix</span>(pattern.<span class="built_in">count</span>).<span class="built_in">reduce</span>(<span class="number">0</span>) &#123;$<span class="number">0</span> + <span class="type">SearchInString</span>.dict[$<span class="number">1</span>]!&#125;</span><br><span class="line">    <span class="comment">//3.依次向后移动并计算哈希值并比较</span></span><br><span class="line">    <span class="keyword">for</span> index <span class="keyword">in</span> <span class="number">0</span>...(str.<span class="built_in">count</span> - pattern.<span class="built_in">count</span>) &#123;</span><br><span class="line">        <span class="keyword">if</span> index != <span class="number">0</span> &#123;</span><br><span class="line">            hashCurrent -= <span class="type">SearchInString</span>.dict[str[index - <span class="number">1</span>]]!</span><br><span class="line">            hashCurrent += <span class="type">SearchInString</span>.dict[str[index + pattern.<span class="built_in">count</span> - <span class="number">1</span>]]!</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span> hashCurrent == hashPattern &#123;</span><br><span class="line">            <span class="keyword">return</span> index</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="literal">nil</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>这里哈希字典的创建也是有讲究的，为了降低哈希碰撞，我们使用字符对应素数，判断素数这个问题算是很初级的算法了，这里直接贴代码：</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 判断是否是素数</span></span><br><span class="line"><span class="keyword">private</span> <span class="keyword">static</span> <span class="function"><span class="keyword">func</span> <span class="title">isPrime</span><span class="params">(num: Int)</span></span> -&gt; <span class="type">Bool</span> &#123;</span><br><span class="line">    <span class="keyword">guard</span> num &gt; <span class="number">3</span> <span class="keyword">else</span> &#123; <span class="keyword">return</span> num &gt; <span class="number">1</span> &#125;</span><br><span class="line">    <span class="keyword">var</span> i = <span class="number">2</span></span><br><span class="line">    <span class="keyword">while</span> i * i &lt; num &#123;</span><br><span class="line">        <span class="keyword">if</span> num % i == <span class="number">0</span> &#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="literal">false</span></span><br><span class="line">        &#125;</span><br><span class="line">        i += <span class="number">1</span></span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="literal">true</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>有了判断素数的方法，接下来我们需要建立一个字符和素数对应的哈希表，这里我们假设我们的主串和模式串中只包含大小写字母和数字，建立哈希表的代码如下所示：</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="comment">//输出前n个素数</span></span><br><span class="line"><span class="keyword">private</span> <span class="keyword">static</span> <span class="function"><span class="keyword">func</span> <span class="title">outputPrime</span><span class="params">(n: Int)</span></span> -&gt; [<span class="type">Int</span>] &#123;</span><br><span class="line">    <span class="keyword">var</span> primes = [<span class="number">2</span>]</span><br><span class="line">    <span class="keyword">var</span> currentNumber = <span class="number">3</span></span><br><span class="line">    <span class="keyword">while</span> primes.<span class="built_in">count</span> &lt; n &#123;</span><br><span class="line">        <span class="keyword">if</span> isPrime(num: currentNumber) &#123;</span><br><span class="line">            primes.append(currentNumber)</span><br><span class="line">        &#125;</span><br><span class="line">        currentNumber += <span class="number">2</span></span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> primes</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">var</span> dict: [<span class="type">Character</span>: <span class="type">Int</span>] = &#123;</span><br><span class="line">    <span class="comment">//构建缓存字典</span></span><br><span class="line">    <span class="keyword">let</span> primes = outputPrime(n: <span class="number">62</span>)</span><br><span class="line">    <span class="keyword">let</span> alphas = <span class="type">Array</span>&lt;<span class="type">Character</span>&gt;(<span class="string">"abcdefghijklmnopqrstuvwxyzABCDEFGHIGKLMNOPQRSTUVWXYZ1234567890"</span>)</span><br><span class="line">    <span class="keyword">var</span> dict = [<span class="type">Character</span>: <span class="type">Int</span>]()</span><br><span class="line">    <span class="keyword">for</span> (index,prime) <span class="keyword">in</span> primes.enumerated() &#123;</span><br><span class="line">        dict[alphas[index]] = prime</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> dict</span><br><span class="line">&#125;()</span><br></pre></td></tr></table></figure>
+
+<p>这样看起来很完美了，但是千万别忽略了哈希碰撞，在这个算法中，如果子串和模式串字母相同顺序不同，哈希值也是相同的，也就是出现了哈希碰撞。RK算法中，如果出现哈希碰撞，我们只能使用BF算法来一位一位的进行比较了。</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//防止哈希冲突返回错误的结果，当遇到两个hash值相同的字符串时候，使用bf算法验证一下</span></span><br><span class="line"><span class="keyword">private</span> <span class="function"><span class="keyword">func</span> <span class="title">checkMatching</span><span class="params">(str: [Character], index: Int, pattern: [Character])</span></span> -&gt; <span class="type">Bool</span> &#123;</span><br><span class="line">    <span class="keyword">for</span> (i, char) <span class="keyword">in</span> pattern.enumerated() &#123;</span><br><span class="line">        <span class="keyword">if</span> str[i + index] != char &#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="literal">false</span></span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="literal">true</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>到此为止，一个完美的RK算法已经完成啦！我们来看下最终的代码吧！</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/// 2.RK(Rabin-Karp)算法，基于哈希匹配的算法</span></span><br><span class="line"><span class="class"><span class="keyword">extension</span> <span class="title">SearchInString</span> </span>&#123;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">var</span> dict: [<span class="type">Character</span>: <span class="type">Int</span>] = &#123;</span><br><span class="line">        <span class="comment">//构建缓存字典</span></span><br><span class="line">        <span class="keyword">let</span> primes = outputPrime(n: <span class="number">62</span>)</span><br><span class="line">        <span class="keyword">let</span> alphas = <span class="type">Array</span>&lt;<span class="type">Character</span>&gt;(<span class="string">"abcdefghijklmnopqrstuvwxyzABCDEFGHIGKLMNOPQRSTUVWXYZ1234567890"</span>)</span><br><span class="line">        <span class="keyword">var</span> dict = [<span class="type">Character</span>: <span class="type">Int</span>]()</span><br><span class="line">        <span class="keyword">for</span> (index,prime) <span class="keyword">in</span> primes.enumerated() &#123;</span><br><span class="line">            dict[alphas[index]] = prime</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> dict</span><br><span class="line">    &#125;()</span><br><span class="line"></span><br><span class="line">    <span class="comment">//RK算法</span></span><br><span class="line">    <span class="function"><span class="keyword">func</span> <span class="title">rabinKarp</span><span class="params">(str: String, pattern: String)</span></span> -&gt; <span class="type">Int?</span> &#123;</span><br><span class="line">        <span class="keyword">let</span> pattern = <span class="type">Array</span>&lt;<span class="type">Character</span>&gt;(pattern)</span><br><span class="line">        <span class="keyword">let</span> str = <span class="type">Array</span>&lt;<span class="type">Character</span>&gt;(str)</span><br><span class="line">        <span class="comment">//1.计算模式串哈希值</span></span><br><span class="line">        <span class="keyword">let</span> hashPattern = pattern.<span class="built_in">reduce</span>(<span class="number">0</span>) &#123;$<span class="number">0</span> + <span class="type">SearchInString</span>.dict[$<span class="number">1</span>]!&#125;</span><br><span class="line">        <span class="comment">//2.计算主串前n个字符的哈希值</span></span><br><span class="line">        <span class="keyword">var</span> hashCurrent = str.<span class="keyword">prefix</span>(pattern.<span class="built_in">count</span>).<span class="built_in">reduce</span>(<span class="number">0</span>) &#123;$<span class="number">0</span> + <span class="type">SearchInString</span>.dict[$<span class="number">1</span>]!&#125;</span><br><span class="line">        <span class="comment">//3.依次向后移动并计算哈希值并比较</span></span><br><span class="line">        <span class="keyword">for</span> index <span class="keyword">in</span> <span class="number">0</span>...(str.<span class="built_in">count</span> - pattern.<span class="built_in">count</span>) &#123;</span><br><span class="line">            <span class="keyword">if</span> index != <span class="number">0</span> &#123;</span><br><span class="line">                hashCurrent -= <span class="type">SearchInString</span>.dict[str[index - <span class="number">1</span>]]!</span><br><span class="line">                hashCurrent += <span class="type">SearchInString</span>.dict[str[index + pattern.<span class="built_in">count</span> - <span class="number">1</span>]]!</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">if</span> hashCurrent == hashPattern &amp;&amp; checkMatching(str: str, index: index, pattern: pattern) &#123;</span><br><span class="line">                <span class="keyword">return</span> index</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">nil</span></span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="comment">//防止哈希冲突返回错误的结果，当遇到两个hash值相同的字符串时候，使用bf算法验证一下</span></span><br><span class="line">    <span class="keyword">private</span> <span class="function"><span class="keyword">func</span> <span class="title">checkMatching</span><span class="params">(str: [Character], index: Int, pattern: [Character])</span></span> -&gt; <span class="type">Bool</span> &#123;</span><br><span class="line">        <span class="keyword">for</span> (i, char) <span class="keyword">in</span> pattern.enumerated() &#123;</span><br><span class="line">            <span class="keyword">if</span> str[i + index] != char &#123;</span><br><span class="line">                <span class="keyword">return</span> <span class="literal">false</span></span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">true</span></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//输出前n个素数</span></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="function"><span class="keyword">func</span> <span class="title">outputPrime</span><span class="params">(n: Int)</span></span> -&gt; [<span class="type">Int</span>] &#123;</span><br><span class="line">        <span class="keyword">var</span> primes = [<span class="number">2</span>]</span><br><span class="line">        <span class="keyword">var</span> currentNumber = <span class="number">3</span></span><br><span class="line">        <span class="keyword">while</span> primes.<span class="built_in">count</span> &lt; n &#123;</span><br><span class="line">            <span class="keyword">if</span> isPrime(num: currentNumber) &#123;</span><br><span class="line">                primes.append(currentNumber)</span><br><span class="line">            &#125;</span><br><span class="line">            currentNumber += <span class="number">2</span></span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> primes</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="comment">// 判断是否是素数</span></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="function"><span class="keyword">func</span> <span class="title">isPrime</span><span class="params">(num: Int)</span></span> -&gt; <span class="type">Bool</span> &#123;</span><br><span class="line">        <span class="keyword">guard</span> num &gt; <span class="number">3</span> <span class="keyword">else</span> &#123; <span class="keyword">return</span> num &gt; <span class="number">1</span> &#125;</span><br><span class="line">        <span class="keyword">var</span> i = <span class="number">2</span></span><br><span class="line">        <span class="keyword">while</span> i * i &lt; num &#123;</span><br><span class="line">            <span class="keyword">if</span> num % i == <span class="number">0</span> &#123;</span><br><span class="line">                <span class="keyword">return</span> <span class="literal">false</span></span><br><span class="line">            &#125;</span><br><span class="line">            i += <span class="number">1</span></span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">true</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h1 id="3-BM（Boyer-Moore）算法"><a href="#3-BM（Boyer-Moore）算法" class="headerlink" title="3.BM（Boyer-Moore）算法"></a>3.BM（Boyer-Moore）算法</h1><p>对于工业级的软件开发来说，我们希望算法尽可能的高效，并且在极端情况下性能不要退化太严重，这时候使用BF或者RK就不太适合了，BF在极端情况下性能退化非常严重，RK算法设计一个合理的哈希算法并不容易。那么，对于查找是重要功能软件是如何处理的呢？</p>
+<p>BM算法是非常高效的字符串匹配算法，有试验统计，它的性能是著名的<a href="[https://zh.wikipedia.org/wiki/%E5%85%8B%E5%8A%AA%E6%96%AF-%E8%8E%AB%E9%87%8C%E6%96%AF-%E6%99%AE%E6%8B%89%E7%89%B9%E7%AE%97%E6%B3%95](https://zh.wikipedia.org/wiki/克努斯-莫里斯-普拉特算法)">KMP 算法</a>3到4倍。</p>
+<p>BM算法的核心思想并不难，字符串匹配算法的核心是，遇到不匹配的字符串时候，就将模式串向后移动一位，那么到底能不能找到一个规律，当遇到字符串不匹配时候，将模式串向后多移动几位又保证不会错过匹配字符的情况呢？</p>
+<p>BM算法的本质其实就是在寻找这种规律，借助这种规律，在模式串与主串的匹配过程中，当模式串和主串某个字符不匹配的时候，能够跳过一些一定不匹配的情况，将模式串向后多滑动几位。</p>
+<p>BM算法分为两部分，分别是<strong>坏字符规则</strong>和<strong>好后缀规则</strong>。</p>
+<h2 id="3-1-坏字符规则"><a href="#3-1-坏字符规则" class="headerlink" title="3.1 坏字符规则"></a>3.1 坏字符规则</h2><p>前两节讲的算法，匹配顺序都是从前往后匹配的，而BM算法的匹配是从后向前匹配的，按照下标从大到小匹配的。</p>
+<p><img src="/resource/images/540809418354024206d9989cb6cdd89e.jpg" alt></p>
+<p>在匹配的过程中，当发现某个字符不匹配，这个不匹配的字符叫做<strong>坏字符</strong>（主串中的字符）。</p>
+<p>坏字符规则的核心是，发现坏字符的处理，当发现坏字符时候并不会将模式串向后移动一位，然后继续从后向前匹配，而是在模式串中查找坏字符出现的第一个位置，这个下标记作xi，我们将坏字符在模式串中的位置记作si，如果坏字符在模式串中不存在，记作-1。那么模式串向后移动的位数就等于si-xi。</p>
+<p><img src="/resource/images/8f520fb9d9cec0f6ea641d4181eb432e.jpg" alt></p>
+<p>根据坏字符的思想，BM算法代码如下所示：</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//BM算法主体</span></span><br><span class="line"><span class="comment">//算法思想：模式串和主串从后向前匹配，找到第一个不匹配的位置，使用好后缀或者坏字符算法计算位移距离，尽可能的向后位移</span></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">boyerMoore</span><span class="params">(str: String, pattern: String)</span></span> -&gt; <span class="type">Int?</span> &#123;</span><br><span class="line">    <span class="keyword">let</span> str = <span class="type">Array</span>&lt;<span class="type">Character</span>&gt;(str)</span><br><span class="line">    <span class="keyword">let</span> pattern = <span class="type">Array</span>&lt;<span class="type">Character</span>&gt;(pattern)</span><br><span class="line">    <span class="keyword">let</span> patternCharLocations = generateCharsDict(pattern: pattern)</span><br><span class="line">    <span class="keyword">let</span> mainStrAssist = generateGoodSuffixAssist(pattern: str)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">var</span> i = <span class="number">0</span>   <span class="comment">//表示模式串和主串对齐的第一个字符位置</span></span><br><span class="line">    <span class="keyword">while</span> i &lt;= str.<span class="built_in">count</span> - pattern.<span class="built_in">count</span> &#123;</span><br><span class="line">        <span class="comment">//从后向前匹配，找到坏字符位置</span></span><br><span class="line">        <span class="keyword">var</span> j = pattern.<span class="built_in">count</span> - <span class="number">1</span></span><br><span class="line">        <span class="comment">//如果模式串和主串对应位置匹配，则一直向前继续匹配</span></span><br><span class="line">        <span class="keyword">while</span> j &gt;= <span class="number">0</span> &amp;&amp; pattern[j] == str[j + i] &#123;</span><br><span class="line">            j -= <span class="number">1</span></span><br><span class="line">        &#125;</span><br><span class="line">        <span class="comment">//当j&lt;0时候，说明主串和模式串完全匹配，找到了第一个匹配的位置i</span></span><br><span class="line">        <span class="keyword">if</span> j &lt; <span class="number">0</span> &#123;</span><br><span class="line">            <span class="keyword">return</span> i</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="comment">//根据坏字符规则更新模式串和主串对齐的起始位置</span></span><br><span class="line">        <span class="keyword">let</span> badCharacterMoveLength = (j - (patternCharLocations[str[j + i]] ?? -<span class="number">1</span>))</span><br><span class="line">        i = i + badCharacterMoveLength</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="literal">nil</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//生成模式串每个字符对应的位置,用于坏字符规则查找坏字符在模式串中位置</span></span><br><span class="line"><span class="keyword">private</span> <span class="function"><span class="keyword">func</span> <span class="title">generateCharsDict</span><span class="params">(pattern: [Character])</span></span> -&gt; [<span class="type">Character</span>: <span class="type">Int</span>] &#123;</span><br><span class="line">    <span class="keyword">var</span> dict = [<span class="type">Character</span>: <span class="type">Int</span>]()</span><br><span class="line">    <span class="keyword">for</span> index <span class="keyword">in</span> <span class="number">0</span>..&lt;pattern.<span class="built_in">count</span> &#123;</span><br><span class="line">        dict[pattern[index]] = index</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> dict</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>这里我要特别说明一点，如果坏字符在模式串里多处出现，那我们在计算 xi 的时候，选择最靠后的那个，因为这样不会让模式串滑动过多，导致本来可能匹配的情况被滑动略过。为了加快坏字符在模式串中位置的查找，这里同样建立一个哈希表存储模式串中每个字符最后一次出现的位置。</p>
+<blockquote>
+<p>这里需要注意的是，si-xi结果可能是负数，这样模式串不但不会向后移动，反而会倒推。所以BM算法还需要好后缀规则。</p>
+</blockquote>
+<h2 id="3-2-好后缀规则"><a href="#3-2-好后缀规则" class="headerlink" title="3.2 好后缀规则"></a>3.2 好后缀规则</h2><p>好后缀规则实际上和坏字符规则的思想类似，如下图所示。</p>
+<p><img src="/resource/images/d78990dbcb794d1aa2cf4a3c646ae58a.jpg" alt></p>
+<p>坏字符规则本质上就是从模式串中查找最后一个和坏字符匹配的位置，好后缀规则本质上是从模式串中查找最后一个和好后缀匹配的位置，这两个规则该怎么配合呢？实际上很简单，当发现坏字符时候，分别计算坏字符移动的位数和好后缀移动位数，取最大的即可。</p>
+<p><img src="/resource/images/b9785be3e91e34bbc23961f67c234b63.jpg" alt></p>
+<p>好后缀规则的原理就是这么简单，但是这里还有个关键问题没有讲到，那就是如何在模式串中查找好后缀出现的位置呢？如果每次都遍历查找，效率是非常低下的，这里其实有个技巧。</p>
+<p>因为好后缀也是模式串本身的后缀子串，所以，我们可以在模式串和主串正式匹配之前，通过预处理模式串，预先计算好模式串的每个后缀子串，对应的另一个可匹配子串的位置。而这个处理过程是非常有技巧并且很难懂的。</p>
+<p>我们需要引入一个关键变量suffix数组，suffix数组的下标k，表示后缀子串的长度，下标对应的数组值存储的是，在模式串中跟好后缀相匹配的子串的起始下标，如图所示：</p>
+<p><img src="/resource/images/99a6cfadf2f9a713401ba8feac2484c2.jpg" alt></p>
+<p>这里为了避免滑动过头，suffix存储的是最靠后的那个子串的起始位置。此外，我们还需要一个boolen数组prefix，记录模式串的后缀子串是否能匹配模式串的前缀子串。</p>
+<p><img src="/resource/images/279be7d64e6254dac1a32d2f6d1a2383.jpg" alt></p>
+<p>这个数组的填充是非常巧妙的，详见代码所示：</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//生成好后缀规则辅助数组</span></span><br><span class="line"><span class="keyword">private</span> <span class="function"><span class="keyword">func</span> <span class="title">generateGoodSuffixAssist</span><span class="params">(pattern: [Character])</span></span> -&gt; (suffix: [<span class="type">Int</span>], <span class="keyword">prefix</span>:[<span class="type">Bool</span>]) &#123;</span><br><span class="line">    <span class="keyword">let</span> <span class="built_in">count</span> = pattern.<span class="built_in">count</span></span><br><span class="line">    <span class="keyword">var</span> suffix = <span class="type">Array</span>&lt;<span class="type">Int</span>&gt;.<span class="keyword">init</span>(repeating: -<span class="number">1</span>, <span class="built_in">count</span>: <span class="built_in">count</span>)</span><br><span class="line">    <span class="keyword">var</span> <span class="keyword">prefix</span> = <span class="type">Array</span>&lt;<span class="type">Bool</span>&gt;(repeating: <span class="literal">false</span>, <span class="built_in">count</span>: <span class="built_in">count</span>)</span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> <span class="number">0</span>..&lt;(<span class="built_in">count</span> - <span class="number">1</span>) &#123;</span><br><span class="line">        <span class="keyword">var</span> j = i</span><br><span class="line">        <span class="keyword">var</span> k = <span class="number">0</span></span><br><span class="line">        <span class="keyword">while</span> j &gt;= <span class="number">0</span> &amp;&amp; pattern[j] == pattern[<span class="built_in">count</span> - <span class="number">1</span> - k] &#123;</span><br><span class="line">            j -= <span class="number">1</span></span><br><span class="line">            k += <span class="number">1</span></span><br><span class="line">            suffix[k] = j + <span class="number">1</span></span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span> j == -<span class="number">1</span> &#123;</span><br><span class="line">            <span class="keyword">prefix</span>[k].toggle()</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> (suffix, <span class="keyword">prefix</span>)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>至此好后缀规则已经讲完了，我们把好后缀规则加到前面坏字符规则代码里面，就可以得到BM算法的完整版本代码实现。</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/// 3.BM（Boyer-Moore）算法，基于坏字符和好后缀</span></span><br><span class="line"><span class="class"><span class="keyword">extension</span> <span class="title">SearchInString</span> </span>&#123;</span><br><span class="line">    <span class="comment">//BM算法主体</span></span><br><span class="line">    <span class="comment">//算法思想：模式串和主串从后向前匹配，找到第一个不匹配的位置，使用好后缀或者坏字符算法计算位移距离，尽可能的向后位移</span></span><br><span class="line">    <span class="function"><span class="keyword">func</span> <span class="title">boyerMoore</span><span class="params">(str: String, pattern: String)</span></span> -&gt; <span class="type">Int?</span> &#123;</span><br><span class="line">        <span class="keyword">let</span> str = <span class="type">Array</span>&lt;<span class="type">Character</span>&gt;(str)</span><br><span class="line">        <span class="keyword">let</span> pattern = <span class="type">Array</span>&lt;<span class="type">Character</span>&gt;(pattern)</span><br><span class="line">        <span class="keyword">let</span> patternCharLocations = generateCharsDict(pattern: pattern)</span><br><span class="line">        <span class="keyword">let</span> mainStrAssist = generateGoodSuffixAssist(pattern: str)</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">var</span> i = <span class="number">0</span>   <span class="comment">//表示模式串和主串对齐的第一个字符位置</span></span><br><span class="line">        <span class="keyword">while</span> i &lt;= str.<span class="built_in">count</span> - pattern.<span class="built_in">count</span> &#123;</span><br><span class="line">            <span class="comment">//从后向前匹配，找到坏字符位置</span></span><br><span class="line">            <span class="keyword">var</span> j = pattern.<span class="built_in">count</span> - <span class="number">1</span></span><br><span class="line">            <span class="comment">//如果模式串和主串对应位置匹配，则一直向前继续匹配</span></span><br><span class="line">            <span class="keyword">while</span> j &gt;= <span class="number">0</span> &amp;&amp; pattern[j] == str[j + i] &#123;</span><br><span class="line">                j -= <span class="number">1</span></span><br><span class="line">            &#125;</span><br><span class="line">            <span class="comment">//当j&lt;0时候，说明主串和模式串完全匹配，找到了第一个匹配的位置i</span></span><br><span class="line">            <span class="keyword">if</span> j &lt; <span class="number">0</span> &#123;</span><br><span class="line">                <span class="keyword">return</span> i</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="comment">//根据坏字符规则更新模式串和主串对齐的起始位置</span></span><br><span class="line">            <span class="keyword">let</span> badCharacterMoveLength = (j - (patternCharLocations[str[j + i]] ?? -<span class="number">1</span>))</span><br><span class="line">            <span class="keyword">var</span> goodSuffixLength = <span class="number">0</span></span><br><span class="line">            <span class="keyword">if</span> j &lt; pattern.<span class="built_in">count</span> - <span class="number">1</span>&#123;</span><br><span class="line">                goodSuffixLength = goodSuffixMoveLength(index: j, length: pattern.<span class="built_in">count</span>, suffix: mainStrAssist.suffix, <span class="keyword">prefix</span>: mainStrAssist.<span class="keyword">prefix</span>)</span><br><span class="line">            &#125;</span><br><span class="line">            i = i + <span class="built_in">max</span>(badCharacterMoveLength, goodSuffixLength)</span><br><span class="line">        &#125;</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">return</span> <span class="literal">nil</span></span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="comment">//生成模式串每个字符对应的位置,用于坏字符规则查找坏字符在模式串中位置</span></span><br><span class="line">    <span class="keyword">private</span> <span class="function"><span class="keyword">func</span> <span class="title">generateCharsDict</span><span class="params">(pattern: [Character])</span></span> -&gt; [<span class="type">Character</span>: <span class="type">Int</span>] &#123;</span><br><span class="line">        <span class="keyword">var</span> dict = [<span class="type">Character</span>: <span class="type">Int</span>]()</span><br><span class="line">        <span class="keyword">for</span> index <span class="keyword">in</span> <span class="number">0</span>..&lt;pattern.<span class="built_in">count</span> &#123;</span><br><span class="line">            dict[pattern[index]] = index</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> dict</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="comment">//生成好后缀规则字符串位置</span></span><br><span class="line">    <span class="keyword">private</span> <span class="function"><span class="keyword">func</span> <span class="title">goodSuffixMoveLength</span><span class="params">(index: Int, length: Int, suffix: [Int], <span class="keyword">prefix</span>:[Bool])</span></span> -&gt; <span class="type">Int</span> &#123;</span><br><span class="line">        <span class="keyword">let</span> k = length - <span class="number">1</span> - index</span><br><span class="line">        <span class="keyword">if</span> suffix[k] != -<span class="number">1</span> &#123;</span><br><span class="line">            <span class="keyword">return</span> index - suffix[k] + <span class="number">1</span></span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">for</span> r <span class="keyword">in</span> (index + <span class="number">2</span>)..&lt;(length - <span class="number">1</span>) &#123;</span><br><span class="line">            <span class="keyword">if</span> <span class="keyword">prefix</span>[length - r] == <span class="literal">true</span> &#123;</span><br><span class="line">                <span class="keyword">return</span> r</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> length</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="comment">//生成好后缀规则辅助数组</span></span><br><span class="line">    <span class="keyword">private</span> <span class="function"><span class="keyword">func</span> <span class="title">generateGoodSuffixAssist</span><span class="params">(pattern: [Character])</span></span> -&gt; (suffix: [<span class="type">Int</span>], <span class="keyword">prefix</span>:[<span class="type">Bool</span>]) &#123;</span><br><span class="line">        <span class="keyword">let</span> <span class="built_in">count</span> = pattern.<span class="built_in">count</span></span><br><span class="line">        <span class="keyword">var</span> suffix = <span class="type">Array</span>&lt;<span class="type">Int</span>&gt;.<span class="keyword">init</span>(repeating: -<span class="number">1</span>, <span class="built_in">count</span>: <span class="built_in">count</span>)</span><br><span class="line">        <span class="keyword">var</span> <span class="keyword">prefix</span> = <span class="type">Array</span>&lt;<span class="type">Bool</span>&gt;(repeating: <span class="literal">false</span>, <span class="built_in">count</span>: <span class="built_in">count</span>)</span><br><span class="line">        <span class="keyword">for</span> i <span class="keyword">in</span> <span class="number">0</span>..&lt;(<span class="built_in">count</span> - <span class="number">1</span>) &#123;</span><br><span class="line">            <span class="keyword">var</span> j = i</span><br><span class="line">            <span class="keyword">var</span> k = <span class="number">0</span></span><br><span class="line">            <span class="keyword">while</span> j &gt;= <span class="number">0</span> &amp;&amp; pattern[j] == pattern[<span class="built_in">count</span> - <span class="number">1</span> - k] &#123;</span><br><span class="line">                j -= <span class="number">1</span></span><br><span class="line">                k += <span class="number">1</span></span><br><span class="line">                suffix[k] = j + <span class="number">1</span></span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">if</span> j == -<span class="number">1</span> &#123;</span><br><span class="line">                <span class="keyword">prefix</span>[k].toggle()</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> (suffix, <span class="keyword">prefix</span>)</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>BM算法尽管难懂、复杂，但是匹配的效率却很高，在实际的软件开发中，特别是一些文本编辑器中，应用比较多。BM算法的核心思想是，利用模式串本身的特点，在模式串中某个字符与主串不匹配的时候，将模式串往后多滑动几位，以此来减少不必要的字符比较，提高匹配效率。</p>
+<blockquote>
+<p>这个算法体现的解决问题思想：</p>
+<ol>
+<li>当需要查找，又想不要太高的时间复杂度，我们可以使用散列表存储查找结果。</li>
+<li>如果某个表达式计算开销较大又需要反复使用怎么办？预处理并做缓存。</li>
+</ol>
+</blockquote>
+<h1 id="4-KMP（Knuth-Morris-Pratt）算法"><a href="#4-KMP（Knuth-Morris-Pratt）算法" class="headerlink" title="4.KMP（Knuth Morris Pratt）算法"></a>4.KMP（Knuth Morris Pratt）算法</h1><p>KMP算法是这几个字符串匹配算法中最难理解的，并且网上有很多讲解，这里我也就不浪费太多时间 在这个算法原理细节上了。</p>
+<p>实际上，KMP算法原理和BM算法原理很相似，在BM算法中，我们从后向前匹配，找到不匹配的字符叫做<strong>坏字符</strong>，已经匹配的后缀子串叫做<strong>好后缀</strong>，当我们遇到 坏字符时候，通过坏字符法则和好后缀法则尽可能多的将后缀子串向后滑动。在KMP算法中，我们从前向后匹配，当遇到坏字符时候，之前已经匹配的子串叫做<strong>好前缀</strong>，我们拿好前缀的后缀子串和模式串的前缀做对比，找到第一个匹配的，然后模式串向后滑动到模式串前缀和好前缀后缀重叠为止，<strong>原理其实还是在遇到坏字符时候尽可能多的将模式串向后滑动</strong>，KMP基本原理图如下所示：</p>
+<p><img src="/resource/images/f4ef2c1e6ce5915e1c6460c2e26c9469.jpg" alt></p>
+<p>在这个算法中<strong>最核心的部分其实是如何计算好前缀的最长可匹配前缀子串</strong>，我们假设现在已经得到了一个next数组来存储最长可匹配前缀子串的位置，那么KMP算法的主体其实很简单了，如下所示：</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// a, b分别是主串和模式串；n, m分别是主串和模式串的长度。</span></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">kmp</span><span class="params">(str: String, pattern: String)</span></span> -&gt; <span class="type">Int?</span> &#123;</span><br><span class="line">    <span class="keyword">let</span> a = <span class="type">Array</span>&lt;<span class="type">Character</span>&gt;(str)</span><br><span class="line">    <span class="keyword">let</span> b = <span class="type">Array</span>&lt;<span class="type">Character</span>&gt;(pattern)</span><br><span class="line">    <span class="keyword">let</span> n = a.<span class="built_in">count</span></span><br><span class="line">    <span class="keyword">let</span> m = b.<span class="built_in">count</span></span><br><span class="line">    <span class="keyword">let</span> next = getNexts(pattern: b)</span><br><span class="line">    <span class="keyword">var</span> j = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> <span class="number">0</span>..&lt;n &#123;</span><br><span class="line">        <span class="keyword">while</span> j &gt; <span class="number">0</span> &amp;&amp; a[i] != b[j] &#123; <span class="comment">// 一直找到a[i]和b[j]</span></span><br><span class="line">            j = next[j - <span class="number">1</span>] + <span class="number">1</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span> (a[i] == b[j]) &#123;</span><br><span class="line">            j += <span class="number">1</span></span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span> (j == m) &#123; <span class="comment">// 找到匹配模式串的了</span></span><br><span class="line">          <span class="keyword">return</span> i - m + <span class="number">1</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="literal">nil</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>当然，我们也可以通过最笨的暴力方法得到每个好前缀的最长可匹配前缀子串，但是那样算法效率将 大大打折，特别是在模式串比较长的场景下。实际上，我们可以通过动态规划的方法快速的计算出来，这里的关键在于如何利用已经计算出来的值推算出下一个next数组中的值。</p>
+<p>前面已经给出了KMP算法的框架代码了，现在把这部分代码合并起来，这两部分合在一起，就是整个KMP算法的代码实现。</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//4.KMP</span></span><br><span class="line"><span class="class"><span class="keyword">extension</span> <span class="title">SearchInString</span> </span>&#123;</span><br><span class="line">    <span class="comment">// a, b分别是主串和模式串；n, m分别是主串和模式串的长度。</span></span><br><span class="line">    <span class="function"><span class="keyword">func</span> <span class="title">kmp</span><span class="params">(str: String, pattern: String)</span></span> -&gt; <span class="type">Int?</span> &#123;</span><br><span class="line">        <span class="keyword">let</span> a = <span class="type">Array</span>&lt;<span class="type">Character</span>&gt;(str)</span><br><span class="line">        <span class="keyword">let</span> b = <span class="type">Array</span>&lt;<span class="type">Character</span>&gt;(pattern)</span><br><span class="line">        <span class="keyword">let</span> n = a.<span class="built_in">count</span></span><br><span class="line">        <span class="keyword">let</span> m = b.<span class="built_in">count</span></span><br><span class="line">        <span class="keyword">let</span> next = getNexts(pattern: b)</span><br><span class="line">        <span class="keyword">var</span> j = <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">for</span> i <span class="keyword">in</span> <span class="number">0</span>..&lt;n &#123;</span><br><span class="line">            <span class="keyword">while</span> j &gt; <span class="number">0</span> &amp;&amp; a[i] != b[j] &#123; <span class="comment">// 一直找到a[i]和b[j]</span></span><br><span class="line">                j = next[j - <span class="number">1</span>] + <span class="number">1</span>;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">if</span> (a[i] == b[j]) &#123;</span><br><span class="line">                j += <span class="number">1</span></span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">if</span> (j == m) &#123; <span class="comment">// 找到匹配模式串的了</span></span><br><span class="line">              <span class="keyword">return</span> i - m + <span class="number">1</span>;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">nil</span></span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line"></span><br><span class="line">    <span class="comment">// b表示模式串，m表示模式串的长度</span></span><br><span class="line">    <span class="keyword">private</span> <span class="function"><span class="keyword">func</span> <span class="title">getNexts</span><span class="params">(pattern: [Character])</span></span> -&gt; [<span class="type">Int</span>] &#123;</span><br><span class="line">        <span class="comment">// b表示模式串，m表示模式串的长度</span></span><br><span class="line">        <span class="keyword">let</span> b = <span class="type">Array</span>&lt;<span class="type">Character</span>&gt;(pattern)</span><br><span class="line">        <span class="keyword">let</span> m = b.<span class="built_in">count</span></span><br><span class="line">        <span class="keyword">var</span> next = [<span class="type">Int</span>](repeating: -<span class="number">1</span>, <span class="built_in">count</span>: m)</span><br><span class="line">        <span class="keyword">var</span> k = -<span class="number">1</span></span><br><span class="line">        <span class="keyword">for</span> i <span class="keyword">in</span> <span class="number">1</span>..&lt;m &#123;</span><br><span class="line">            <span class="keyword">while</span> k != -<span class="number">1</span> &amp;&amp; b[k + <span class="number">1</span>] != b[i] &#123;</span><br><span class="line">                k = next[k]</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">if</span> b[k + <span class="number">1</span>] == b[i] &#123;</span><br><span class="line">                k += <span class="number">1</span></span><br><span class="line">            &#125;</span><br><span class="line">            next[i] = k</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> next</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>Refersnce</p>
+<p><a href="https://time.geekbang.org/column/article/71187" target="_blank" rel="noopener">https://time.geekbang.org/column/article/71187</a></p>
+</blockquote>
+
+      
+    </div>
+    <div class="article-footer">
+      
+        <blockquote class="mt-2x">
+  <ul class="post-copyright list-unstyled">
+    
+    <li class="post-copyright-link hidden-xs">
+      <strong>本文链接：</strong>
+      <a href="http://blog.weidongfang.online/2020/04/03/string-sorting-algorithm/" title="【算法】手撕五花八门的字符串匹配算法" target="_blank" rel="external">http://blog.weidongfang.online/2020/04/03/string-sorting-algorithm/</a>
+    </li>
+    
+    <li class="post-copyright-license">
+      <strong>版权声明： </strong> 本博客所有文章除特别声明外，均采用 <a href="http://creativecommons.org/licenses/by/4.0/deed.zh" target="_blank" rel="external">CC BY 4.0 CN协议</a> 许可协议。转载请注明出处！
+    </li>
+  </ul>
+</blockquote>
+
+
+<div class="panel panel-default panel-badger">
+  <div class="panel-body">
+    <figure class="media">
+      <div class="media-left">
+        <a href="https://github.com/dev-dongfang" target="_blank" class="img-burn thumb-sm visible-lg">
+          <img src="/images/favicon.jpg" class="img-rounded w-full" alt="">
+        </a>
+      </div>
+      <div class="media-body">
+        <h3 class="media-heading"><a href="https://github.com/dev-dongfang" target="_blank"><span class="text-dark">Dev-Dongfang</span><small class="ml-1x">Keep Moving ！</small></a></h3>
+        <div>热爱计算机，热爱软件开发，iOS开发者，Swift开发者，熟悉iOS系统逆向与安全。熟悉常用的数据结构与算法，对计算机操作系统和编译过程比较感兴趣，目前仍在修炼。</div>
+      </div>
+    </figure>
+  </div>
+</div>
+
+
+      
+    </div>
+  </article>
+  
+    
+  <section id="comments">
+  	
+
+    
+  </section>
+
+
+  
+</div>
+
+  <nav class="bar bar-footer clearfix" data-stick-bottom>
+  <div class="bar-inner">
+  
+  <ul class="pager pull-left">
+    
+    <li class="prev">
+      <a href="/2020/04/08/block-chain-details/" title="区块链技术-笔记"><i class="icon icon-angle-left" aria-hidden="true"></i><span>&nbsp;&nbsp;上一篇</span></a>
+    </li>
+    
+    
+    <li class="next">
+      <a href="/2020/03/31/binary-search/" title="【算法】二分查找详解"><span>下一篇&nbsp;&nbsp;</span><i class="icon icon-angle-right" aria-hidden="true"></i></a>
+    </li>
+    
+    
+  </ul>
+  
+  
+  
+  <div class="bar-right">
+    
+    <div class="share-component" data-sites="wechat,twitter,qq,weibo" data-mobile-sites="wechat,twitter,qq,weibo"></div>
+    
+  </div>
+  </div>
+</nav>
+  
+
+
+</main>
+
+  <footer class="footer" itemscope itemtype="http://schema.org/WPFooter">
+	
+	
+    <ul class="social-links">
+    	
+        <li><a href="https://github.com/dev-dongfang" target="_blank" title="Github" data-toggle=tooltip data-placement=top><i class="icon icon-github"></i></a></li>
+        
+        <li><a href="https://twitter.com/weidf" target="_blank" title="Twitter" data-toggle=tooltip data-placement=top><i class="icon icon-twitter"></i></a></li>
+        
+        <li><a href="mailto:dev.dongfang@gmail.com" target="_blank" title="Email" data-toggle=tooltip data-placement=top><i class="icon icon-email"></i></a></li>
+        
+    </ul>
+
+    <div class="copyright">
+    	
+        <div class="publishby">
+        	Theme by <a href="https://github.com/cofess" target="_blank"> cofess </a>base on <a href="https://github.com/cofess/hexo-theme-pure" target="_blank">pure</a>.
+        </div>
+    </div>
+</footer>
+  <script src="//cdn.jsdelivr.net/npm/jquery@1.12.4/dist/jquery.min.js"></script>
+<script>
+window.jQuery || document.write('<script src="js/jquery.min.js"><\/script>')
+</script>
+<script src="/js/plugin.min.js"></script>
+<script src="/js/application.js"></script>
+
+
+    <script>
+(function ($) {
+    $('.search-form').on('submit', function (e) {
+        var keyword = $('.search-form-input[name="wd"]').val();
+        window.location = 'https://www.baidu.com/s?wd=site:blog.weidongfang.online ' + keyword;
+        return false;
+    });
+})(jQuery);
+</script>
+
+
+
+
+   
+
+
+
+
+   
+    
+<script src="//cdn.jsdelivr.net/npm/gitment@0.0.3/dist/gitment.browser.min.js"></script>
+<script>
+var gitment = new Gitment({
+  // id默认为当前页面url，如果url后带参数或锚点，gitment要重新初始化
+  // https://github.com/imsun/gitment/issues/55
+  // 解决方案：id:window.location.pathname,或者将id设置为当前页面标题
+  id: '【算法】手撕五花八门的字符串匹配算法', 
+  owner: 'hell03W', // 可以是你的GitHub用户名，也可以是github id
+  repo: 'TechBlogComment',
+  oauth: {
+    client_id: '30db1eac28643da3f3ea',
+    client_secret: '7d19e8067df8a03bdb5d26e6e2b0490b778031cb',
+  }
+})
+gitment.render('comments')
+</script>
+
+
+
+
+
+
+
+
+    <script defer>
+var _hmt = _hmt || [];
+(function() {
+    var hm = document.createElement("script");
+    hm.src = "//hm.baidu.com/hm.js?9973e9eaf1485d0719cd19d7436e2fea";
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+
+
+</body>
+</html>
