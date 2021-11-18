@@ -1,0 +1,586 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 3.9.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/resource/images/head_icon180.jpg">
+  <link rel="icon" type="image/png" sizes="32x32" href="/resource/images/head_icon180.jpg">
+  <link rel="icon" type="image/png" sizes="16x16" href="/resource/images/head_icon32.jpg">
+  <link rel="mask-icon" href="/resource/images/head_icon180.jpg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"blog.weidongfang.online","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":true,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":"valine","storage":true,"lazyload":false,"nav":null,"activeClass":"valine"},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="星巴克在国内的定价算是比较贵的，至少对于我来讲是比较贵的，为了做本次的阅读总结，我专程跑到附近的星巴克咖啡店体验了一番。看完这本书后再去体验，对星巴克的文化有了更深理解，这不是第一次去，但这次喝星巴克有了不一样的感觉。">
+<meta name="keywords" content="iOS, 逆向与安全, swift, flutter, linux">
+<meta property="og:type" content="article">
+<meta property="og:title" content="《将心注入-一杯咖啡成就星巴克传奇》— 阅读与总结">
+<meta property="og:url" content="http://blog.weidongfang.online/posts/2021-05/591hsi.html">
+<meta property="og:site_name" content="Dev-Dongfang">
+<meta property="og:description" content="星巴克在国内的定价算是比较贵的，至少对于我来讲是比较贵的，为了做本次的阅读总结，我专程跑到附近的星巴克咖啡店体验了一番。看完这本书后再去体验，对星巴克的文化有了更深理解，这不是第一次去，但这次喝星巴克有了不一样的感觉。">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="http://img.weidongfang.online/imgbed/20210522101914.png">
+<meta property="og:updated_time" content="2021-06-01T09:30:15.466Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="《将心注入-一杯咖啡成就星巴克传奇》— 阅读与总结">
+<meta name="twitter:description" content="星巴克在国内的定价算是比较贵的，至少对于我来讲是比较贵的，为了做本次的阅读总结，我专程跑到附近的星巴克咖啡店体验了一番。看完这本书后再去体验，对星巴克的文化有了更深理解，这不是第一次去，但这次喝星巴克有了不一样的感觉。">
+<meta name="twitter:image" content="http://img.weidongfang.online/imgbed/20210522101914.png">
+
+<link rel="canonical" href="http://blog.weidongfang.online/posts/2021-05/591hsi.html">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>《将心注入-一杯咖啡成就星巴克传奇》— 阅读与总结 | Dev-Dongfang</title>
+  
+
+
+  <script>
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?9973e9eaf1485d0719cd19d7436e2fea";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+<link rel="alternate" href="/atom.xml" title="Dev-Dongfang" type="application/atom+xml">
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Dev-Dongfang</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">iOS、逆向与安全、swift、flutter、linux，爱生活、爱代码、爱分享。</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-learning">
+
+    <a href="/learning/" rel="section"><i class="fa fa-book fa-fw"></i>笔记</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签<span class="badge">1</span></a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档<span class="badge">24</span></a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://blog.weidongfang.online/posts/2021-05/591hsi.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/resource/images/head_icon180.jpg">
+      <meta itemprop="name" content="韦东方">
+      <meta itemprop="description" content="You never know where your limitation is without trying.">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Dev-Dongfang">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          《将心注入-一杯咖啡成就星巴克传奇》— 阅读与总结
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2021-05-22 13:00:24" itemprop="dateCreated datePublished" datetime="2021-05-22T13:00:24+08:00">2021-05-22</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2021-06-01 17:30:15" itemprop="dateModified" datetime="2021-06-01T17:30:15+08:00">2021-06-01</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/reading/" itemprop="url" rel="index"><span itemprop="name">reading</span></a>
+                </span>
+            </span>
+
+          
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Valine：</span>
+    
+    <a title="valine" href="/posts/2021-05/591hsi.html#valine-comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/posts/2021-05/591hsi.html" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>星巴克在国内的定价算是比较贵的，至少对于我来讲是比较贵的，为了做本次的阅读总结，我专程跑到附近的星巴克咖啡店体验了一番。看完这本书后再去体验，对星巴克的文化有了更深理解，这不是第一次去，但这次喝星巴克有了不一样的感觉。<a id="more"></a> </p>
+<p><strong>星巴克使命宣言</strong></p>
+<blockquote>
+<p><strong>使命宣言：将星巴克建成全球极品咖啡的翘楚，同时在公司不断成长的过程中，始终坚持之际一贯的原则。</strong></p>
+<p><strong>指导原则：</strong></p>
+<ul>
+<li>提供完善的工作环境，并创造相互尊重和相互信任的工作氛围；</li>
+<li>秉持多元化是我们企业经营的重要原则；</li>
+<li>采用最高标准进行采购烘焙，并提供最新鲜的咖啡；</li>
+<li>是可以高度热忱满足顾客的需求；</li>
+<li>积极贡献社区和环境；</li>
+<li>认识到盈利是我们未来成功的基础。</li>
+</ul>
+</blockquote>
+<h2 id="星巴克体验"><a href="#星巴克体验" class="headerlink" title="星巴克体验"></a>星巴克体验</h2><p>星巴克是卖咖啡豆生意起家的，至今在星巴克咖啡店显眼的地方仍然有摆着各种咖啡豆、咖啡粉、速溶、浓缩等产品的货架。在我看来，这个货架还是很有意义的，虽然主要营收不在这里，但是这个货架表明了星巴克不忘初心，即使做到了全球连锁也会记得当初的样子，追求极致的价值观念；另一方面，这个货架也表现了星巴克服务至上的理念，即使现在已经很少有人去买咖啡豆，那些喜欢手磨的人依然可以找到地方买星巴克咖啡豆，三十年前习惯去星巴克买咖啡豆的人，至今仍然可以在星巴克买到想要的咖啡豆，就像是大超市一样，总有一些货区是不赚钱甚至是亏钱的，但是作为超市是不可或缺的部分。</p>
+<p>第二个让我惊讶的是星巴克周边。星巴克的咖啡杯、星巴克保温杯、主题背包甚至还有毛绒玩具，各种各样的东西，满目琳琅，给我的第一感觉是不务正业。一个做咖啡店生意的不好好做咖啡，整这么多周边，并且还放在进门最显眼的地方，然后想到霍华德带领星巴克走向世界的过程。刚开始，星巴克品牌是卖咖啡豆生意的，在霍华德的带领下开始卖咖啡，当店铺咖啡生意到瓶颈时候星巴克开始为航空公司提供服务，美国咖啡店到瓶颈时候开始走向全世界，当对手的创新超越自己时候，果断扩大自己服务客户理念的外延，跟进对方的创新。星巴克正是因为一次一次的推翻自己，一次一次的探索，才成就了今天的星巴克。理解了这点，也就理解了为什么星巴克有那么多周边，为什么星巴克可以买到蛋糕了。</p>
+<p>最让我惊讶的其实是星冰乐。从书中得知，星冰乐是星巴克90年代时候研发的产品，让我没想到的是，至今这款咖啡仍然在售卖，并且放在价目表的第一栏——最显眼的位置。当初星巴克是否要售卖星冰乐这种咖啡延伸饮料，霍华德也经历了痛苦的挣扎，卖，可能影响星巴克咖啡的品质，降低星巴克品牌的价值，不卖，可能错失一个机会。当霍华德亲眼看到用户在星巴克买不到冰咖啡悻悻离去时候，选择听从用户的选择，开始售卖星冰乐。市场是会说话的，星巴克的星冰乐成为当年星巴克乃至美国咖啡产业最受欢迎的咖啡饮品。我果断点了一杯星冰乐，这是一种没什么咖啡味道的饮料，我的感觉是，这已经不是咖啡了，但是是一款非常棒的饮料，说不出哪里好，炎炎夏日，来一杯是真的好！喝了星冰乐之后，也理解了星冰乐能够畅销二十多年的原因，口感很好，心旷神怡，能够畅销二十年也就不足为奇了。</p>
+<h2 id="为你喝彩"><a href="#为你喝彩" class="headerlink" title="为你喝彩"></a>为你喝彩</h2><h3 id="如果你从未有过机会，可能是你从未抓住过机会"><a href="#如果你从未有过机会，可能是你从未抓住过机会" class="headerlink" title="如果你从未有过机会，可能是你从未抓住过机会"></a>如果你从未有过机会，可能是你从未抓住过机会</h3><p>和很多励志鸡汤文中写的一样，带领星巴克走向全世界的霍华德也出身自一个贫苦的家庭，但贫苦的家庭也带给他更多的<strong>进取心</strong>。家住在纽约一个低档次的社区，从小就为自己所住的社区而自卑。父亲是一个做杂工的工人，勤奋努力的工作，在一次事故中伤了腿，从此再也无法工作，他父亲的努力工作并没有得到应有的善待，也正因为此，霍华德带领下的星巴克建立了以员工为中心的价值观。霍华德高中时最大的成功就是成为橄榄球队的四分卫，正因为此才成为当时高中的名人，也因此得到了密歇根大学的全额奖学金，没有这笔钱可能就没办法实现上大学的梦想了。</p>
+<p>他的母亲是一个聪明、有见识、做事有条理的人。他母亲连高中都没有毕业，但最大的理想却是让她的三个孩子都接受大学教育。鼓励霍华德挑战自己，敢于把自己放在挑战者的位置，从而学会克服困难。</p>
+<p>1975年大学毕业后，经过6年的奋斗，已经算是小有成就，大公司、大房子、高薪，这时候他已经获得了很多人无法企及的成功，这样的好日子是他父母不敢想象的，远超过他们的期盼。但是霍华德总感觉自己好像老是在惦记着什么，想要把命运掌握在自己手中，总在想下一步应该做怎么办。直到遇到了星巴克。</p>
+<p>实际上，霍华德花了一年的时间才说服星巴克创始人同意雇佣自己。与其说是运气使霍华德获得了成功，不如说是他创造了自己的运气。当你认准了——在你自己的内心，在你的梦想中，你觉得有把握，就必须应该去做能够使自己愿望成为现实的事情。没有一件伟大的事情是紧靠运气就行的。</p>
+<p>一次欧洲之旅促使霍华德萌生了将咖啡变成一种生活方式的想法。当时欧洲意式咖啡已经是一种生活习惯，早上起来，路边的咖啡馆三五成群的人在边喝咖啡边聊天，咖啡已经是一种普通的路边饮料一样。而美国却没有类似的东西。霍华德不断的想周围的人灌输这样的思想，但星巴克的创始人杰瑞认为销售出身的霍华德走的有点太远了，杰瑞的星巴克只想专心的做咖啡烘焙生意，致力于用最好的咖啡豆，深度烘焙出最浓厚的咖啡，这也是星巴克咖啡豆能够保持竞争力的原因。</p>
+<p>当霍华德认为无法说服杰瑞时候，便选择了离开。第一次遇到星巴克就为之倾倒的霍华德做出离开的决定，一定经历了复杂的心理斗争，但是为了自己的理想，为了自己认为正确的事情，他毅然决然。</p>
+<p>我们认识霍华德是因为他带领星巴克走向了全世界，但是在霍华德加入星巴克之前已经是非常成功的人，比身边绝大多数的人都成功，过着以前从不敢想象的生活。很多厉害的人其实并不是做成功了某件事情，所以很厉害，而是因为很厉害，所以能够将别人做不了的事情做成功。现实生活中也有很多人苦于遇不到自己的伯乐，而很少有人反思自己是不是真的千里马。在21世纪的今天，在今天的中国，从没有哪个时代给普通人现在这样多的机会，最近二三十年，涌现出一大批从零开始白手起家创造无尽财富的富豪，所以啊，这是时代并不缺机会，却的是看到机会的人。一个好的社会就是机会均等的社会，不敢说中国现在是完全的机会均等，但是对于绝大多数生活再山区、生活在乡下的孩子、绝不多数的普通人都有一样的机会走出去，看这个世界。相比欧美更加严重的阶级固化，现在的中国可能是机会最均等的国家。</p>
+<p>如果你从未有过机会，可能是你从未抓住过机会。</p>
+<h3 id="员工至上"><a href="#员工至上" class="headerlink" title="员工至上"></a>员工至上</h3><p>霍华德的父亲一辈子勤勤勉勉辛苦工作，但是并没有得到应有的善待。在工作中不小心伤了腿，由于没有医疗保险，让本就拮据的家庭经济更加困难。也因此，当霍华德接手星巴克时候，将所有员工作为星巴克最重要的资产，员工的利益高于管理层、股东的利益。</p>
+<p>在霍华德接手星巴克之前，杰瑞为了收购毕兹咖啡与茶耗费了巨大的资金，导致星巴克员工奖金下降。星巴克员工不理解自己更加辛苦的劳动得到的却是奖金下降，星巴克从创办开始第一次员工和领导层对着干。霍华德也第一次见识到员工对企业的重要性，咖啡豆生意作为零售业，基层员工是最接近客户的地方，如果员工内心积怨还怎么更好的服务客户？</p>
+<p>从霍华德接手星巴克后就着手重建管理层和基层员工的关系，力排众议说服所有的股东，将利益向基层普通员工倾斜，给所有的员工包括正式员工和临时工全部缴纳医疗保险，在公司上市之前给所有的员工配股，让所有员工做公司的合伙人，享受企业增长带来红利，这些事情在当时所有的私营企业中都是前所未有的。</p>
+<p>得到的结果就是，员工中心耿耿，全身心的为客服服务，员工主动要求解散工会，因为员工完全相信管理层，不需要工会为自己争取权益。当雇员有自信、有尊严时，他们就会做出更多的贡献，为公司、为家庭、为世界。</p>
+<h3 id="重建咖啡体验"><a href="#重建咖啡体验" class="headerlink" title="重建咖啡体验"></a>重建咖啡体验</h3><p>咖啡店其实是一个没有太多护城河的行业，只要有优质的咖啡豆，找准一个地段，只要有钱就能开办起来。星巴克靠什么能够打败无数的咖啡店，成为最好的咖啡店呢？</p>
+<p>星巴克除了优质的咖啡，提供的更是一种更为深沉的浪漫情怀，给人一种与咖啡同样吸引人的氛围。其它咖啡店可能只是一个喝咖啡的地方，但星巴克可以给人以浪漫，劳累的工作之余，有一个地方可以闻到苏门答腊或者哥斯达黎加咖啡的香味，一边品尝咖啡，一遍品味异域分享也不失为一种浪漫；星巴克提供普通人都消费的起的奢侈消费，不管是蓝领工人还是医生律师都能够品尝到同样的卡布奇诺，享受着同一种世界和一流的产品；星巴克提供一片绿洲，星巴克人对你微笑，迅速为你服务，然后不会打扰你，走进星巴克就能在繁忙之余获得片刻的喘息。这就是星巴克的情怀了吧，每一个简单的事情做到极致，当成企业的价值观经营理念对待，都能够让企业与众不同。</p>
+<p>正式这样与众不同的咖啡文化，才打造出星巴克一流的咖啡体验。</p>
+<h3 id="进击的星巴克"><a href="#进击的星巴克" class="headerlink" title="进击的星巴克"></a>进击的星巴克</h3><p>星巴克在创立之初就确立了提供优质咖啡的价值观。星巴克咖啡豆的特点就是深度烘焙，厚重的咖啡风味，这和当时其它咖啡不同。星巴克一直恪守自己的经营理念。当其它公司开始提供五花八门的咖啡时候，星巴克还是只有纯正的深度烘焙咖啡，炎炎夏日，其它咖啡店都开始提供冰咖啡时候，星巴克只提供热咖啡。因为星巴克认为，冰咖啡会影响咖啡的风味。与此同时，不断的有门店经理反映咖啡店由于没有冰咖啡造成客户流失，在坚守优质咖啡风味的价值观和迎合客户之间做选择并不是一件容易的事，直到霍华德亲眼看到用户在星巴克买不到冰咖啡悻悻离去时候，选择听从用户的选择，开始售卖星冰乐。</p>
+<p>用户的选择永远是最正确的选择，星冰乐在推出当年成为星巴克最畅销的咖啡单品，也是整个咖啡行业最畅销的咖啡单品。现在你去星巴克依然可以买到星冰乐，星冰乐已经畅销了二十多年了。现在的星冰乐已经拼不出咖啡的风味了，但是不可否认是一款非常棒的饮料，其实到底是咖啡还是饮料并不重要，最重要的是客户的认可。我想，如果霍华德固守星巴克最优质的咖啡风味，那么很大可能会输掉星巴克，就像当初杰瑞输掉星巴克一样。</p>
+<p>从此之后，星巴克就成为一头会跳舞的大象，身板庞大，但是总能灵活调整，找到企业新的增长点，不断的打造新产品。当咖啡店生意逐渐遇到瓶颈时候，霍华德和航空公司合作，将咖啡店开到机场，将咖啡卖到了飞机上；和百事可乐合作，开发灌装的咖啡；当星巴克开遍美国时候，又瞄上了全球市场；基于科学家的咖啡精华提取技术，提纯咖啡制作浓缩咖啡粉；投资数百万美元，创建实验室研究咖啡的口味、保存等问题。</p>
+<p>星巴克的创新永远在路上，这才保证了星巴克稳定的增长。</p>
+<h2 id="碎碎念"><a href="#碎碎念" class="headerlink" title="碎碎念"></a>碎碎念</h2><p><strong>1.做正确的选择</strong></p>
+<p>并购星巴克后，新的企业应该叫”天天“还是”星巴克“？对于创业者来讲，对自己创建的第一个品牌都会有说不清的怀恋，在品牌选择时候，必须放下自我。出于公司长期发展的考虑，名字必须能够被容易记住，必须能够与人们的精神发生某种联系，必须给大家带来利益，所以，这个选择只能是星巴克。</p>
+<p><strong>2.别被比你聪明的人吓倒</strong></p>
+<p>最好的管理者是那些对优秀的人才有着良好直觉的人，一方面能够调动能人去放手做事，一方面可知自己不对他们的行动横加干涉。企业家往往喜欢自己出点子，自己去包打天下。但是，只有去聘用更有能力的人，更专业的人企业才能够获得更好的发展。因此完全不必担心别人比你聪明，因为比你聪明的人有很多，很多很多。坦陈自己的不足，坦陈别人比自己优秀，这样才能做一个更好的企业管理者。</p>
+<p><strong>3.星巴克名字和logo的来源</strong></p>
+<p>星巴克这个名字取自于小说《白鲸》，其中“皮廓德号”那条船的第一个伙伴的名字就叫星巴克。这个名字彰显了早期咖啡经销商远渡重洋和航海的浪漫情怀。星巴克logo的灵感源自于一副16世纪斯堪的纳维亚的木刻画：两条尾巴的美人鱼，或者塞壬，被星巴克最初的名字：星巴克咖啡、茶、香料（STARBUCKS COFFEE TEA SPICES）围绕起来。星巴克最初的塞壬头像是一个坦露胸部的具有鲁本斯风格的女人像，象征咖啡本身对人的诱惑。</p>
+<img src="http://img.weidongfang.online/imgbed/20210522101914.png" width="20%">
+
+<blockquote>
+<p><strong>Reference:</strong></p>
+<p>1.<a href="https://www.36kr.com/p/1723499380737" target="_blank" rel="noopener">星巴克的LOGO是怎么来的？这有一段神奇的历史_详细解读_最新资讯_热点事件_36氪 (36kr.com)</a></p>
+<p>2.<a href="https://medium.com/fast-company/the-starbucks-logo-has-a-secret-youve-never-noticed-dca0e319b19a" target="_blank" rel="noopener">The Starbucks Logo Has A Secret You’ve Never Noticed | by Fast Company | Fast Company | Medium</a></p>
+</blockquote>
+<p><strong>4.投资就是投人</strong></p>
+<p>霍华德经过自己一番努力，最终收获了很多笔投资。但是其中很多人之所以出钱是因为霍华德，而不是因为咖啡店这个点子。<strong>一句话，投资就是投人。</strong>从侧面也反映出了霍华德在当时已经获得很多人的支持，身边很多人都看好霍华德这个人，用中国话说就是：<strong>靠谱</strong>。</p>
+<p><strong>5.我不同意你的观点，但是我捍卫你说话的权利</strong></p>
+<p>星巴克的创始人杰瑞并不看好霍华德的咖啡生活方式的咖啡馆，但是在霍华德准备离开创办咖啡馆时候，仍然给他投资了15万美金，杰瑞说：这不是我们自己想要的公司，但是我们支持你。由此也可以看出，杰瑞也是一个宽宏大量的人，杰瑞虽然没有陪伴星巴克走向更加光明的未来，但是他也在坚守自己的价值观，坚守公司最初的理想。</p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/posts/2021-05/ueysksioajd.html" rel="prev" title="《随机漫步的傻瓜》— 阅读与总结">
+      <i class="fa fa-chevron-left"></i> 《随机漫步的傻瓜》— 阅读与总结
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/posts/2021-06/6350866.html" rel="next" title="《如何做好一场技术演讲》— 学习与总结">
+      《如何做好一场技术演讲》— 学习与总结 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+    <div class="comments" id="valine-comments"></div>
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#星巴克体验"><span class="nav-number">1.</span> <span class="nav-text">星巴克体验</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#为你喝彩"><span class="nav-number">2.</span> <span class="nav-text">为你喝彩</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#如果你从未有过机会，可能是你从未抓住过机会"><span class="nav-number">2.1.</span> <span class="nav-text">如果你从未有过机会，可能是你从未抓住过机会</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#员工至上"><span class="nav-number">2.2.</span> <span class="nav-text">员工至上</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#重建咖啡体验"><span class="nav-number">2.3.</span> <span class="nav-text">重建咖啡体验</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#进击的星巴克"><span class="nav-number">2.4.</span> <span class="nav-text">进击的星巴克</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#碎碎念"><span class="nav-number">3.</span> <span class="nav-text">碎碎念</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="韦东方"
+      src="/resource/images/head_icon180.jpg">
+  <p class="site-author-name" itemprop="name">韦东方</p>
+  <div class="site-description" itemprop="description">You never know where your limitation is without trying.</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">24</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+        <span class="site-state-item-count">10</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">1</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="http://readingnote.weidongfang.online" title="Reading → http://readingnote.weidongfang.online" rel="noopener" target="_blank"><i class="fa fa-book-reader fa-fw"></i>Reading</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:dev.dongfang@gmail.com" title="E-mail → mailto:dev.dongfang@gmail.com" rel="noopener" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-mail</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="/atom.xml" title="RSS → /atom.xml"><i class="fa fa-rss fa-fw"></i>RSS</a>
+      </span>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+  <div class="beian"><a href="https://beian.miit.gov.cn" rel="noopener" target="_blank">京ICP备20017039号-1 </a>
+  </div>
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">@dev.dongfang</span>
+</div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+<script src="/js/utils.js"></script><script src="/js/motion.js"></script>
+<script src="/js/schemes/pisces.js"></script>
+<script src="/js/next-boot.js"></script>
+
+
+
+  
+  <script>
+    (function(){
+      var canonicalURL, curProtocol;
+      //Get the <link> tag
+      var x=document.getElementsByTagName("link");
+		//Find the last canonical URL
+		if(x.length > 0){
+			for (i=0;i<x.length;i++){
+				if(x[i].rel.toLowerCase() == 'canonical' && x[i].href){
+					canonicalURL=x[i].href;
+				}
+			}
+		}
+    //Get protocol
+	    if (!canonicalURL){
+	    	curProtocol = window.location.protocol.split(':')[0];
+	    }
+	    else{
+	    	curProtocol = canonicalURL.split(':')[0];
+	    }
+      //Get current URL if the canonical URL does not exist
+	    if (!canonicalURL) canonicalURL = window.location.href;
+	    //Assign script content. Replace current URL with the canonical URL
+      !function(){var e=/([http|https]:\/\/[a-zA-Z0-9\_\.]+\.baidu\.com)/gi,r=canonicalURL,t=document.referrer;if(!e.test(r)){var n=(String(curProtocol).toLowerCase() === 'https')?"https://sp0.baidu.com/9_Q4simg2RQJ8t7jm9iCKT-xh_/s.gif":"//api.share.baidu.com/s.gif";t?(n+="?r="+encodeURIComponent(document.referrer),r&&(n+="&l="+r)):r&&(n+="?l="+r);var i=new Image;i.src=n}}(window);})();
+  </script>
+
+
+
+
+  <script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+
+<script>
+NexT.utils.loadComments(document.querySelector('#valine-comments'), () => {
+  NexT.utils.getScript('//unpkg.com/valine/dist/Valine.min.js', () => {
+    var GUEST = ['nick', 'mail', 'link'];
+    var guest = 'nick,mail,link';
+    guest = guest.split(',').filter(item => {
+      return GUEST.includes(item);
+    });
+    new Valine({
+      el         : '#valine-comments',
+      verify     : false,
+      notify     : true,
+      appId      : 'vMrO1hYoNr03pjrQ0iIUSSLL-gzGzoHsz',
+      appKey     : 'iyTSJjyCkkOSrXToutmor7ru',
+      placeholder: "欢迎留言！",
+      avatar     : 'mm',
+      meta       : guest,
+      pageSize   : '15' || 10,
+      visitor    : false,
+      lang       : 'zh-cn' || 'zh-cn',
+      path       : location.pathname,
+      recordIP   : false,
+      serverURLs : ''
+    });
+  }, window.Valine);
+});
+</script>
+
+</body>
+</html>

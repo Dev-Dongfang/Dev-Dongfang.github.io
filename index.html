@@ -1,812 +1,1162 @@
 <!DOCTYPE html>
-<html lang=zh>
-<head><meta name="generator" content="Hexo 3.9.0">
-  <meta charset="utf-8">
-  
-  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, minimal-ui">
-  <meta name="renderer" content="webkit">
-  <meta http-equiv="Cache-Control" content="no-transform">
-  <meta http-equiv="Cache-Control" content="no-siteapp">
-  <meta name="apple-mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-status-bar-style" content="black">
-  <meta name="format-detection" content="telephone=no,email=no,adress=no">
-  <!-- Color theme for statusbar -->
-  <meta name="theme-color" content="#000000">
-  <!-- 强制页面在当前窗口以独立页面显示,防止别人在框架里调用页面 -->
-  <meta http-equiv="window-target" content="_top">
-  
-  
-  <title>Dongfang&#39;s技术博客,iOS技术分享,逆向与安全,Cydia,底层原理,Swift,Objective-C</title>
-  <meta property="og:type" content="website">
-<meta property="og:title" content="Dongfang&#39;s技术博客,iOS技术分享,逆向与安全,Cydia,底层原理,Swift,Objective-C">
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 3.9.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/resource/images/head_icon180.jpg">
+  <link rel="icon" type="image/png" sizes="32x32" href="/resource/images/head_icon180.jpg">
+  <link rel="icon" type="image/png" sizes="16x16" href="/resource/images/head_icon32.jpg">
+  <link rel="mask-icon" href="/resource/images/head_icon180.jpg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"blog.weidongfang.online","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":true,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":"valine","storage":true,"lazyload":false,"nav":null,"activeClass":"valine"},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="You never know where your limitation is without trying.">
+<meta name="keywords" content="iOS, 逆向与安全, swift, flutter, linux">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Dev-Dongfang">
 <meta property="og:url" content="http://blog.weidongfang.online/index.html">
-<meta property="og:site_name" content="Dongfang&#39;s技术博客,iOS技术分享,逆向与安全,Cydia,底层原理,Swift,Objective-C">
+<meta property="og:site_name" content="Dev-Dongfang">
+<meta property="og:description" content="You never know where your limitation is without trying.">
 <meta property="og:locale" content="zh-CN">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Dongfang&#39;s技术博客,iOS技术分享,逆向与安全,Cydia,底层原理,Swift,Objective-C">
-  <!-- Canonical links -->
-  <link rel="canonical" href="http://blog.weidongfang.online/index.html">
+<meta name="twitter:title" content="Dev-Dongfang">
+<meta name="twitter:description" content="You never know where your limitation is without trying.">
+
+<link rel="canonical" href="http://blog.weidongfang.online/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : true,
+    isPost : false,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>Dev-Dongfang</title>
   
-    <link rel="alternate" href="/atom.xml" title="Dongfang&#39;s技术博客,iOS技术分享,逆向与安全,Cydia,底层原理,Swift,Objective-C" type="application/atom+xml">
-  
-  
-    <link rel="icon" href="/images/favicon.jpg" type="image/x-icon">
-  
-  <link rel="stylesheet" href="/css/style.css">
-  
-  
-  
-  
+
+
+  <script>
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?9973e9eaf1485d0719cd19d7436e2fea";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+<link rel="alternate" href="/atom.xml" title="Dev-Dongfang" type="application/atom+xml">
 </head>
 
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
 
-<body class="main-right theme-purple no-sidebar" itemscope itemtype="http://schema.org/WebPage">
-  <header class="header" itemscope itemtype="http://schema.org/WPHeader">
-  <div class="slimContent">
-    <div class="navbar-header">
-      
-      
-      <div class="profile-block text-center">
-        <a id="avatar" href="https://github.com/dev-dongfang" target="_blank">
-          <img class="img-circle img-rotate" src="/images/favicon.jpg" width="200" height="200">
-        </a>
-        <h2 id="name" class="hidden-xs hidden-sm">Dev-Dongfang</h2>
-        <h3 id="title" class="hidden-xs hidden-sm hidden-md">Keep Moving ！</h3>
-        <small id="location" class="text-muted hidden-xs hidden-sm"><i class="icon icon-map-marker"></i> Beijing, China</small>
-      </div>
-      
-      <div class="search" id="search-form-wrap">
-
-    <form class="search-form sidebar-form" method="GET" action="https://www.baidu.com/s?">
-	<div class="input-group">
-    	<input name="wd" type="text" class="form-control search-form-input" placeholder="搜索" />
-	    <span class="input-group-btn">
-	    	<button type="submit" class=" btn btn-flat search-form-submit"><i class="icon icon-search"></i></button>
-	    </span>
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
     </div>
-</form>
+  </div>
 
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Dev-Dongfang</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">iOS、逆向与安全、swift、flutter、linux，爱生活、爱代码、爱分享。</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
 </div>
-      <button class="navbar-toggle collapsed" type="button" data-toggle="collapse" data-target="#main-navbar" aria-controls="main-navbar" aria-expanded="false">
-        <span class="sr-only">Toggle navigation</span>
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
-      </button>
-    </div>
-    <nav id="main-navbar" class="collapse navbar-collapse" itemscope itemtype="http://schema.org/SiteNavigationElement" role="navigation">
-      <ul class="nav navbar-nav main-nav menu-highlight">
-        
-        
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
         <li class="menu-item menu-item-home">
-          <a href="/">
-            
-            <i class="icon icon-home-fill"></i>
-            
-            <span class="menu-title">首页</span>
-          </a>
-        </li>
-        
-        
-        <li class="menu-item menu-item-learningnote">
-          <a href="/LearningNote">
-            
-            <i class="icon icon-book-fill"></i>
-            
-            <span class="menu-title">学习笔记</span>
-          </a>
-        </li>
-        
-        
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-learning">
+
+    <a href="/learning/" rel="section"><i class="fa fa-book fa-fw"></i>笔记</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签<span class="badge">1</span></a>
+
+  </li>
         <li class="menu-item menu-item-archives">
-          <a href="/archives">
-            
-            <i class="icon icon-archives-fill"></i>
-            
-            <span class="menu-title">归档</span>
-          </a>
-        </li>
-        
-        
-        <li class="menu-item menu-item-categories">
-          <a href="/categories">
-            
-            <i class="icon icon-folder"></i>
-            
-            <span class="menu-title">分类</span>
-          </a>
-        </li>
-        
-        
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档<span class="badge">24</span></a>
+
+  </li>
         <li class="menu-item menu-item-about">
-          <a href="/about">
-            
-            <i class="icon icon-cup-fill"></i>
-            
-            <span class="menu-title">关于</span>
-          </a>
-        </li>
-        
-      </ul>
-      
-	
-    <ul class="social-links">
-    	
-        <li><a href="https://github.com/dev-dongfang" target="_blank" title="Github" data-toggle=tooltip data-placement=top><i class="icon icon-github"></i></a></li>
-        
-        <li><a href="https://twitter.com/weidf" target="_blank" title="Twitter" data-toggle=tooltip data-placement=top><i class="icon icon-twitter"></i></a></li>
-        
-        <li><a href="mailto:dev.dongfang@gmail.com" target="_blank" title="Email" data-toggle=tooltip data-placement=top><i class="icon icon-email"></i></a></li>
-        
-    </ul>
 
-    </nav>
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
   </div>
-</header>
-
-  
-    <aside class="sidebar" itemscope itemtype="http://schema.org/WPSideBar">
-  <div class="slimContent">
-    
-      <div class="widget">
-    <h3 class="widget-title">公告</h3>
-    <div class="widget-body">
-        <div id="board">
-            <div class="content">
-                <p>欢迎交流与分享经验!</p>
-            </div>
-        </div>
-    </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
 </div>
 
-    
-      
-  <div class="widget">
-    <h3 class="widget-title">分类</h3>
-    <div class="widget-body">
-      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/Swift/">Swift</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/其它/">其它</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/区块链/">区块链</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/算法/">算法</a><span class="category-list-count">4</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/翻译/">翻译</a><span class="category-list-count">3</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/逆向/">逆向</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/逆向与安全/">逆向与安全</a><span class="category-list-count">1</span></li></ul>
     </div>
   </div>
 
+</div>
+    </header>
 
     
-      
-
-    
-      
-    
-      
-  <div class="widget">
-    <h3 class="widget-title">归档</h3>
-    <div class="widget-body">
-      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/04/">四月 2020</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/03/">三月 2020</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/02/">二月 2020</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/01/">一月 2020</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/11/">十一月 2019</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/10/">十月 2019</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/09/">九月 2019</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/08/">八月 2019</a><span class="archive-list-count">1</span></li></ul>
-    </div>
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
   </div>
 
 
-    
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content index posts-expand">
+            
       
-  <div class="widget">
-    <h3 class="widget-title">最新文章</h3>
-    <div class="widget-body">
-      <ul class="recent-post-list list-unstyled no-thumbnail">
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://blog.weidongfang.online/posts/2021-06/6350866.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/resource/images/head_icon180.jpg">
+      <meta itemprop="name" content="韦东方">
+      <meta itemprop="description" content="You never know where your limitation is without trying.">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Dev-Dongfang">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/posts/2021-06/6350866.html" class="post-title-link" itemprop="url">《如何做好一场技术演讲》— 学习与总结</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2021-06-01 14:53:58 / 修改时间：15:08:13" itemprop="dateCreated datePublished" datetime="2021-06-01T14:53:58+08:00">2021-06-01</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/极客时间/" itemprop="url" rel="index"><span itemprop="name">极客时间</span></a>
+                </span>
+            </span>
+
+          
+  
+  
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>演讲和当众讲话是每个人都无法避免的事情，也是当今世界非常重要的个人技能。纵然你有天纵之才，你也需要表达出来，别人才能够知道，表达出来你才会有更多的机会和资源表现自己，实现自己。TED掌门人克里斯安德森曾说，<strong>无论今天公众演讲有多么重要，未来只会更加重要。</strong></p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/posts/2021-06/6350866.html#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
         
-          <li>
-            
-            <div class="item-inner">
-              <p class="item-category">
-                <a class="category-link" href="/categories/区块链/">区块链</a>
-              </p>
-              <p class="item-title">
-                <a href="/2020/04/08/block-chain-details/" class="title">区块链技术-笔记</a>
-              </p>
-              <p class="item-date">
-                <time datetime="2020-04-08T11:16:07.000Z" itemprop="datePublished">2020-04-08</time>
-              </p>
-            </div>
-          </li>
-          
-          <li>
-            
-            <div class="item-inner">
-              <p class="item-category">
-                <a class="category-link" href="/categories/算法/">算法</a>
-              </p>
-              <p class="item-title">
-                <a href="/2020/04/03/string-sorting-algorithm/" class="title">【算法】手撕五花八门的字符串匹配算法</a>
-              </p>
-              <p class="item-date">
-                <time datetime="2020-04-03T04:29:49.000Z" itemprop="datePublished">2020-04-03</time>
-              </p>
-            </div>
-          </li>
-          
-          <li>
-            
-            <div class="item-inner">
-              <p class="item-category">
-                <a class="category-link" href="/categories/算法/">算法</a>
-              </p>
-              <p class="item-title">
-                <a href="/2020/03/31/binary-search/" class="title">【算法】二分查找详解</a>
-              </p>
-              <p class="item-date">
-                <time datetime="2020-03-31T14:35:33.000Z" itemprop="datePublished">2020-03-31</time>
-              </p>
-            </div>
-          </li>
-          
-          <li>
-            
-            <div class="item-inner">
-              <p class="item-category">
-                <a class="category-link" href="/categories/逆向/">逆向</a>
-              </p>
-              <p class="item-title">
-                <a href="/2020/02/24/crack-dingtalk-location-practice/" class="title">【逆】逆向分析实践-钉钉打卡/钉钉签到/钉钉定位/远程打卡功能</a>
-              </p>
-              <p class="item-date">
-                <time datetime="2020-02-24T15:41:34.000Z" itemprop="datePublished">2020-02-24</time>
-              </p>
-            </div>
-          </li>
-          
-          <li>
-            
-            <div class="item-inner">
-              <p class="item-category">
-                <a class="category-link" href="/categories/翻译/">翻译</a>
-              </p>
-              <p class="item-title">
-                <a href="/2020/02/14/Unsafe-Swift-Using-Pointers-and-Interacting-With-C/" class="title">【译】不安全的Swift：Swift指针与C交互</a>
-              </p>
-              <p class="item-date">
-                <time datetime="2020-02-14T14:42:54.000Z" itemprop="datePublished">2020-02-14</time>
-              </p>
-            </div>
-          </li>
-          
-      </ul>
+      
     </div>
-  </div>
-  
 
     
-  </div>
-</aside>
-
-  
-  <main class="main" role="main">
-  
-  <div class="content article-list">
     
-      <article class="article article-type-post" itemscope itemtype="http://schema.org/BlogPosting">
-  <div class="article-header">
     
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
   
-    <h1 itemprop="name">
-      <a class="article-title" href="/2020/04/08/block-chain-details/">区块链技术-笔记</a>
-    </h1>
+  
   
 
-  </div>
+      
   
-  <div class="article-entry text-muted" itemprop="description">
-    <p>不可否认，区块链技术是一个很有想象力的新技术，区块链技术的革命性在于去中心化，但区块链技术的发展却越来约中心化，这像极了整个人类历史的发展。人类的聚集形式从部落到村落再到国家、全球化，区块链技术也从Pow到Pos再到DPos，区块链的发展似乎再次证明了中心化的优越性。</p>
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://blog.weidongfang.online/posts/2021-04/ye238s3iweir3.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/resource/images/head_icon180.jpg">
+      <meta itemprop="name" content="韦东方">
+      <meta itemprop="description" content="You never know where your limitation is without trying.">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Dev-Dongfang">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/posts/2021-04/ye238s3iweir3.html" class="post-title-link" itemprop="url">【iOS】如何实现弱引用字典，并在对象释放时自动移除？</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2021-04-28 11:10:55 / 修改时间：15:33:37" itemprop="dateCreated datePublished" datetime="2021-04-28T11:10:55+08:00">2021-04-28</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/iOS/" itemprop="url" rel="index"><span itemprop="name">iOS</span></a>
+                </span>
+            </span>
+
+          
+  
+  
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <blockquote>
+<p>这个问题来自一道面试题，去年换工作时候碰到的一个问题，现场并没有想到完整的解决方案，面试结束后想到了可行的解决方案。</p>
+</blockquote>
+<p>我们知道，在objc中，数组和字典中必须存放真实存在的对象，如果存储nil就会导致崩溃，当数组或者字典持有一个对象时候，会自动对对象的引用计数做+1操作。在一些实际开发场景，一方面我们希望保存对象的引用，另一方并不想干预对象的正常释放流程，这时候使用NSArray或者NSDictionary就会有问题了。</p>
+<p>幸运的是，objc中也提供了几个可以存储弱引用的序列，NSMapTable、NSHashTable、NSPointerArray。在开发中如果有需要存储弱引用的场景，可以使用这些序列。</p>
+<p>那么，我们应该如何实现一个弱引用序列？如何存储对象的弱引用？对象释放后，又是如何将对象从序列中移除掉？这些个问题也是本文需要解决的关键问题。</p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/posts/2021-04/ye238s3iweir3.html#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://blog.weidongfang.online/posts/2020-12/83620274.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/resource/images/head_icon180.jpg">
+      <meta itemprop="name" content="韦东方">
+      <meta itemprop="description" content="You never know where your limitation is without trying.">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Dev-Dongfang">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/posts/2020-12/83620274.html" class="post-title-link" itemprop="url">【译】优化签名流程——为编译提速</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-12-26 16:59:41" itemprop="dateCreated datePublished" datetime="2020-12-26T16:59:41+08:00">2020-12-26</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2021-02-14 21:36:36" itemprop="dateModified" datetime="2021-02-14T21:36:36+08:00">2021-02-14</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/翻译/" itemprop="url" rel="index"><span itemprop="name">翻译</span></a>
+                </span>
+            </span>
+
+          
+  
+  
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>原文链接：<a href="https://eisel.me/signing" target="_blank" rel="noopener">https://eisel.me/signing</a> </p>
+<h2 id="介绍"><a href="#介绍" class="headerlink" title="介绍"></a>介绍</h2><p>不管你的项目使用的是增量编译还是全量编译，代码签名所占用时间都是相同的。App体积越大签名时间也越长，因此，签名有时候会成为你编译耗时的瓶颈。这里有几个可以减少代码签名耗时的技巧，严格的说，这些技巧并没有文档记录可考证，在将来也有可能被禁用，但是也有大公司在使用，目前并没有发现明显的劣势。</p>
+<p><strong>注意</strong>：这些技巧只能用于开发环境。</p>
+<p><strong>注意</strong>：请查看代码签名的耗时，即你能够节省的时间，并确定这些时间对你来说是否重要。</p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/posts/2020-12/83620274.html#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://blog.weidongfang.online/posts/2020-11/2dya62uis2.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/resource/images/head_icon180.jpg">
+      <meta itemprop="name" content="韦东方">
+      <meta itemprop="description" content="You never know where your limitation is without trying.">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Dev-Dongfang">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/posts/2020-11/2dya62uis2.html" class="post-title-link" itemprop="url">【译】SwiftUI中常见的8个错误以及解决方案</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2020-11-15 15:07:45 / 修改时间：15:35:01" itemprop="dateCreated datePublished" datetime="2020-11-15T15:07:45+08:00">2020-11-15</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/翻译/" itemprop="url" rel="index"><span itemprop="name">翻译</span></a>
+                </span>
+            </span>
+
+          
+  
+  
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <blockquote>
+<p>原文：<a href="https://www.hackingwithswift.com/articles/224/common-swiftui-mistakes-and-how-to-fix-them" target="_blank" rel="noopener">8 Common SwiftUI Mistakes - and how to fix them</a></p>
+<p>作者：<a href="https://www.hackingwithswift.com/about" target="_blank" rel="noopener">Paul Hudson</a>  2020/10/9   twitter：<a href="https://twitter.com/twostraws" target="_blank" rel="noopener">@twostraws</a></p>
+<p>翻译：韦东方</p>
+</blockquote>
+<img src="https://www.hackingwithswift.com/uploads/swiftui.jpg" style="width:1000%">
+
+<blockquote>
+<p>用更少的代码做更多的事情。</p>
+</blockquote>
+<p>SwiftUI是一个大型的、复杂的框架，也是一个非常有意思的框架，不过对于初学者很多地方都很容易出错。这篇文章我将介绍8个初学者常犯的错误，以及其解决方案。</p>
+<p>有些错误实际上是误解，因为SwiftUI是如此的复杂，某些细节上很容易造成误解。另外一些错误是由于对SwiftUI工作原理理解不够透彻，或者思维习惯还留在UIKit时代而造成的。例如有时候你会花费大量的时间写视图和修饰器，而没有预留足够的时间去简化最终的代码。</p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/posts/2020-11/2dya62uis2.html#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://blog.weidongfang.online/posts/2020-09/8fysm.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/resource/images/head_icon180.jpg">
+      <meta itemprop="name" content="韦东方">
+      <meta itemprop="description" content="You never know where your limitation is without trying.">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Dev-Dongfang">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/posts/2020-09/8fysm.html" class="post-title-link" itemprop="url">【算法】全排列/组合问题全解</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-09-25 20:13:21" itemprop="dateCreated datePublished" datetime="2020-09-25T20:13:21+08:00">2020-09-25</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2020-09-29 13:06:09" itemprop="dateModified" datetime="2020-09-29T13:06:09+08:00">2020-09-29</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/算法/" itemprop="url" rel="index"><span itemprop="name">算法</span></a>
+                </span>
+            </span>
+
+          
+  
+  
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>算法中的排列组合问题说难也不难，只要掌握排列组合的技巧，实际上所有相关的问题都会迎刃而解，本篇将循序渐进的破解排列组合问题中的经典算法。</p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/posts/2020-09/8fysm.html#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://blog.weidongfang.online/posts/2020-05/58865.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/resource/images/head_icon180.jpg">
+      <meta itemprop="name" content="韦东方">
+      <meta itemprop="description" content="You never know where your limitation is without trying.">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Dev-Dongfang">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/posts/2020-05/58865.html" class="post-title-link" itemprop="url">Raspberry挂载移动硬盘的坑：解决挂载失败导致raspberry系统无法启动的问题</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-05-26 18:19:17" itemprop="dateCreated datePublished" datetime="2020-05-26T18:19:17+08:00">2020-05-26</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2021-04-28 14:56:49" itemprop="dateModified" datetime="2021-04-28T14:56:49+08:00">2021-04-28</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Linux/" itemprop="url" rel="index"><span itemprop="name">Linux</span></a>
+                </span>
+            </span>
+
+          
+  
+  
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>第一次玩raspberry，踩了不少的坑，在挂载移动硬盘上走了不少的弯路，同时也学到了很多。关于挂载移动硬盘，主要遇到两个问题，第一个问题是挂载后的移动硬盘目录权限和所属关系无法修改；第二个问题是挂载失败导致raspberry系统无法启动的问题。</p>
+<p>关于第一个问题的解决方法，上篇博客已经有了解释，详情请<a href="http://blog.weidongfang.online/posts/2020-05/50924.html">点这里</a>。这里主要讲解挂载失败导致系统无法重启的探索发现过程。</p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/posts/2020-05/58865.html#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://blog.weidongfang.online/posts/2020-05/50924.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/resource/images/head_icon180.jpg">
+      <meta itemprop="name" content="韦东方">
+      <meta itemprop="description" content="You never know where your limitation is without trying.">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Dev-Dongfang">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/posts/2020-05/50924.html" class="post-title-link" itemprop="url">linux/raspberry中挂载外接硬盘</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-05-25 00:54:56" itemprop="dateCreated datePublished" datetime="2020-05-25T00:54:56+08:00">2020-05-25</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2021-04-28 11:09:58" itemprop="dateModified" datetime="2021-04-28T11:09:58+08:00">2021-04-28</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Linux/" itemprop="url" rel="index"><span itemprop="name">Linux</span></a>
+                </span>
+            </span>
+
+          
+  
+  
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>最近在学一个linux课程，于是就入手了一个raspberry开始折腾，在挂载外接硬盘过程中走了不少的弯路，希望记下来能够帮助更多的人。这里我写的可能并不太详细，但是尽可能的系统，具体到挂载的每个技术点上，更多的详情可以自行google。如果操作上有任何问题和疑问可以和我联系，一起探讨。</p>
+<p>实践中，我是在树莓派<code>Raspbian</code>系统中操作的，但是我认为其他linux操作系统都是一样的道理。</p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/posts/2020-05/50924.html#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://blog.weidongfang.online/posts/2020-05/40324.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/resource/images/head_icon180.jpg">
+      <meta itemprop="name" content="韦东方">
+      <meta itemprop="description" content="You never know where your limitation is without trying.">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Dev-Dongfang">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/posts/2020-05/40324.html" class="post-title-link" itemprop="url">【笔记】ngrok搭建你自己的内网穿透</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-05-21 12:36:57" itemprop="dateCreated datePublished" datetime="2020-05-21T12:36:57+08:00">2020-05-21</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2021-04-28 14:55:38" itemprop="dateModified" datetime="2021-04-28T14:55:38+08:00">2021-04-28</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Linux/" itemprop="url" rel="index"><span itemprop="name">Linux</span></a>
+                </span>
+            </span>
+
+          
+  
+  
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>大概两周前，入手了一块树莓派，然后就开始各种折腾，安装了php环境，安装了nginx、部署了静态博客、安装了Django环境，部署了Django项目、安装了Owncloud+aria私人网盘和下载器。接下来想要探索一下外网访问，第一个想到的是花生壳，花生壳的内网穿透还算稳定，官方使用教程也比较详细，很快就搭建好了。</p>
+<p>可是，作为一个技术人，不自己动手搭建内网穿透怎么过瘾？网上有很多关于内网穿透的技术，最终我选择两种来实操了一下。其一是ngrok，其二是ssh反向代理。</p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/posts/2020-05/40324.html#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://blog.weidongfang.online/posts/2020-04/8260.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/resource/images/head_icon180.jpg">
+      <meta itemprop="name" content="韦东方">
+      <meta itemprop="description" content="You never know where your limitation is without trying.">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Dev-Dongfang">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/posts/2020-04/8260.html" class="post-title-link" itemprop="url">【笔记】区块链技术</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-04-08 19:16:07" itemprop="dateCreated datePublished" datetime="2020-04-08T19:16:07+08:00">2020-04-08</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2020-05-30 23:04:28" itemprop="dateModified" datetime="2020-05-30T23:04:28+08:00">2020-05-30</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/区块链/" itemprop="url" rel="index"><span itemprop="name">区块链</span></a>
+                </span>
+            </span>
+
+          
+  
+  
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>不可否认，区块链技术是一个很有想象力的新技术，区块链技术的革命性在于去中心化，但区块链技术的发展却越来约中心化，这像极了整个人类历史的发展。人类的聚集形式从部落到村落再到国家、全球化，区块链技术也从Pow到Pos再到DPos，区块链的发展似乎再次证明了中心化的优越性。</p>
 <p>区块链技术到底是怎么回事呢？</p>
-  </div>
-  
-  <p class="article-meta">
-    <span class="article-date">
-    <i class="icon icon-calendar-check"></i>
-	<a href="/2020/04/08/block-chain-details/" class="article-date">
-	  <time datetime="2020-04-08T11:16:07.000Z" itemprop="datePublished">4月 8</time>
-	</a>
-</span>
-    
-  <span class="article-category">
-    <i class="icon icon-folder"></i>
-    <a class="article-category-link" href="/categories/区块链/">区块链</a>
-  </span>
-
-    
-
-    <span class="post-comment"><i class="icon icon-comment"></i> <a href="/2020/04/08/block-chain-details/#comments" class="article-comment-link">评论</a></span>
-    
-	
-		<span class="post-wordcount hidden-xs" itemprop="wordCount">字数统计: 3k(字)</span>
-	
-	
-		<span class="post-readcount hidden-xs" itemprop="timeRequired">阅读时长: 10(分)</span>
-	
-
-  </p>
-</article>
-
-    
-      <article class="article article-type-post" itemscope itemtype="http://schema.org/BlogPosting">
-  <div class="article-header">
-    
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2020/04/03/string-sorting-algorithm/">【算法】手撕五花八门的字符串匹配算法</a>
-    </h1>
-  
-
-  </div>
-  
-  <div class="article-entry text-muted" itemprop="description">
-    <p>字符串匹配在计算机领域是个老生常谈的问题，对于任何一个开发工程师来说应该都不陌生，我们常用的各种语言一般都提供有字符串查找相关的方法，比如swift语言String相关的<code>contains</code>、<code>hasPrefix</code>、<code>first(where:)</code>等方法，他们底层的实现就是依赖字符串匹配算法的。</p>
-<p>字符串匹配算法有很多，这里只讲单模式串匹配算法，包括：BF算法、RK算法、BM算法、KMP算法。</p>
-  </div>
-  
-  <p class="article-meta">
-    <span class="article-date">
-    <i class="icon icon-calendar-check"></i>
-	<a href="/2020/04/03/string-sorting-algorithm/" class="article-date">
-	  <time datetime="2020-04-03T04:29:49.000Z" itemprop="datePublished">4月 3</time>
-	</a>
-</span>
-    
-  <span class="article-category">
-    <i class="icon icon-folder"></i>
-    <a class="article-category-link" href="/categories/算法/">算法</a>
-  </span>
-
-    
-
-    <span class="post-comment"><i class="icon icon-comment"></i> <a href="/2020/04/03/string-sorting-algorithm/#comments" class="article-comment-link">评论</a></span>
-    
-	
-		<span class="post-wordcount hidden-xs" itemprop="wordCount">字数统计: 5.4k(字)</span>
-	
-	
-		<span class="post-readcount hidden-xs" itemprop="timeRequired">阅读时长: 22(分)</span>
-	
-
-  </p>
-</article>
-
-    
-      <article class="article article-type-post" itemscope itemtype="http://schema.org/BlogPosting">
-  <div class="article-header">
-    
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2020/03/31/binary-search/">【算法】二分查找详解</a>
-    </h1>
-  
-
-  </div>
-  
-  <div class="article-entry text-muted" itemprop="description">
-    <p>二分查找也称折半查找，是一种效率较高的查找方法，但是。折半查找要求线性表必须采取顺序存储结构，而且表中袁旭按关键字有序排列。</p>
-  </div>
-  
-  <p class="article-meta">
-    <span class="article-date">
-    <i class="icon icon-calendar-check"></i>
-	<a href="/2020/03/31/binary-search/" class="article-date">
-	  <time datetime="2020-03-31T14:35:33.000Z" itemprop="datePublished">3月 31</time>
-	</a>
-</span>
-    
-  <span class="article-category">
-    <i class="icon icon-folder"></i>
-    <a class="article-category-link" href="/categories/算法/">算法</a>
-  </span>
-
-    
-
-    <span class="post-comment"><i class="icon icon-comment"></i> <a href="/2020/03/31/binary-search/#comments" class="article-comment-link">评论</a></span>
-    
-	
-		<span class="post-wordcount hidden-xs" itemprop="wordCount">字数统计: 1.9k(字)</span>
-	
-	
-		<span class="post-readcount hidden-xs" itemprop="timeRequired">阅读时长: 8(分)</span>
-	
-
-  </p>
-</article>
-
-    
-      <article class="article article-type-post" itemscope itemtype="http://schema.org/BlogPosting">
-  <div class="article-header">
-    
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2020/02/24/crack-dingtalk-location-practice/">【逆】逆向分析实践-钉钉打卡/钉钉签到/钉钉定位/远程打卡功能</a>
-    </h1>
-  
-
-  </div>
-  
-  <div class="article-entry text-muted" itemprop="description">
-    <blockquote>
-<p>本文内容仅为iOS逆向技术研究，请勿用作非法用途。</p>
-</blockquote>
-<p>在家隔离的日子过得还是比较漫长的，每天宅在家里，吃饭睡觉写代码挺无聊的。因为笔者所在公司使用钉钉打卡，于是钉钉便成了笔者本次逆向练习的目标😏。</p>
-  </div>
-  
-  <p class="article-meta">
-    <span class="article-date">
-    <i class="icon icon-calendar-check"></i>
-	<a href="/2020/02/24/crack-dingtalk-location-practice/" class="article-date">
-	  <time datetime="2020-02-24T15:41:34.000Z" itemprop="datePublished">2月 24</time>
-	</a>
-</span>
-    
-  <span class="article-category">
-    <i class="icon icon-folder"></i>
-    <a class="article-category-link" href="/categories/逆向/">逆向</a>
-  </span>
-
-    
-
-    <span class="post-comment"><i class="icon icon-comment"></i> <a href="/2020/02/24/crack-dingtalk-location-practice/#comments" class="article-comment-link">评论</a></span>
-    
-	
-		<span class="post-wordcount hidden-xs" itemprop="wordCount">字数统计: 1.1k(字)</span>
-	
-	
-		<span class="post-readcount hidden-xs" itemprop="timeRequired">阅读时长: 4(分)</span>
-	
-
-  </p>
-</article>
-
-    
-      <article class="article article-type-post" itemscope itemtype="http://schema.org/BlogPosting">
-  <div class="article-header">
-    
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2020/02/14/Unsafe-Swift-Using-Pointers-and-Interacting-With-C/">【译】不安全的Swift：Swift指针与C交互</a>
-    </h1>
-  
-
-  </div>
-  
-  <div class="article-entry text-muted" itemprop="description">
-    <blockquote>
-<p>翻译：韦东方        校对：韦子悦</p>
-<p>原文链接：<a href="https://www.raywenderlich.com/7181017-unsafe-swift-using-pointers-and-interacting-with-c" target="_blank" rel="noopener">https://www.raywenderlich.com/7181017-unsafe-swift-using-pointers-and-interacting-with-c</a></p>
-<p>在这个教程中，你将学会如何在swift中使用指针直接操作内存。</p>
-</blockquote>
-<p>默认情况下，Swift是内存安全的：Swift禁止直接的内存访问并确保你定义的变量在使用之前必须初始化。但是，这只是“默认情况下”。在 Swift中你也可以使用指针来直接访问内存。</p>
-<p>本教程将带你快速浏览一下Swift所谓“不安全”的特性。</p>
-<p>这里的 “不安全”并不意味着危险的错误代码，而是说编写这部分代码需要格外的小心，因为编译器并不会为这部分代码做全面的检查。</p>
-  </div>
-  
-  <p class="article-meta">
-    <span class="article-date">
-    <i class="icon icon-calendar-check"></i>
-	<a href="/2020/02/14/Unsafe-Swift-Using-Pointers-and-Interacting-With-C/" class="article-date">
-	  <time datetime="2020-02-14T14:42:54.000Z" itemprop="datePublished">2月 14</time>
-	</a>
-</span>
-    
-  <span class="article-category">
-    <i class="icon icon-folder"></i>
-    <a class="article-category-link" href="/categories/翻译/">翻译</a>
-  </span>
-
-    
-
-    <span class="post-comment"><i class="icon icon-comment"></i> <a href="/2020/02/14/Unsafe-Swift-Using-Pointers-and-Interacting-With-C/#comments" class="article-comment-link">评论</a></span>
-    
-	
-		<span class="post-wordcount hidden-xs" itemprop="wordCount">字数统计: 5.6k(字)</span>
-	
-	
-		<span class="post-readcount hidden-xs" itemprop="timeRequired">阅读时长: 23(分)</span>
-	
-
-  </p>
-</article>
-
-    
-      <article class="article article-type-post" itemscope itemtype="http://schema.org/BlogPosting">
-  <div class="article-header">
-    
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2020/01/10/package-deb-from-app/">【逆】如何将App打包成deb安装包</a>
-    </h1>
-  
-
-  </div>
-  
-  <div class="article-entry text-muted" itemprop="description">
-    <blockquote>
-<p>我们通过Cydia只能安装deb格式的插件，无法直接安装ipa。如果我们想要在Cydia发布应用程序类型的插件，那么必须将App打包成deb才能进行发布。</p>
-</blockquote>
-  </div>
-  
-  <p class="article-meta">
-    <span class="article-date">
-    <i class="icon icon-calendar-check"></i>
-	<a href="/2020/01/10/package-deb-from-app/" class="article-date">
-	  <time datetime="2020-01-10T12:21:45.000Z" itemprop="datePublished">1月 10</time>
-	</a>
-</span>
-    
-  <span class="article-category">
-    <i class="icon icon-folder"></i>
-    <a class="article-category-link" href="/categories/逆向与安全/">逆向与安全</a>
-  </span>
-
-    
-
-    <span class="post-comment"><i class="icon icon-comment"></i> <a href="/2020/01/10/package-deb-from-app/#comments" class="article-comment-link">评论</a></span>
-    
-	
-		<span class="post-wordcount hidden-xs" itemprop="wordCount">字数统计: 543(字)</span>
-	
-	
-		<span class="post-readcount hidden-xs" itemprop="timeRequired">阅读时长: 2(分)</span>
-	
-
-  </p>
-</article>
-
-    
-      <article class="article article-type-post" itemscope itemtype="http://schema.org/BlogPosting">
-  <div class="article-header">
-    
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2020/01/03/floating-point-details/">为什么浮点数在运算过程中会造成精度损失</a>
-    </h1>
-  
-
-  </div>
-  
-  <div class="article-entry text-muted" itemprop="description">
-    <p>在日常程序开发中，很多时候我们需要用到实数，这时候我们就需要使用浮点数来表示了。现在我们先来看下面的代码：</p>
-<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> a: <span class="type">Float</span> = <span class="number">0.2</span></span><br><span class="line"><span class="keyword">let</span> b: <span class="type">Float</span> = <span class="number">0.3</span></span><br><span class="line"><span class="keyword">let</span> num = a * b</span><br><span class="line"><span class="built_in">print</span>(num)</span><br></pre></td></tr></table></figure>
-
-<p>这是一个最简单的Float乘法，你觉得打印结果是多少，0.06吗？实际上打印结果是<code>0.060000002</code>，看到这个结果你有没有吃惊，聪明的计算机竟然连最简单的小数乘法都算不好。</p>
-  </div>
-  
-  <p class="article-meta">
-    <span class="article-date">
-    <i class="icon icon-calendar-check"></i>
-	<a href="/2020/01/03/floating-point-details/" class="article-date">
-	  <time datetime="2020-01-03T12:21:45.000Z" itemprop="datePublished">1月 3</time>
-	</a>
-</span>
-    
-  <span class="article-category">
-    <i class="icon icon-folder"></i>
-    <a class="article-category-link" href="/categories/其它/">其它</a>
-  </span>
-
-    
-
-    <span class="post-comment"><i class="icon icon-comment"></i> <a href="/2020/01/03/floating-point-details/#comments" class="article-comment-link">评论</a></span>
-    
-	
-		<span class="post-wordcount hidden-xs" itemprop="wordCount">字数统计: 2.4k(字)</span>
-	
-	
-		<span class="post-readcount hidden-xs" itemprop="timeRequired">阅读时长: 9(分)</span>
-	
-
-  </p>
-</article>
-
-    
-      <article class="article article-type-post" itemscope itemtype="http://schema.org/BlogPosting">
-  <div class="article-header">
-    
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2019/11/06/Get-started-with-SwiftUI/">【译】SwiftUI入门教程</a>
-    </h1>
-  
-
-  </div>
-  
-  <div class="article-entry text-muted" itemprop="description">
-    <p><a href="https://www.hackingwithswift.com/about" target="_blank" rel="noopener">Paul Hudson</a>    October 14th 2019     <a href="https://twitter.com/twostraws" target="_blank" rel="noopener">@twostraws</a></p>
-<p><img src="/resource/images/ios-13-1.jpg" alt="img"></p>
-<p>SwiftUI是苹果公司新发布的用于构建UI界面的框架，它可以用于搭建iOS、macOS、tvOS、watchOS系统的UI界面。它采用声明式的方式进行构建，相比UIKit，使用SwiftUI搭建App更快、更安全。</p>
-  </div>
-  
-  <p class="article-meta">
-    <span class="article-date">
-    <i class="icon icon-calendar-check"></i>
-	<a href="/2019/11/06/Get-started-with-SwiftUI/" class="article-date">
-	  <time datetime="2019-11-06T10:23:49.000Z" itemprop="datePublished">11月 6</time>
-	</a>
-</span>
-    
-  <span class="article-category">
-    <i class="icon icon-folder"></i>
-    <a class="article-category-link" href="/categories/翻译/">翻译</a>
-  </span>
-
-    
-
-    <span class="post-comment"><i class="icon icon-comment"></i> <a href="/2019/11/06/Get-started-with-SwiftUI/#comments" class="article-comment-link">评论</a></span>
-    
-	
-		<span class="post-wordcount hidden-xs" itemprop="wordCount">字数统计: 2.5k(字)</span>
-	
-	
-		<span class="post-readcount hidden-xs" itemprop="timeRequired">阅读时长: 9(分)</span>
-	
-
-  </p>
-</article>
-
-    
-      <article class="article article-type-post" itemscope itemtype="http://schema.org/BlogPosting">
-  <div class="article-header">
-    
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2019/11/03/Avoiding-near-duplicates-in-sets/">【译】如何在Set集合中避免重复元素</a>
-    </h1>
-  
-
-  </div>
-  
-  <div class="article-entry text-muted" itemprop="description">
-    <blockquote>
-<p>文章翻译自 <a href="https://www.hackingwithswift.com/articles/199/avoiding-near-duplicates-in-sets" target="_blank" rel="noopener">Avoiding near-duplicates in sets</a>, 作者<a href="https://www.hackingwithswift.com/about" target="_blank" rel="noopener">Paul Hudson</a> <a href="https://twitter.com/twostraws" target="_blank" rel="noopener">@twostraws</a>是一名优秀的Swifter。<br>这是我第一次翻译，可能有翻译不到位的地方，如果有任何问题，欢迎反馈。学习学习再学习，加油💪！</p>
-</blockquote>
-<p><img src="../resource/images/coding-man-2.jpg" alt="img"></p>
-<p>Julian Schiavo写道：我想用Set集合来保证我的Array中元素是唯一的，但是Set集合中每个元素都包含一个Date类型的变量，当两个不同元素仅仅是Date变量不同的时候，实际上Set中可以同时保存这两个元素，这就出现了重复元素。这种问题该怎么解决呢？</p>
-  </div>
-  
-  <p class="article-meta">
-    <span class="article-date">
-    <i class="icon icon-calendar-check"></i>
-	<a href="/2019/11/03/Avoiding-near-duplicates-in-sets/" class="article-date">
-	  <time datetime="2019-11-03T10:23:49.000Z" itemprop="datePublished">11月 3</time>
-	</a>
-</span>
-    
-  <span class="article-category">
-    <i class="icon icon-folder"></i>
-    <a class="article-category-link" href="/categories/翻译/">翻译</a>
-  </span>
-
-    
-
-    <span class="post-comment"><i class="icon icon-comment"></i> <a href="/2019/11/03/Avoiding-near-duplicates-in-sets/#comments" class="article-comment-link">评论</a></span>
-    
-	
-		<span class="post-wordcount hidden-xs" itemprop="wordCount">字数统计: 1.4k(字)</span>
-	
-	
-		<span class="post-readcount hidden-xs" itemprop="timeRequired">阅读时长: 5(分)</span>
-	
-
-  </p>
-</article>
-
-    
-      <article class="article article-type-post" itemscope itemtype="http://schema.org/BlogPosting">
-  <div class="article-header">
-    
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2019/10/16/RxSwift-brief/">【笔记】RxSwift简介</a>
-    </h1>
-  
-
-  </div>
-  
-  <div class="article-entry text-muted" itemprop="description">
-    <p>RxSwift是一个可以帮助我们简化异步编程的框架，它拓展了观察者模式，能够帮助你自由组合多个异步事件，而不需要去关心线程、同步、线程安全等问题、并发等问题。RxSwift属于函数响应式编程，它通过构建函数操作数据序列，然后对这些序列做出响应的编程方式。</p>
-  </div>
-  
-  <p class="article-meta">
-    <span class="article-date">
-    <i class="icon icon-calendar-check"></i>
-	<a href="/2019/10/16/RxSwift-brief/" class="article-date">
-	  <time datetime="2019-10-16T07:22:35.000Z" itemprop="datePublished">10月 16</time>
-	</a>
-</span>
-    
-  <span class="article-category">
-    <i class="icon icon-folder"></i>
-    <a class="article-category-link" href="/categories/Swift/">Swift</a>
-  </span>
-
-    
-
-    <span class="post-comment"><i class="icon icon-comment"></i> <a href="/2019/10/16/RxSwift-brief/#comments" class="article-comment-link">评论</a></span>
-    
-	
-		<span class="post-wordcount hidden-xs" itemprop="wordCount">字数统计: 5.3k(字)</span>
-	
-	
-		<span class="post-readcount hidden-xs" itemprop="timeRequired">阅读时长: 21(分)</span>
-	
-
-  </p>
-</article>
-
-    
-  </div>
-
-  
-    
-    <nav class="bar bar-footer clearfix" data-stick-bottom>
-        <div class="bar-inner">
-        <ul class="pager pull-left">
-            
-            <li class="prev disabled">
-                <a href="javascript:;">
-                    <i class="icon icon-angle-left"></i>
-                    上一页
-                </a>
-            </li>
-            
-            
-            <li class="next">
-                <a href="/page/2/">
-                    下一页
-                    <i class="icon icon-angle-right"></i>
-                </a>
-            </li>
-            
-        </ul>
-        <div class="total-article bar-right">Page 1 of 2</div>
-        </div>
-    </nav>
-    
- 
-</main>
-
-  <footer class="footer" itemscope itemtype="http://schema.org/WPFooter">
-	
-	
-    <ul class="social-links">
-    	
-        <li><a href="https://github.com/dev-dongfang" target="_blank" title="Github" data-toggle=tooltip data-placement=top><i class="icon icon-github"></i></a></li>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/posts/2020-04/8260.html#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
         
-        <li><a href="https://twitter.com/weidf" target="_blank" title="Twitter" data-toggle=tooltip data-placement=top><i class="icon icon-twitter"></i></a></li>
-        
-        <li><a href="mailto:dev.dongfang@gmail.com" target="_blank" title="Email" data-toggle=tooltip data-placement=top><i class="icon icon-email"></i></a></li>
-        
-    </ul>
-
-    <div class="copyright">
-    	
-        <div class="publishby">
-        	Theme by <a href="https://github.com/cofess" target="_blank"> cofess </a>base on <a href="https://github.com/cofess/hexo-theme-pure" target="_blank">pure</a>.
-        </div>
+      
     </div>
-</footer>
-  <script src="//cdn.jsdelivr.net/npm/jquery@1.12.4/dist/jquery.min.js"></script>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://blog.weidongfang.online/posts/2020-04/41401.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/resource/images/head_icon180.jpg">
+      <meta itemprop="name" content="韦东方">
+      <meta itemprop="description" content="You never know where your limitation is without trying.">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Dev-Dongfang">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/posts/2020-04/41401.html" class="post-title-link" itemprop="url">【算法】手撕五花八门的字符串匹配算法</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-04-03 12:29:49" itemprop="dateCreated datePublished" datetime="2020-04-03T12:29:49+08:00">2020-04-03</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2020-05-30 23:04:28" itemprop="dateModified" datetime="2020-05-30T23:04:28+08:00">2020-05-30</time>
+              </span>
+
+          
+  
+  
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>字符串匹配在计算机领域是个老生常谈的问题，对于任何一个开发工程师来说应该都不陌生，我们常用的各种语言一般都提供有字符串查找相关的方法，比如swift语言String相关的<code>contains</code>、<code>hasPrefix</code>、<code>first(where:)</code>等方法，他们底层的实现就是依赖字符串匹配算法的。</p>
+<p>字符串匹配算法有很多，这里只讲单模式串匹配算法，包括：BF算法、RK算法、BM算法、KMP算法。</p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/posts/2020-04/41401.html#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+
+  
+  <nav class="pagination">
+    <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="extend next" rel="next" href="/page/2/"><i class="fa fa-angle-right" aria-label="下一页"></i></a>
+  </nav>
+
+
+
+          </div>
+          
+
 <script>
-window.jQuery || document.write('<script src="js/jquery.min.js"><\/script>')
-</script>
-<script src="/js/plugin.min.js"></script>
-<script src="/js/application.js"></script>
-
-
-    <script>
-(function ($) {
-    $('.search-form').on('submit', function (e) {
-        var keyword = $('.search-form-input[name="wd"]').val();
-        window.location = 'https://www.baidu.com/s?wd=site:blog.weidongfang.online ' + keyword;
-        return false;
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
     });
-})(jQuery);
+  }
 </script>
 
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="韦东方"
+      src="/resource/images/head_icon180.jpg">
+  <p class="site-author-name" itemprop="name">韦东方</p>
+  <div class="site-description" itemprop="description">You never know where your limitation is without trying.</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">24</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+        <span class="site-state-item-count">10</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">1</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="http://readingnote.weidongfang.online" title="Reading → http://readingnote.weidongfang.online" rel="noopener" target="_blank"><i class="fa fa-book-reader fa-fw"></i>Reading</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:dev.dongfang@gmail.com" title="E-mail → mailto:dev.dongfang@gmail.com" rel="noopener" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-mail</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="/atom.xml" title="RSS → /atom.xml"><i class="fa fa-rss fa-fw"></i>RSS</a>
+      </span>
+  </div>
 
 
 
-   
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+  <div class="beian"><a href="https://beian.miit.gov.cn" rel="noopener" target="_blank">京ICP备20017039号-1 </a>
+  </div>
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">@dev.dongfang</span>
+</div>
+
+        
 
 
 
@@ -815,17 +1165,95 @@ window.jQuery || document.write('<script src="js/jquery.min.js"><\/script>')
 
 
 
-    <script defer>
-var _hmt = _hmt || [];
-(function() {
-    var hm = document.createElement("script");
-    hm.src = "//hm.baidu.com/hm.js?9973e9eaf1485d0719cd19d7436e2fea";
-    var s = document.getElementsByTagName("script")[0];
-    s.parentNode.insertBefore(hm, s);
-})();
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+<script src="/js/utils.js"></script><script src="/js/motion.js"></script>
+<script src="/js/schemes/pisces.js"></script>
+<script src="/js/next-boot.js"></script>
+
+
+
+  
+  <script>
+    (function(){
+      var canonicalURL, curProtocol;
+      //Get the <link> tag
+      var x=document.getElementsByTagName("link");
+		//Find the last canonical URL
+		if(x.length > 0){
+			for (i=0;i<x.length;i++){
+				if(x[i].rel.toLowerCase() == 'canonical' && x[i].href){
+					canonicalURL=x[i].href;
+				}
+			}
+		}
+    //Get protocol
+	    if (!canonicalURL){
+	    	curProtocol = window.location.protocol.split(':')[0];
+	    }
+	    else{
+	    	curProtocol = canonicalURL.split(':')[0];
+	    }
+      //Get current URL if the canonical URL does not exist
+	    if (!canonicalURL) canonicalURL = window.location.href;
+	    //Assign script content. Replace current URL with the canonical URL
+      !function(){var e=/([http|https]:\/\/[a-zA-Z0-9\_\.]+\.baidu\.com)/gi,r=canonicalURL,t=document.referrer;if(!e.test(r)){var n=(String(curProtocol).toLowerCase() === 'https')?"https://sp0.baidu.com/9_Q4simg2RQJ8t7jm9iCKT-xh_/s.gif":"//api.share.baidu.com/s.gif";t?(n+="?r="+encodeURIComponent(document.referrer),r&&(n+="&l="+r)):r&&(n+="?l="+r);var i=new Image;i.src=n}}(window);})();
+  </script>
+
+
+
+
+  <script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+
+<script>
+NexT.utils.loadComments(document.querySelector('#valine-comments'), () => {
+  NexT.utils.getScript('//unpkg.com/valine/dist/Valine.min.js', () => {
+    var GUEST = ['nick', 'mail', 'link'];
+    var guest = 'nick,mail,link';
+    guest = guest.split(',').filter(item => {
+      return GUEST.includes(item);
+    });
+    new Valine({
+      el         : '#valine-comments',
+      verify     : false,
+      notify     : true,
+      appId      : 'vMrO1hYoNr03pjrQ0iIUSSLL-gzGzoHsz',
+      appKey     : 'iyTSJjyCkkOSrXToutmor7ru',
+      placeholder: "欢迎留言！",
+      avatar     : 'mm',
+      meta       : guest,
+      pageSize   : '15' || 10,
+      visitor    : false,
+      lang       : 'zh-cn' || 'zh-cn',
+      path       : location.pathname,
+      recordIP   : false,
+      serverURLs : ''
+    });
+  }, window.Valine);
+});
 </script>
-
-
 
 </body>
 </html>

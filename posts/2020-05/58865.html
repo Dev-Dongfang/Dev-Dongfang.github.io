@@ -1,0 +1,581 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 3.9.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/resource/images/head_icon180.jpg">
+  <link rel="icon" type="image/png" sizes="32x32" href="/resource/images/head_icon180.jpg">
+  <link rel="icon" type="image/png" sizes="16x16" href="/resource/images/head_icon32.jpg">
+  <link rel="mask-icon" href="/resource/images/head_icon180.jpg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"blog.weidongfang.online","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":true,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":"valine","storage":true,"lazyload":false,"nav":null,"activeClass":"valine"},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="第一次玩raspberry，踩了不少的坑，在挂载移动硬盘上走了不少的弯路，同时也学到了很多。关于挂载移动硬盘，主要遇到两个问题，第一个问题是挂载后的移动硬盘目录权限和所属关系无法修改；第二个问题是挂载失败导致raspberry系统无法启动的问题。 关于第一个问题的解决方法，上篇博客已经有了解释，详情请点这里。这里主要讲解挂载失败导致系统无法重启的探索发现过程。">
+<meta name="keywords" content="iOS, 逆向与安全, swift, flutter, linux">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Raspberry挂载移动硬盘的坑：解决挂载失败导致raspberry系统无法启动的问题">
+<meta property="og:url" content="http://blog.weidongfang.online/posts/2020-05/58865.html">
+<meta property="og:site_name" content="Dev-Dongfang">
+<meta property="og:description" content="第一次玩raspberry，踩了不少的坑，在挂载移动硬盘上走了不少的弯路，同时也学到了很多。关于挂载移动硬盘，主要遇到两个问题，第一个问题是挂载后的移动硬盘目录权限和所属关系无法修改；第二个问题是挂载失败导致raspberry系统无法启动的问题。 关于第一个问题的解决方法，上篇博客已经有了解释，详情请点这里。这里主要讲解挂载失败导致系统无法重启的探索发现过程。">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="http://img.weidongfang.online/imgbed/20200526170803.png">
+<meta property="og:image" content="http://img.weidongfang.online/imgbed/20200526172958.png">
+<meta property="og:image" content="http://img.weidongfang.online/imgbed/20200526174159.png">
+<meta property="og:image" content="http://img.weidongfang.online/imgbed/20200526174519.png">
+<meta property="og:updated_time" content="2021-04-28T06:56:49.635Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Raspberry挂载移动硬盘的坑：解决挂载失败导致raspberry系统无法启动的问题">
+<meta name="twitter:description" content="第一次玩raspberry，踩了不少的坑，在挂载移动硬盘上走了不少的弯路，同时也学到了很多。关于挂载移动硬盘，主要遇到两个问题，第一个问题是挂载后的移动硬盘目录权限和所属关系无法修改；第二个问题是挂载失败导致raspberry系统无法启动的问题。 关于第一个问题的解决方法，上篇博客已经有了解释，详情请点这里。这里主要讲解挂载失败导致系统无法重启的探索发现过程。">
+<meta name="twitter:image" content="http://img.weidongfang.online/imgbed/20200526170803.png">
+
+<link rel="canonical" href="http://blog.weidongfang.online/posts/2020-05/58865.html">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>Raspberry挂载移动硬盘的坑：解决挂载失败导致raspberry系统无法启动的问题 | Dev-Dongfang</title>
+  
+
+
+  <script>
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?9973e9eaf1485d0719cd19d7436e2fea";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+<link rel="alternate" href="/atom.xml" title="Dev-Dongfang" type="application/atom+xml">
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Dev-Dongfang</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">iOS、逆向与安全、swift、flutter、linux，爱生活、爱代码、爱分享。</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-learning">
+
+    <a href="/learning/" rel="section"><i class="fa fa-book fa-fw"></i>笔记</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签<span class="badge">1</span></a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档<span class="badge">24</span></a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://blog.weidongfang.online/posts/2020-05/58865.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/resource/images/head_icon180.jpg">
+      <meta itemprop="name" content="韦东方">
+      <meta itemprop="description" content="You never know where your limitation is without trying.">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Dev-Dongfang">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Raspberry挂载移动硬盘的坑：解决挂载失败导致raspberry系统无法启动的问题
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-05-26 18:19:17" itemprop="dateCreated datePublished" datetime="2020-05-26T18:19:17+08:00">2020-05-26</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2021-04-28 14:56:49" itemprop="dateModified" datetime="2021-04-28T14:56:49+08:00">2021-04-28</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Linux/" itemprop="url" rel="index"><span itemprop="name">Linux</span></a>
+                </span>
+            </span>
+
+          
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Valine：</span>
+    
+    <a title="valine" href="/posts/2020-05/58865.html#valine-comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/posts/2020-05/58865.html" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>第一次玩raspberry，踩了不少的坑，在挂载移动硬盘上走了不少的弯路，同时也学到了很多。关于挂载移动硬盘，主要遇到两个问题，第一个问题是挂载后的移动硬盘目录权限和所属关系无法修改；第二个问题是挂载失败导致raspberry系统无法启动的问题。</p>
+<p>关于第一个问题的解决方法，上篇博客已经有了解释，详情请<a href="http://blog.weidongfang.online/posts/2020-05/50924.html">点这里</a>。这里主要讲解挂载失败导致系统无法重启的探索发现过程。</p>
+<a id="more"></a>
+
+<p>关于挂载外接磁盘，每次重启系统都去手动挂载肯定是不现实的。自动挂载的话，我能想到的方案是在系统启动时执行mount脚本，我们可以将mount命令以及参数封装到sh文件中，在<code>rc.local</code>文件中添加执行sh文件的脚本即可。经过查找发现，linux中有专门存放文件系统的静态信息文件，系统启动时候会去查找并自动挂载，这个文件就是<code>fstab</code>。既然这样那就学习一下新的方式吧！</p>
+<h1 id="1-糟糕！"><a href="#1-糟糕！" class="headerlink" title="1.糟糕！"></a>1.糟糕！</h1><p>于是我在网上找了一段挂载的代码，放入fstab，大眼一看似乎没什么问题，就关机重启了。然后raspberry系统再也起不来了… </p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">/dev/sdp1      /home/raspberry       ext4      defaults,noatime      0      1</span><br></pre></td></tr></table></figure>
+
+<p>经过检查发现，我写进fstab的外接磁盘位置是<code>/dev/sdp1</code>，我记得raspberry上外接磁盘位置是<code>/dev/sda1</code>，一个字母之差，导致系统起不来了… 看到这我肠子都悔青了，没有好好检查一下。</p>
+<p>难道说要重新刷系统？重新配置环境？可是raspberry已经部署了很多东西了，docker、nextcloud、aria2、nginx、django等等等…. </p>
+<h1 id="2-我相信我并不孤独"><a href="#2-我相信我并不孤独" class="headerlink" title="2.我相信我并不孤独"></a>2.我相信我并不孤独</h1><p>在网上简单搜索下，发现很多人建议重新刷系统。但是，<strong>我相信我并不是第一个遇到这个问题的人</strong>，一定有前人探索出过可行的解决方案！</p>
+<p>我们知道，<strong>在linux操作系统上，整个系统都是以文件的形式组织的</strong>，所以fstab这个文件一定存储在raspberry启动盘的某个位置，我们只需要找到方法，打开这个文件，修改这个文件中一个字符即可解决一切问题！</p>
+<p>想到这，我兴奋的拔下raspberry的闪存卡，插到电脑上。然而，直接挂载到mac上的只有几百兆的存储空间，剩下的空间都不见了！</p>
+<h1 id="3-Here-We-Go"><a href="#3-Here-We-Go" class="headerlink" title="3.Here We Go"></a>3.Here We Go</h1><p>用mac磁盘工具发现，Linux系统所在区间的文件系统，mac不支持，实际上存储raspbian系统的部分，磁盘文件系统是<a href="https://en.wikipedia.org/wiki/Ext4" target="_blank" rel="noopener">ext4</a>。</p>
+<p><img src="http://img.weidongfang.online/imgbed/20200526170803.png" alt></p>
+<p>幸运的是，mac上可以通过安装插件支持ext4。这里主要要用到两个插件：<a href="https://github.com/osxfuse/osxfuse" target="_blank" rel="noopener">osxfuse</a>和<a href="https://github.com/gerard/ext4fuse" target="_blank" rel="noopener">ext4fuse</a>。</p>
+<ul>
+<li><strong>osxfuse</strong>：github上的解释<em>FUSE extends macOS by adding support for user space file systems</em>。就是说，让Mac osx支持fuse这个文件系统的插件。</li>
+<li><strong>ext4fuse</strong>：ext4fuse是fuse这个文件系统的ext4实现。</li>
+</ul>
+<p>有了这两个工具，我们就可以在mac上操作ext4文件系统了。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"># 使用HomeBrew安装ext4fuse</span><br><span class="line">brew install ext4fuse</span><br></pre></td></tr></table></figure>
+
+<p>osxfuse可以去<a href="https://osxfuse.github.io/" target="_blank" rel="noopener">官网</a>下载最新的安装包进行安装，这里需要注意的是，<strong>安装时候一定要勾选<code>MacFUSE Compatibility Layer</code></strong>，否则可能导致无无法写入，说多了都是泪… </p>
+<p><img src="http://img.weidongfang.online/imgbed/20200526172958.png" alt></p>
+<p>接下来，我们可以通过ext4fuse命令，将ext4文件系统挂载到我们的mac上了！</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">#查看mac上链接的外接磁盘位置</span><br><span class="line">diskutil list</span><br><span class="line"></span><br><span class="line">#通过ext4fuse命令将ext4挂载到mac指定的目录中，`allow_other`参数表示允许其他用户读取</span><br><span class="line">sudo ext4fuse /dev/disk2s2 /Volumes/raspberry -o allow_other</span><br></pre></td></tr></table></figure>
+
+<p>然后，我们就可以进入到raspberry系统目录了。</p>
+<p><img src="http://img.weidongfang.online/imgbed/20200526174159.png" alt></p>
+<p>这时候你会发现，你只能从ext4系统中读取文件而无法写入（这块也卡了我挺长时间），实际上，你认真阅读ext4fuse的readme的话，你会发现下面这句：</p>
+<p><img src="http://img.weidongfang.online/imgbed/20200526174519.png" alt></p>
+<p><strong>最终的解决方案就是fuse-ext2！</strong>fuse-ext2是一个多操作系统fuse模块，支持挂载ext2/ext3/ext4文件系统并<strong>提供读写支持</strong>。mac上fuse-ext2的安装步骤可以<a href="https://github.com/alperakcan/fuse-ext2#macos" target="_blank" rel="noopener">点这里</a>。</p>
+<p>安装完毕后，使用<code>fuse-ext2</code>命令重新挂载即可（注意安装osxfuse时候选中<code>MacFUSE Compatibility Layer</code>，否则可能导致无写入权限），你会发现，现在你可以愉快的读写raspberry系统盘了。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo fuse-ext2 /dev/disk2s2 /Volumes/raspberry -o allow_other</span><br></pre></td></tr></table></figure>
+
+<p>然后，修改fstab文件，重启raspberry，外接硬盘挂载成功！😄</p>
+<p><em>说明：部分图片来源于网络，因为解决问题过程中没有保存现场。</em></p>
+<blockquote>
+<p>Reference:</p>
+<p><a href="https://piratefache.ch/mount-raspberry-pi-sd-card-on-mac-os/" target="_blank" rel="noopener">https://piratefache.ch/mount-raspberry-pi-sd-card-on-mac-os/</a></p>
+<p><a href="https://docs.j7k6.org/mount-ext4-macos/" target="_blank" rel="noopener">https://docs.j7k6.org/mount-ext4-macos/</a></p>
+<p><a href="https://github.com/alperakcan/fuse-ext2" target="_blank" rel="noopener">https://github.com/alperakcan/fuse-ext2</a></p>
+<p><a href="https://en.wikipedia.org/wiki/Filesystem_in_Userspace" target="_blank" rel="noopener">https://en.wikipedia.org/wiki/Filesystem_in_Userspace</a></p>
+</blockquote>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/posts/2020-05/50924.html" rel="prev" title="linux/raspberry中挂载外接硬盘">
+      <i class="fa fa-chevron-left"></i> linux/raspberry中挂载外接硬盘
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/posts/2020-09/8fysm.html" rel="next" title="【算法】全排列/组合问题全解">
+      【算法】全排列/组合问题全解 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+    <div class="comments" id="valine-comments"></div>
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#1-糟糕！"><span class="nav-number">1.</span> <span class="nav-text">1.糟糕！</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#2-我相信我并不孤独"><span class="nav-number">2.</span> <span class="nav-text">2.我相信我并不孤独</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#3-Here-We-Go"><span class="nav-number">3.</span> <span class="nav-text">3.Here We Go</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="韦东方"
+      src="/resource/images/head_icon180.jpg">
+  <p class="site-author-name" itemprop="name">韦东方</p>
+  <div class="site-description" itemprop="description">You never know where your limitation is without trying.</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">24</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+        <span class="site-state-item-count">10</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">1</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="http://readingnote.weidongfang.online" title="Reading → http://readingnote.weidongfang.online" rel="noopener" target="_blank"><i class="fa fa-book-reader fa-fw"></i>Reading</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:dev.dongfang@gmail.com" title="E-mail → mailto:dev.dongfang@gmail.com" rel="noopener" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-mail</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="/atom.xml" title="RSS → /atom.xml"><i class="fa fa-rss fa-fw"></i>RSS</a>
+      </span>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+  <div class="beian"><a href="https://beian.miit.gov.cn" rel="noopener" target="_blank">京ICP备20017039号-1 </a>
+  </div>
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">@dev.dongfang</span>
+</div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+<script src="/js/utils.js"></script><script src="/js/motion.js"></script>
+<script src="/js/schemes/pisces.js"></script>
+<script src="/js/next-boot.js"></script>
+
+
+
+  
+  <script>
+    (function(){
+      var canonicalURL, curProtocol;
+      //Get the <link> tag
+      var x=document.getElementsByTagName("link");
+		//Find the last canonical URL
+		if(x.length > 0){
+			for (i=0;i<x.length;i++){
+				if(x[i].rel.toLowerCase() == 'canonical' && x[i].href){
+					canonicalURL=x[i].href;
+				}
+			}
+		}
+    //Get protocol
+	    if (!canonicalURL){
+	    	curProtocol = window.location.protocol.split(':')[0];
+	    }
+	    else{
+	    	curProtocol = canonicalURL.split(':')[0];
+	    }
+      //Get current URL if the canonical URL does not exist
+	    if (!canonicalURL) canonicalURL = window.location.href;
+	    //Assign script content. Replace current URL with the canonical URL
+      !function(){var e=/([http|https]:\/\/[a-zA-Z0-9\_\.]+\.baidu\.com)/gi,r=canonicalURL,t=document.referrer;if(!e.test(r)){var n=(String(curProtocol).toLowerCase() === 'https')?"https://sp0.baidu.com/9_Q4simg2RQJ8t7jm9iCKT-xh_/s.gif":"//api.share.baidu.com/s.gif";t?(n+="?r="+encodeURIComponent(document.referrer),r&&(n+="&l="+r)):r&&(n+="?l="+r);var i=new Image;i.src=n}}(window);})();
+  </script>
+
+
+
+
+  <script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+
+<script>
+NexT.utils.loadComments(document.querySelector('#valine-comments'), () => {
+  NexT.utils.getScript('//unpkg.com/valine/dist/Valine.min.js', () => {
+    var GUEST = ['nick', 'mail', 'link'];
+    var guest = 'nick,mail,link';
+    guest = guest.split(',').filter(item => {
+      return GUEST.includes(item);
+    });
+    new Valine({
+      el         : '#valine-comments',
+      verify     : false,
+      notify     : true,
+      appId      : 'vMrO1hYoNr03pjrQ0iIUSSLL-gzGzoHsz',
+      appKey     : 'iyTSJjyCkkOSrXToutmor7ru',
+      placeholder: "欢迎留言！",
+      avatar     : 'mm',
+      meta       : guest,
+      pageSize   : '15' || 10,
+      visitor    : false,
+      lang       : 'zh-cn' || 'zh-cn',
+      path       : location.pathname,
+      recordIP   : false,
+      serverURLs : ''
+    });
+  }, window.Valine);
+});
+</script>
+
+</body>
+</html>

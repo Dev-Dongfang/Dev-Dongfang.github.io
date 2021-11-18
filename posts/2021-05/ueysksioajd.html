@@ -1,0 +1,557 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 3.9.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/resource/images/head_icon180.jpg">
+  <link rel="icon" type="image/png" sizes="32x32" href="/resource/images/head_icon180.jpg">
+  <link rel="icon" type="image/png" sizes="16x16" href="/resource/images/head_icon32.jpg">
+  <link rel="mask-icon" href="/resource/images/head_icon180.jpg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"blog.weidongfang.online","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":true,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":"valine","storage":true,"lazyload":false,"nav":null,"activeClass":"valine"},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="这应该不是我第一次阅读这本书，早几年就阅读过一次，当时没有做系统的总结，所以给我留下的印象并不多。这次阅读这本书源自于吴军老师的《硅谷来信》上看到的书名，吴军老师对书中的观点信手拈来，因此我觉得自己是时候重读一遍了。 本次阅读，感觉这本书部分章节的观点是比较晦涩的，有的章节很努力的想要搞清楚作者想要表达什么，但是阅读下来根本搞不清楚作者想要表达的点。不过，按照主题分类，作者几个重要观点叙述还是非常">
+<meta name="keywords" content="iOS, 逆向与安全, swift, flutter, linux">
+<meta property="og:type" content="article">
+<meta property="og:title" content="《随机漫步的傻瓜》— 阅读与总结">
+<meta property="og:url" content="http://blog.weidongfang.online/posts/2021-05/ueysksioajd.html">
+<meta property="og:site_name" content="Dev-Dongfang">
+<meta property="og:description" content="这应该不是我第一次阅读这本书，早几年就阅读过一次，当时没有做系统的总结，所以给我留下的印象并不多。这次阅读这本书源自于吴军老师的《硅谷来信》上看到的书名，吴军老师对书中的观点信手拈来，因此我觉得自己是时候重读一遍了。 本次阅读，感觉这本书部分章节的观点是比较晦涩的，有的章节很努力的想要搞清楚作者想要表达什么，但是阅读下来根本搞不清楚作者想要表达的点。不过，按照主题分类，作者几个重要观点叙述还是非常">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="http://img.weidongfang.online/imgbed/20210515234648.png">
+<meta property="og:updated_time" content="2021-06-01T09:38:53.278Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="《随机漫步的傻瓜》— 阅读与总结">
+<meta name="twitter:description" content="这应该不是我第一次阅读这本书，早几年就阅读过一次，当时没有做系统的总结，所以给我留下的印象并不多。这次阅读这本书源自于吴军老师的《硅谷来信》上看到的书名，吴军老师对书中的观点信手拈来，因此我觉得自己是时候重读一遍了。 本次阅读，感觉这本书部分章节的观点是比较晦涩的，有的章节很努力的想要搞清楚作者想要表达什么，但是阅读下来根本搞不清楚作者想要表达的点。不过，按照主题分类，作者几个重要观点叙述还是非常">
+<meta name="twitter:image" content="http://img.weidongfang.online/imgbed/20210515234648.png">
+
+<link rel="canonical" href="http://blog.weidongfang.online/posts/2021-05/ueysksioajd.html">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>《随机漫步的傻瓜》— 阅读与总结 | Dev-Dongfang</title>
+  
+
+
+  <script>
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?9973e9eaf1485d0719cd19d7436e2fea";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+<link rel="alternate" href="/atom.xml" title="Dev-Dongfang" type="application/atom+xml">
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Dev-Dongfang</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">iOS、逆向与安全、swift、flutter、linux，爱生活、爱代码、爱分享。</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-learning">
+
+    <a href="/learning/" rel="section"><i class="fa fa-book fa-fw"></i>笔记</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签<span class="badge">1</span></a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档<span class="badge">24</span></a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://blog.weidongfang.online/posts/2021-05/ueysksioajd.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/resource/images/head_icon180.jpg">
+      <meta itemprop="name" content="韦东方">
+      <meta itemprop="description" content="You never know where your limitation is without trying.">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Dev-Dongfang">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          《随机漫步的傻瓜》— 阅读与总结
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2021-05-16 02:13:58" itemprop="dateCreated datePublished" datetime="2021-05-16T02:13:58+08:00">2021-05-16</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2021-06-01 17:38:53" itemprop="dateModified" datetime="2021-06-01T17:38:53+08:00">2021-06-01</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/reading/" itemprop="url" rel="index"><span itemprop="name">reading</span></a>
+                </span>
+            </span>
+
+          
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Valine：</span>
+    
+    <a title="valine" href="/posts/2021-05/ueysksioajd.html#valine-comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/posts/2021-05/ueysksioajd.html" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>这应该不是我第一次阅读这本书，早几年就阅读过一次，当时没有做系统的总结，所以给我留下的印象并不多。这次阅读这本书源自于吴军老师的《硅谷来信》上看到的书名，吴军老师对书中的观点信手拈来，因此我觉得自己是时候重读一遍了。</p>
+<p>本次阅读，感觉这本书部分章节的观点是比较晦涩的，有的章节很努力的想要搞清楚作者想要表达什么，但是阅读下来根本搞不清楚作者想要表达的点。不过，按照主题分类，作者几个重要观点叙述还是非常清晰明白的，很容易理解。阅读的意义就在于能从中学到什么，哪怕只有一句话，那么阅读都是有益的。本次阅读加上今天的总结，还是给我留下很多宝贵的观点的。例如随机性和黑天鹅、归纳法的局限性、幸存者偏差、生活中的非对称和非线性事件、我们都是概率盲、如何生活再随机世界中等。有些是我已经拥有的观点了，不过通过阅读本书还是能够加深自己对观点的理解和认识，总体上看，受益匪浅。</p>
+<a id="more"></a>
+
+<h2 id="关于随机性和黑天鹅"><a href="#关于随机性和黑天鹅" class="headerlink" title="关于随机性和黑天鹅"></a>关于随机性和黑天鹅</h2><p>由于人类人口基数巨大，根据概率论，对整个人类而言，靠随机性获取成功的人要比我们想象中的更多。举个例子，例如对股市上涨还是下跌的预测中涨跌各占50%，那么连续10次赌对的人有多少？1/1024，也就是说，每一千个人中，就可能有一个人连续10次赌对，如果有1亿人参与呢？那就是10万人。<strong>由此可见，生活中，靠随机性获取成就的人其实大有人在，远比我们想象中的要多。</strong></p>
+<p>现实生活就好比是一个巨大的俄罗斯轮盘，就像是一个有这1000发子弹容量的左轮手枪，里面只有一颗子弹。以金融市场为例，你使用自己的方法，连续100次获胜，那么你可能归结为你方法的优越性，完全信任自己的方法，从而开始慢慢的忽略了潜在的风险。千分之一的事件之所以被称为稀有事件而不是不可能事件，是因为千分之一是会发生的，只要你尝试的次数足够多，稀有事件总会到来的。你可能会幸运999次，但是只要有一次致命的失败，就能抹掉你999次的成功。</p>
+<p>虽然，靠随机性赚钱的傻瓜一抓一大把，但是他们从没有人认为自己是靠随机性赚钱的，而是将赚钱归功于才华。只有在他们遭遇失败的时候，才会将其决断归结为运气。话说回来，那些随机漫步的傻瓜的存在还是有一点价值的，因为他们的存在，才能够帮助那些有真正智慧的人获得最终的成功。</p>
+<h2 id="归纳法的局限性"><a href="#归纳法的局限性" class="headerlink" title="归纳法的局限性"></a>归纳法的局限性</h2><p>人类对<a href="https://zhuanlan.zhihu.com/p/39495529" target="_blank" rel="noopener">归纳法和演绎法</a>的总结也就最近两千年的事情，但是人类对归纳法的应用却有着数百万年的历史，可以说，归纳法是人类刻在骨子里的认知。不可否认，归纳法在整个人类进化史中有着非常重要的作用，帮助我们人类找到大自然的规律，从而更好的生存发展和进化。但是在现如今现代化的世界，很多事情靠归纳是会出错的。</p>
+<p><strong>在现实生活中，很多人会对概率性的问题，套用归纳法总结出错误的因果关系，靠概率得出的结论，总有一天会败给概率。</strong>例如一个生活在现实中的人，扣动100次扳机都没有干掉自己，他就会错误的认为扣动扳机是无害的，他从不会回过头认真审视自己的行为。不过，属于他的千分之一终有一天会到来，稀有事件之所以叫稀有事件是因为这些事件是会发生的。</p>
+<p>每个人的生命长度和认知都是有限的，这也会在一定程度上导致我们误用归纳法。就好比一只火鸡，364天都能够看到主人来给自己投食，它会错误的认为主人会永远投食，它永远想不到第365天等待它的是什么。</p>
+<p><strong>使用归纳法需要注意归纳法的非对称性。</strong>例如有个陈述：没有一个天鹅是白的，因为我看了10w个天鹅。要想推翻这个陈述只需要一只黑天鹅即可，哪怕有再多的白天鹅，只要存在一只黑天鹅，就能推翻“所有天鹅都是白的”这个归纳结论。这就是归纳法的非对称性，证实和证伪难的多，要想证实，就必须看完天底下所有的天鹅，而这在现实世界是不可能的。而稀有事件如果存在，那么一定会在意想不到的时候发生，如果不会发生就不是稀有事件了。</p>
+<p>由此可见，归纳法虽好，但也不是万能的。我们在使用归纳法之前一定要三思，认真思考每个归纳前置条件，考虑好每个可能导致归纳偏误的点，考虑好归纳法的非对称性。。</p>
+<h2 id="幸存者偏差"><a href="#幸存者偏差" class="headerlink" title="幸存者偏差"></a>幸存者偏差</h2><p><strong>幸存者偏差是我在这本书中重新认识的最重要的知识。</strong>幸存者偏差最早是二战时期的数学家为了证明战机最要害位置计算出来的，之前我对幸存者偏差理解到此位置。这本书给了我一个新的视角，让我从现实生活中找到了幸存者偏差存在的普遍性。</p>
+<p><strong>我们的眼里只看到成功者，因此容易形成对机遇的错误看法。</strong>例如，我们经常会认为长得漂亮的人薪资高，这可能是我们通常只会注意到那些薪资比较高的人，或者说，那些薪资比较高的人容易引起我们的注意。“长得漂亮的人薪资高”这样的结论中，我们完全忽略了低收入的人群，如果我们扩大对比的样本，将低收入人群也涵盖进来，可能结果是薪资高低和漂亮与否没有关系。类似这样的，我们在生活中，总是会使用错误的对比样本得出自认为正确的结论；总是会用错误的因果关系，归纳自己的成功经验。殊不知，你的正确可能只是随机漫步的正确，你可能只是一个正确的傻瓜。</p>
+<p>长久以来，人们一直忽略幸存者偏差的错误。我们经历的现实只是可能出现的所有随机历史中的一个，我们却误把它当做最有代表性的，忘了还有其它的可能性。简言之，<strong>幸存者偏差的含义是“表现最好的最容易被看见”</strong>。为什么？因为输家没有献身。</p>
+<p><strong>关于幸存者偏差可以简述如下</strong>：第一，幸存者偏差起源自我们只看赢家，因而对运气持有错误的看法；第二，不同凡响的成功，最常见的原因是运气；第三：我们在生物构造上缺乏了解概率的能力。</p>
+<h2 id="生活中的非对称现象"><a href="#生活中的非对称现象" class="headerlink" title="生活中的非对称现象"></a>生活中的非对称现象</h2><p><strong>概率和期望-从非对称中获利。</strong>举个例子，假设明天市场上涨的概率是80%，但是涨幅只有1%，下跌的概率是20%，但是下跌的幅度是10%。那么请问，你买涨还是买跌？表面上看上涨的概率大，但是买跌的期望收益更大。上涨和下跌的期望并不是对称的，这时候，我们就可是利用非对称现象获利。</p>
+<p>这个例子也让我想起来吴军老师讲的瑞士制造的例子。瑞士制造的产品真的比其它绝大多数同类产品更好，但是可能只是好一点点，但正是这一点点的好，其价格比其它产品昂贵数倍。这也可以归结为价格和品质的非对称性。</p>
+<p>生活和工作中，我们同样可以使用非对称性获利。比如，工作中，我们可以比同事多努力一点点，哪怕只是一点点，就能够得到更多的绩效评分，从而得到数倍于同事的股票分红。一点点的优势就能拉开巨大的距离。</p>
+<p>因此，趁时间还不算太晚，需要好好培养自己的优势了，哪怕只是比别人优秀一点点，当机会来临时候你就能比别人更迅速的抓住。</p>
+<h2 id="我们都是概率盲"><a href="#我们都是概率盲" class="headerlink" title="我们都是概率盲"></a>我们都是概率盲</h2><p>举个例子证明你是概率盲。假如中国人人均寿命是70，那么30岁的你预期寿命是多少？可能大多数人脱口而出是70。这样的结论显然忽略了那些30岁前由于各种原因死去的人，70这个数字是包含那些人的，而站在30岁节点的你，已经可以把三十岁前死去的那些人从你的平均数字中删除掉了。所以30岁你的预期寿命肯定是大于70的。</p>
+<p>在我们人类几百万年的进化过程中，我们从来不擅长计算概率。某些偏见已经深深嵌入我们大脑中，刻在基因里，阻碍我们处理较复杂、可能需要更精确评估概率的问题。我们人类非常不擅长计算概率问题，因此在一切关于预测这样事情，通常会搞错一些关键条件，忽略关键点。这点需要我们自身提高警惕。</p>
+<h2 id="《随机漫步的傻瓜》笔记总结"><a href="#《随机漫步的傻瓜》笔记总结" class="headerlink" title="《随机漫步的傻瓜》笔记总结"></a>《随机漫步的傻瓜》笔记总结</h2><p><a href="https://github.com/Dev-Dongfang/FileArchive/blob/master/Learning/Xminds/读书-随机漫步的傻瓜.xmind" target="_blank" rel="noopener">脑图-读书-随机漫步的傻瓜.xmind</a></p>
+<p><img src="http://img.weidongfang.online/imgbed/20210515234648.png" alt></p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/posts/2021-04/ye238s3iweir3.html" rel="prev" title="【iOS】如何实现弱引用字典，并在对象释放时自动移除？">
+      <i class="fa fa-chevron-left"></i> 【iOS】如何实现弱引用字典，并在对象释放时自动移除？
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/posts/2021-05/591hsi.html" rel="next" title="《将心注入-一杯咖啡成就星巴克传奇》— 阅读与总结">
+      《将心注入-一杯咖啡成就星巴克传奇》— 阅读与总结 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+    <div class="comments" id="valine-comments"></div>
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#关于随机性和黑天鹅"><span class="nav-number">1.</span> <span class="nav-text">关于随机性和黑天鹅</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#归纳法的局限性"><span class="nav-number">2.</span> <span class="nav-text">归纳法的局限性</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#幸存者偏差"><span class="nav-number">3.</span> <span class="nav-text">幸存者偏差</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#生活中的非对称现象"><span class="nav-number">4.</span> <span class="nav-text">生活中的非对称现象</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#我们都是概率盲"><span class="nav-number">5.</span> <span class="nav-text">我们都是概率盲</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#《随机漫步的傻瓜》笔记总结"><span class="nav-number">6.</span> <span class="nav-text">《随机漫步的傻瓜》笔记总结</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="韦东方"
+      src="/resource/images/head_icon180.jpg">
+  <p class="site-author-name" itemprop="name">韦东方</p>
+  <div class="site-description" itemprop="description">You never know where your limitation is without trying.</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">24</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+        <span class="site-state-item-count">10</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">1</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="http://readingnote.weidongfang.online" title="Reading → http://readingnote.weidongfang.online" rel="noopener" target="_blank"><i class="fa fa-book-reader fa-fw"></i>Reading</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:dev.dongfang@gmail.com" title="E-mail → mailto:dev.dongfang@gmail.com" rel="noopener" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-mail</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="/atom.xml" title="RSS → /atom.xml"><i class="fa fa-rss fa-fw"></i>RSS</a>
+      </span>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+  <div class="beian"><a href="https://beian.miit.gov.cn" rel="noopener" target="_blank">京ICP备20017039号-1 </a>
+  </div>
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">@dev.dongfang</span>
+</div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+<script src="/js/utils.js"></script><script src="/js/motion.js"></script>
+<script src="/js/schemes/pisces.js"></script>
+<script src="/js/next-boot.js"></script>
+
+
+
+  
+  <script>
+    (function(){
+      var canonicalURL, curProtocol;
+      //Get the <link> tag
+      var x=document.getElementsByTagName("link");
+		//Find the last canonical URL
+		if(x.length > 0){
+			for (i=0;i<x.length;i++){
+				if(x[i].rel.toLowerCase() == 'canonical' && x[i].href){
+					canonicalURL=x[i].href;
+				}
+			}
+		}
+    //Get protocol
+	    if (!canonicalURL){
+	    	curProtocol = window.location.protocol.split(':')[0];
+	    }
+	    else{
+	    	curProtocol = canonicalURL.split(':')[0];
+	    }
+      //Get current URL if the canonical URL does not exist
+	    if (!canonicalURL) canonicalURL = window.location.href;
+	    //Assign script content. Replace current URL with the canonical URL
+      !function(){var e=/([http|https]:\/\/[a-zA-Z0-9\_\.]+\.baidu\.com)/gi,r=canonicalURL,t=document.referrer;if(!e.test(r)){var n=(String(curProtocol).toLowerCase() === 'https')?"https://sp0.baidu.com/9_Q4simg2RQJ8t7jm9iCKT-xh_/s.gif":"//api.share.baidu.com/s.gif";t?(n+="?r="+encodeURIComponent(document.referrer),r&&(n+="&l="+r)):r&&(n+="?l="+r);var i=new Image;i.src=n}}(window);})();
+  </script>
+
+
+
+
+  <script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+
+<script>
+NexT.utils.loadComments(document.querySelector('#valine-comments'), () => {
+  NexT.utils.getScript('//unpkg.com/valine/dist/Valine.min.js', () => {
+    var GUEST = ['nick', 'mail', 'link'];
+    var guest = 'nick,mail,link';
+    guest = guest.split(',').filter(item => {
+      return GUEST.includes(item);
+    });
+    new Valine({
+      el         : '#valine-comments',
+      verify     : false,
+      notify     : true,
+      appId      : 'vMrO1hYoNr03pjrQ0iIUSSLL-gzGzoHsz',
+      appKey     : 'iyTSJjyCkkOSrXToutmor7ru',
+      placeholder: "欢迎留言！",
+      avatar     : 'mm',
+      meta       : guest,
+      pageSize   : '15' || 10,
+      visitor    : false,
+      lang       : 'zh-cn' || 'zh-cn',
+      path       : location.pathname,
+      recordIP   : false,
+      serverURLs : ''
+    });
+  }, window.Valine);
+});
+</script>
+
+</body>
+</html>

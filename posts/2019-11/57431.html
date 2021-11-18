@@ -1,0 +1,623 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 3.9.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/resource/images/head_icon180.jpg">
+  <link rel="icon" type="image/png" sizes="32x32" href="/resource/images/head_icon180.jpg">
+  <link rel="icon" type="image/png" sizes="16x16" href="/resource/images/head_icon32.jpg">
+  <link rel="mask-icon" href="/resource/images/head_icon180.jpg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"blog.weidongfang.online","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":true,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":"valine","storage":true,"lazyload":false,"nav":null,"activeClass":"valine"},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="Paul Hudson    October 14th 2019     @twostraws  SwiftUI是苹果公司新发布的用于构建UI界面的框架，它可以用于搭建iOS、macOS、tvOS、watchOS系统的UI界面。它采用声明式的方式进行构建，相比UIKit，使用SwiftUI搭建App更快、更安全。">
+<meta name="keywords" content="iOS, 逆向与安全, swift, flutter, linux">
+<meta property="og:type" content="article">
+<meta property="og:title" content="【译】SwiftUI入门教程">
+<meta property="og:url" content="http://blog.weidongfang.online/posts/2019-11/57431.html">
+<meta property="og:site_name" content="Dev-Dongfang">
+<meta property="og:description" content="Paul Hudson    October 14th 2019     @twostraws  SwiftUI是苹果公司新发布的用于构建UI界面的框架，它可以用于搭建iOS、macOS、tvOS、watchOS系统的UI界面。它采用声明式的方式进行构建，相比UIKit，使用SwiftUI搭建App更快、更安全。">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="http://img.weidongfang.online/imgbed/ios-13-1.jpg">
+<meta property="og:updated_time" content="2020-05-30T15:04:28.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="【译】SwiftUI入门教程">
+<meta name="twitter:description" content="Paul Hudson    October 14th 2019     @twostraws  SwiftUI是苹果公司新发布的用于构建UI界面的框架，它可以用于搭建iOS、macOS、tvOS、watchOS系统的UI界面。它采用声明式的方式进行构建，相比UIKit，使用SwiftUI搭建App更快、更安全。">
+<meta name="twitter:image" content="http://img.weidongfang.online/imgbed/ios-13-1.jpg">
+
+<link rel="canonical" href="http://blog.weidongfang.online/posts/2019-11/57431.html">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>【译】SwiftUI入门教程 | Dev-Dongfang</title>
+  
+
+
+  <script>
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?9973e9eaf1485d0719cd19d7436e2fea";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+<link rel="alternate" href="/atom.xml" title="Dev-Dongfang" type="application/atom+xml">
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Dev-Dongfang</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">iOS、逆向与安全、swift、flutter、linux，爱生活、爱代码、爱分享。</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-learning">
+
+    <a href="/learning/" rel="section"><i class="fa fa-book fa-fw"></i>笔记</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签<span class="badge">1</span></a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档<span class="badge">24</span></a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://blog.weidongfang.online/posts/2019-11/57431.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/resource/images/head_icon180.jpg">
+      <meta itemprop="name" content="韦东方">
+      <meta itemprop="description" content="You never know where your limitation is without trying.">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Dev-Dongfang">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          【译】SwiftUI入门教程
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2019-11-06 18:23:49" itemprop="dateCreated datePublished" datetime="2019-11-06T18:23:49+08:00">2019-11-06</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2020-05-30 23:04:28" itemprop="dateModified" datetime="2020-05-30T23:04:28+08:00">2020-05-30</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/翻译/" itemprop="url" rel="index"><span itemprop="name">翻译</span></a>
+                </span>
+            </span>
+
+          
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Valine：</span>
+    
+    <a title="valine" href="/posts/2019-11/57431.html#valine-comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/posts/2019-11/57431.html" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p><a href="https://www.hackingwithswift.com/about" target="_blank" rel="noopener">Paul Hudson</a>    October 14th 2019     <a href="https://twitter.com/twostraws" target="_blank" rel="noopener">@twostraws</a></p>
+<p><img src="http://img.weidongfang.online/imgbed/ios-13-1.jpg" alt="img"></p>
+<p>SwiftUI是苹果公司新发布的用于构建UI界面的框架，它可以用于搭建iOS、macOS、tvOS、watchOS系统的UI界面。它采用声明式的方式进行构建，相比UIKit，使用SwiftUI搭建App更快、更安全。</p>
+<a id="more"></a>
+
+<p>如果你用过UIKit，刚上手使用SwiftUI可能会不习惯，因为我们已经习惯了用UIKit搭建界面的流程，但是一旦你习惯了SwiftUI声明式的方式，习惯了SwiftUI的思考方式，你一定会爱上SwiftUI。</p>
+<p>WWDC2019苹果介绍SwiftUI时候，说它有四个特点：</p>
+<ul>
+<li><strong>声明式的：</strong>我们只需声明我们想要的样式，并不需要像UIKit那样描述如何实现我们的样式。</li>
+<li><strong>自动化的：</strong>自动化意味着它可以省去很多之前我们必须手动完成的事情。</li>
+<li><strong>可组合的：</strong>可组合意味着我们可以构建很多小的UI元素，然后将小的元素组合在一起，形成复杂的UI界面。</li>
+<li><strong>稳定的：</strong>稳定意味着在不同版本的系统中SwiftUI搭建的界面表现是相同的。</li>
+</ul>
+<p>目前为止我已经使用SwiftUI写了成千上万行的代码，我可以明确的告诉你， 他们漏了很重要的一点：<strong>简洁</strong>。你使用SwiftUI搭建界面的代码量可能只有UIKit代码量的10-20%。之所以会减少这么多，是因为我们不需要再写重复的UI元素，也不用处理生命周期相关的方法等等。</p>
+<p>让我们一起来看看SwiftUI到底是如何工作的：</p>
+<ul>
+<li>更新：我已经发布了大量的SwiftUI免费教程：<a href="https://hackingwithswift.com/quick-start/swiftui" target="_blank" rel="noopener">SwiftUI示例代码</a>。里面有很多代码示例和SwiftUI常见问题的解决方案，外加一个长视频叫你怎么搭建你的第一个完整SwiftUI项目。</li>
+<li>现在你还可以关注我的<a href="https://www.hackingwithswift.com/100/swiftui" target="_blank" rel="noopener">100天SwiftUI入门</a>课程，手把手叫你写SwiftUI。</li>
+</ul>
+<h3 id="View是什么"><a href="#View是什么" class="headerlink" title="View是什么?"></a>View是什么?</h3><p>在SwiftUI中，<code>View</code>的功能类似于<code>UIView</code>，但是有两个重要的不同点：</p>
+<ol>
+<li>View是协议类型而不是class类型，因此不会出现继承问题。</li>
+<li>我们的view必须返回唯一的一个view，这个view内部可以包含多个其他的view，但是我们只能返回多个view的superview。</li>
+</ol>
+<p>苹果给的代码示例如下所示：</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">ContentView</span>: <span class="title">View</span> </span>&#123;</span><br><span class="line">    <span class="keyword">var</span> body: some <span class="type">View</span> &#123;</span><br><span class="line">        <span class="type">Text</span>(<span class="string">"Hello World"</span>)</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>你可能会注意到这些事情：</p>
+<ol>
+<li>上述View的返回值是<code>some View</code>，其实some view是一个透明类型。如果你没见过这种用法，你可以参考我的文章：<a href="https://www.youtube.com/watch?v=DvHkeUxiwYY&feature=youtu.be" target="_blank" rel="noopener">透明返回类型</a>。</li>
+<li>它实际上返回的是一个包含文本“Hello World”的Text视图，Text等价于UIKit中的UILabel。</li>
+<li>这里并没有使用<code>return</code>关键字，这是Swift5.1的另一个新特性，如果你不明白可以查看<a href="https://www.youtube.com/watch?v=EkvxlrYFUkc&feature=youtu.be" target="_blank" rel="noopener">我的视频</a>。</li>
+</ol>
+<h3 id="创建栈布局"><a href="#创建栈布局" class="headerlink" title="创建栈布局"></a>创建栈布局</h3><p>前面提到，我们的View必须返回唯一的一个东西，不是0个、2个或者200个。因此如果你想要展示多个标签，你必须将他们放到一个容器里面，比如<code>HStack</code>、<code>VStack</code>、<code>ZStack</code>，分别对应水平布局、垂直布局、堆叠布局。</p>
+<p>因此，如果你想要垂直排列三个label，你需要像下面这么写：</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> body: some <span class="type">View</span> &#123;</span><br><span class="line">    <span class="type">VStack</span> &#123;</span><br><span class="line">        <span class="type">Text</span>(<span class="string">"Hello World"</span>)</span><br><span class="line">        <span class="type">Text</span>(<span class="string">"Hello World"</span>)</span><br><span class="line">        <span class="type">Text</span>(<span class="string">"Hello World"</span>)</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>默认情况下，这些label只会占据他们需要的空间，所以你将会在屏幕中央看到这三个label。如果你想让他们分开，你需要使用<code>Spacer</code>插入一个可变的控件，如下所示：</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> body: some <span class="type">View</span> &#123;</span><br><span class="line">    <span class="type">VStack</span> &#123;</span><br><span class="line">        <span class="type">Text</span>(<span class="string">"Hello World"</span>)</span><br><span class="line">        <span class="type">Text</span>(<span class="string">"Hello World"</span>)</span><br><span class="line">        <span class="type">Spacer</span>()</span><br><span class="line">        <span class="type">Text</span>(<span class="string">"Hello World"</span>)</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>现在你将会看到前两个label在你屏幕的顶部，然后是一个空隙，然后是最后一个view在屏幕的底部。为了产生更加微妙的效果，你可以使用Divider，这个可以用来创建元素水平上的空隙，而不会将他们推开。</p>
+<h3 id="创建列表内容"><a href="#创建列表内容" class="headerlink" title="创建列表内容"></a>创建列表内容</h3><p>用过UIKit的人都知道，创建TableView是非常单调乏味的事情：首先注册cell，然后告诉UIKit列表中有多少个元素，从缓存池中获取cell并进行配置，然后是其它的工作，这些重复的工作是非常乏味的。</p>
+<p>而在SwiftUI中，我们不再需要做这些重复的工作。</p>
+<p>列表在SwiftUI中用<code>List</code>来实现，它能够展示静态或者动态的内容。例如，我们可能想要定义一个结构体来定义用户的属性，如下所示：</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">User</span> </span>&#123;</span><br><span class="line">    <span class="keyword">var</span> firstName: <span class="type">String</span></span><br><span class="line">    <span class="keyword">var</span> lastName: <span class="type">String</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>我们要想把如上结构体展示到一个列表中，首先我们需要定义列表中的一行是什么样子的。因为每一行都需要展示一个结构体类型User，所以我们需要在View对象中添加一个User属性，由于列表中每一行都需要展示name属性，所以我们需要让我们View的body返回一个展示文本的视图。</p>
+<p>如下所示：</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">UserRow</span>: <span class="title">View</span> </span>&#123;</span><br><span class="line">    <span class="keyword">var</span> user: <span class="type">User</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">var</span> body: some <span class="type">View</span> &#123;</span><br><span class="line">        <span class="type">Text</span>(<span class="string">"\(user.firstName) \(user.lastName)"</span>)</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>最后，我们需要更新<code>ContentView</code>结构体以便创建多个用户，然后将用户放置到列表中：</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">ContentView</span>: <span class="title">View</span> </span>&#123;</span><br><span class="line">    <span class="keyword">var</span> body: some <span class="type">View</span> &#123;</span><br><span class="line">        <span class="keyword">let</span> user1 = <span class="type">User</span>(firstName: <span class="string">"Piper"</span>, lastName: <span class="string">"Chapman"</span>)</span><br><span class="line">        <span class="keyword">let</span> user2 = <span class="type">User</span>(firstName: <span class="string">"Gloria"</span>, lastName: <span class="string">"Mendoza"</span>)</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> <span class="type">List</span> &#123;</span><br><span class="line">            <span class="type">UserRow</span>(user: user1)</span><br><span class="line">            <span class="type">UserRow</span>(user: user2)</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>上面简单的列表示例可以正常运行，但是为了更好的使用列表展示数据，你可能想要通过一个数组来动态配置列表内容，让SwiftUI自行判断需要多少行，自动创建并且展示。</p>
+<p>为了实现这个功能，我们需要让User实现<code>Identifiable</code>协议，以便让SwiftUI确定唯一的一个用户。我们可以通过判断每个User中每个属性是否相同来实现这个功能，但是这样效率很低并且容易出错。因此我们需要给我们的User结构体添加一个id属性，以此来保证列表中的User不会发生重复。</p>
+<p>我们给User添加一个id属性，如下所示：</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">User</span>: <span class="title">Identifiable</span> </span>&#123;</span><br><span class="line">    <span class="keyword">var</span> id: <span class="type">Int</span></span><br><span class="line">    <span class="keyword">var</span> firstName: <span class="type">String</span></span><br><span class="line">    <span class="keyword">var</span> lastName: <span class="type">String</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>你可以使用任何你想用的类型来做唯一标记，比如字符串、UUID等等。</p>
+<p>现在我们可以创建一个包含多个User对象的数组，你可以随便填写一点内容，然后通过闭包给每一行配置数据，如下所示：</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">ContentView</span>: <span class="title">View</span> </span>&#123;</span><br><span class="line">    <span class="keyword">var</span> body: some <span class="type">View</span> &#123;</span><br><span class="line">        <span class="comment">// create some example data</span></span><br><span class="line">        <span class="keyword">let</span> user1 = <span class="type">User</span>(id: <span class="number">1</span>, firstName: <span class="string">"Piper"</span>, lastName: <span class="string">"Chapman"</span>)</span><br><span class="line">        <span class="keyword">let</span> user2 = <span class="type">User</span>(id: <span class="number">2</span>, firstName: <span class="string">"Gloria"</span>, lastName: <span class="string">"Mendoza"</span>)</span><br><span class="line">        <span class="keyword">let</span> users = [user1, user2]</span><br><span class="line"></span><br><span class="line">        <span class="comment">// show that data</span></span><br><span class="line">        <span class="keyword">return</span> <span class="type">List</span>(users) &#123; user <span class="keyword">in</span></span><br><span class="line">            <span class="type">UserRow</span>(user: user)</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>声明一点：上面示例大部分代码都是为了创建示例数据用的，真正的SwiftUI代码只有三行，这三行还包含了闭包的必要结构。</p>
+<p>实际上，如果你想像上面示例那张展示数据，你只需要写一行SwiftUI代码即可，如下所示：</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">return</span> <span class="type">List</span>(users, rowContent: <span class="type">UserRow</span>.<span class="keyword">init</span>)</span><br></pre></td></tr></table></figure>
+
+<p><strong>Duang！</strong></p>
+<p>说实话，SwiftUI将会大量的削减你的UI代码。</p>
+<p>在结束这个例子之前，再说一点：我们可以随意的修改UserRow而无需担心它在哪里使用了它。SwiftUI一个重要特性就是可组合的，我们把一个User对象传递给UserRow，UserRow会自行决定如何展示数据，我们不需要像UIKit那样使用主视图来控制所有的子视图。</p>
+<p>如果你想要让UserRow垂直展示两个Label，其中一个使用大标题，一个使用小标题，并且都靠左对齐，你可以这么写：</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">UserRow</span>: <span class="title">View</span> </span>&#123;</span><br><span class="line">    <span class="keyword">var</span> user: <span class="type">User</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">var</span> body: some <span class="type">View</span> &#123;</span><br><span class="line">        <span class="type">VStack</span>(alignment: .leading) &#123;</span><br><span class="line">            <span class="type">Text</span>(user.firstName)</span><br><span class="line">                .font(.largeTitle)</span><br><span class="line">            <span class="type">Text</span>(user.lastName)</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>漂亮！</p>
+<h3 id="展示一个详细页"><a href="#展示一个详细页" class="headerlink" title="展示一个详细页"></a>展示一个详细页</h3><p>仅仅展示一个页面挺没意思的，再来一个吧。</p>
+<p>首先，我们想让这个视图展示列表中选中User的名字，并且用红色字体大标题：</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">DetailView</span>: <span class="title">View</span> </span>&#123;</span><br><span class="line">    <span class="keyword">var</span> selectedUser: <span class="type">User</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">var</span> body: some <span class="type">View</span> &#123;</span><br><span class="line">        <span class="type">Text</span>(selectedUser.lastName)</span><br><span class="line">            .font(.largeTitle)</span><br><span class="line">            .foregroundColor(.red)</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>然后我们想把列表嵌入到一个导航View中，相当于是UIKit中的导航控制器：</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">ContentView</span>: <span class="title">View</span> </span>&#123;</span><br><span class="line">    <span class="keyword">var</span> body: some <span class="type">View</span> &#123;</span><br><span class="line">        <span class="keyword">let</span> user1 = <span class="type">User</span>(id: <span class="number">1</span>, firstName: <span class="string">"Piper"</span>, lastName: <span class="string">"Chapman Yay"</span>)</span><br><span class="line">        <span class="keyword">let</span> user2 = <span class="type">User</span>(id: <span class="number">2</span>, firstName: <span class="string">"Gloria"</span>, lastName: <span class="string">"Mendoza"</span>)</span><br><span class="line">        <span class="keyword">let</span> users = [user1, user2]</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> <span class="type">NavigationView</span> &#123;</span><br><span class="line">            <span class="type">List</span>(users, rowContent: <span class="type">UserRow</span>.<span class="keyword">init</span>)</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>默认情况下，导航栏没有标题，所以你需要给导航栏添加一个标题：</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">List</span>(users, rowContent: <span class="type">UserRow</span>.<span class="keyword">init</span>)</span><br><span class="line">    .navigationBarTitle(<span class="string">"Users"</span>)</span><br></pre></td></tr></table></figure>
+
+<p>我们真正想要的是点击列表中的一行，然后展示这一行对应的详情页面。</p>
+<p>为了实现这个功能，我们需要将我们的UserRow包装到NavigationLink中。NavigationLink的初始化方法需要几个参数，这里我们只填两个参数，一个是点击后要跳转的目标View，另一个是闭包来给每一行添加数据。这个示例中，是给我们的UserRow配置数据。</p>
+<p>我们的NavigationView变成了这样：</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">return</span> <span class="type">NavigationView</span> &#123;</span><br><span class="line">    <span class="type">List</span>(users) &#123; user <span class="keyword">in</span></span><br><span class="line">        <span class="type">NavigationLink</span>(destination: <span class="type">DetailView</span>(selectedUser: user)) &#123;</span><br><span class="line">            <span class="type">UserRow</span>(user: user)</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;.navigationBarTitle(<span class="string">"Users"</span>)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>现在发生了两件事情。首先，如果你点击右下角预览区域的播放按钮，你会看到现在你可以点击列表中的行然后展开详情页面了；其次你会注意到我们列表行有一个指示器，意思是SwiftUI是自动化的。</p>
+<h3 id="接下来怎么做？"><a href="#接下来怎么做？" class="headerlink" title="接下来怎么做？"></a>接下来怎么做？</h3><p>一旦你习惯了使用SwiftUI，你再使用UIKit就好比是用习惯了Swift再回去用Objective-C，类似于<code>viewDidLoad()</code>等保证生命周期的方法看起来就很多余了，你可能开始讨厌编写这些模板代码了，因为这些东西在SwiftUI中全部都不见了。</p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/posts/2019-11/52136.html" rel="prev" title="【译】如何在Set集合中避免重复元素">
+      <i class="fa fa-chevron-left"></i> 【译】如何在Set集合中避免重复元素
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/posts/2020-01/47451.html" rel="next" title="为什么浮点数在运算过程中会造成精度损失">
+      为什么浮点数在运算过程中会造成精度损失 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+    <div class="comments" id="valine-comments"></div>
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#View是什么"><span class="nav-number">1.</span> <span class="nav-text">View是什么?</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#创建栈布局"><span class="nav-number">2.</span> <span class="nav-text">创建栈布局</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#创建列表内容"><span class="nav-number">3.</span> <span class="nav-text">创建列表内容</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#展示一个详细页"><span class="nav-number">4.</span> <span class="nav-text">展示一个详细页</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#接下来怎么做？"><span class="nav-number">5.</span> <span class="nav-text">接下来怎么做？</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="韦东方"
+      src="/resource/images/head_icon180.jpg">
+  <p class="site-author-name" itemprop="name">韦东方</p>
+  <div class="site-description" itemprop="description">You never know where your limitation is without trying.</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">24</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+        <span class="site-state-item-count">10</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">1</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="http://readingnote.weidongfang.online" title="Reading → http://readingnote.weidongfang.online" rel="noopener" target="_blank"><i class="fa fa-book-reader fa-fw"></i>Reading</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:dev.dongfang@gmail.com" title="E-mail → mailto:dev.dongfang@gmail.com" rel="noopener" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-mail</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="/atom.xml" title="RSS → /atom.xml"><i class="fa fa-rss fa-fw"></i>RSS</a>
+      </span>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+  <div class="beian"><a href="https://beian.miit.gov.cn" rel="noopener" target="_blank">京ICP备20017039号-1 </a>
+  </div>
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">@dev.dongfang</span>
+</div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+<script src="/js/utils.js"></script><script src="/js/motion.js"></script>
+<script src="/js/schemes/pisces.js"></script>
+<script src="/js/next-boot.js"></script>
+
+
+
+  
+  <script>
+    (function(){
+      var canonicalURL, curProtocol;
+      //Get the <link> tag
+      var x=document.getElementsByTagName("link");
+		//Find the last canonical URL
+		if(x.length > 0){
+			for (i=0;i<x.length;i++){
+				if(x[i].rel.toLowerCase() == 'canonical' && x[i].href){
+					canonicalURL=x[i].href;
+				}
+			}
+		}
+    //Get protocol
+	    if (!canonicalURL){
+	    	curProtocol = window.location.protocol.split(':')[0];
+	    }
+	    else{
+	    	curProtocol = canonicalURL.split(':')[0];
+	    }
+      //Get current URL if the canonical URL does not exist
+	    if (!canonicalURL) canonicalURL = window.location.href;
+	    //Assign script content. Replace current URL with the canonical URL
+      !function(){var e=/([http|https]:\/\/[a-zA-Z0-9\_\.]+\.baidu\.com)/gi,r=canonicalURL,t=document.referrer;if(!e.test(r)){var n=(String(curProtocol).toLowerCase() === 'https')?"https://sp0.baidu.com/9_Q4simg2RQJ8t7jm9iCKT-xh_/s.gif":"//api.share.baidu.com/s.gif";t?(n+="?r="+encodeURIComponent(document.referrer),r&&(n+="&l="+r)):r&&(n+="?l="+r);var i=new Image;i.src=n}}(window);})();
+  </script>
+
+
+
+
+  <script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+
+<script>
+NexT.utils.loadComments(document.querySelector('#valine-comments'), () => {
+  NexT.utils.getScript('//unpkg.com/valine/dist/Valine.min.js', () => {
+    var GUEST = ['nick', 'mail', 'link'];
+    var guest = 'nick,mail,link';
+    guest = guest.split(',').filter(item => {
+      return GUEST.includes(item);
+    });
+    new Valine({
+      el         : '#valine-comments',
+      verify     : false,
+      notify     : true,
+      appId      : 'vMrO1hYoNr03pjrQ0iIUSSLL-gzGzoHsz',
+      appKey     : 'iyTSJjyCkkOSrXToutmor7ru',
+      placeholder: "欢迎留言！",
+      avatar     : 'mm',
+      meta       : guest,
+      pageSize   : '15' || 10,
+      visitor    : false,
+      lang       : 'zh-cn' || 'zh-cn',
+      path       : location.pathname,
+      recordIP   : false,
+      serverURLs : ''
+    });
+  }, window.Valine);
+});
+</script>
+
+</body>
+</html>

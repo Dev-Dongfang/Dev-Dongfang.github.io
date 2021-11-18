@@ -1,0 +1,567 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 3.9.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/resource/images/head_icon180.jpg">
+  <link rel="icon" type="image/png" sizes="32x32" href="/resource/images/head_icon180.jpg">
+  <link rel="icon" type="image/png" sizes="16x16" href="/resource/images/head_icon32.jpg">
+  <link rel="mask-icon" href="/resource/images/head_icon180.jpg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"blog.weidongfang.online","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":true,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":"valine","storage":true,"lazyload":false,"nav":null,"activeClass":"valine"},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="本文内容仅为iOS逆向技术研究，请勿用作非法用途。  在家隔离的日子过得还是比较漫长的，每天宅在家里，吃饭睡觉写代码挺无聊的。因为笔者所在公司使用钉钉打卡，于是钉钉便成了笔者本次逆向练习的目标😏。">
+<meta name="keywords" content="iOS, 逆向与安全, swift, flutter, linux">
+<meta property="og:type" content="article">
+<meta property="og:title" content="【逆】逆向分析实践-钉钉打卡&#x2F;钉钉签到&#x2F;钉钉定位&#x2F;远程打卡功能">
+<meta property="og:url" content="http://blog.weidongfang.online/posts/2020-02/42423.html">
+<meta property="og:site_name" content="Dev-Dongfang">
+<meta property="og:description" content="本文内容仅为iOS逆向技术研究，请勿用作非法用途。  在家隔离的日子过得还是比较漫长的，每天宅在家里，吃饭睡觉写代码挺无聊的。因为笔者所在公司使用钉钉打卡，于是钉钉便成了笔者本次逆向练习的目标😏。">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="http://img.weidongfang.online/imgbed/IMG_0007.PNG">
+<meta property="og:updated_time" content="2020-05-30T15:04:28.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="【逆】逆向分析实践-钉钉打卡&#x2F;钉钉签到&#x2F;钉钉定位&#x2F;远程打卡功能">
+<meta name="twitter:description" content="本文内容仅为iOS逆向技术研究，请勿用作非法用途。  在家隔离的日子过得还是比较漫长的，每天宅在家里，吃饭睡觉写代码挺无聊的。因为笔者所在公司使用钉钉打卡，于是钉钉便成了笔者本次逆向练习的目标😏。">
+<meta name="twitter:image" content="http://img.weidongfang.online/imgbed/IMG_0007.PNG">
+
+<link rel="canonical" href="http://blog.weidongfang.online/posts/2020-02/42423.html">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>【逆】逆向分析实践-钉钉打卡/钉钉签到/钉钉定位/远程打卡功能 | Dev-Dongfang</title>
+  
+
+
+  <script>
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?9973e9eaf1485d0719cd19d7436e2fea";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+<link rel="alternate" href="/atom.xml" title="Dev-Dongfang" type="application/atom+xml">
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Dev-Dongfang</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">iOS、逆向与安全、swift、flutter、linux，爱生活、爱代码、爱分享。</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-learning">
+
+    <a href="/learning/" rel="section"><i class="fa fa-book fa-fw"></i>笔记</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签<span class="badge">1</span></a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档<span class="badge">24</span></a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://blog.weidongfang.online/posts/2020-02/42423.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/resource/images/head_icon180.jpg">
+      <meta itemprop="name" content="韦东方">
+      <meta itemprop="description" content="You never know where your limitation is without trying.">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Dev-Dongfang">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          【逆】逆向分析实践-钉钉打卡/钉钉签到/钉钉定位/远程打卡功能
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-02-24 23:41:34" itemprop="dateCreated datePublished" datetime="2020-02-24T23:41:34+08:00">2020-02-24</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2020-05-30 23:04:28" itemprop="dateModified" datetime="2020-05-30T23:04:28+08:00">2020-05-30</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/逆向/" itemprop="url" rel="index"><span itemprop="name">逆向</span></a>
+                </span>
+            </span>
+
+          
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Valine：</span>
+    
+    <a title="valine" href="/posts/2020-02/42423.html#valine-comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/posts/2020-02/42423.html" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <blockquote>
+<p>本文内容仅为iOS逆向技术研究，请勿用作非法用途。</p>
+</blockquote>
+<p>在家隔离的日子过得还是比较漫长的，每天宅在家里，吃饭睡觉写代码挺无聊的。因为笔者所在公司使用钉钉打卡，于是钉钉便成了笔者本次逆向练习的目标😏。</p>
+<a id="more"></a>
+
+<h1 id="1-脱壳"><a href="#1-脱壳" class="headerlink" title="1. 脱壳"></a>1. 脱壳</h1><p>笔者比较习惯使用AloneMonkey重写的<a href>dumpdecrypted</a>进行脱壳操作，只需将目标app的BundleIdentifity写入plist即可，是真的香。无奈平时使用的ios8.4越狱机留在公司了，而手边只有一个iOS12.4的越狱机（dumpdecrypted在笔者iOS12.4不好使），因此只能换种方式了。</p>
+<p>这次脱壳使用了lldb的方式，lldb脱壳的原理是：将运行中的app数据部分拷贝到电脑上，然后将加密的mach-o文件也拷贝到电脑上，最后将从ios系统内存拷贝的mach-o数据部分拼接到加密的mach-o文件对应的部分，再将mach-o的<code>cryptid</code>改成0即可。</p>
+<p>网上关于lldb脱壳的博客还是比较多的，这里不再赘述。</p>
+<h1 id="2-工具"><a href="#2-工具" class="headerlink" title="2.工具"></a>2.工具</h1><ol>
+<li>MacBook Pro，iOS12.4 6s越狱机。</li>
+<li>pc端工具：otool、class-dump、Xcode、lldb、vscode、lipo、reveal。</li>
+<li>iOS端工具：钉钉、debugserver。</li>
+</ol>
+<h1 id="3-分析"><a href="#3-分析" class="headerlink" title="3. 分析"></a>3. 分析</h1><p>打开App，使用reveal查看<strong>签到</strong>页面，我们发现，这个页面的控制器叫<code>DTWebViewController</code>，打开这个类的头文件，并没有发现任何与location/coordinate相关的方法和属性。</p>
+<p>想到在正向开发中，一般都会有一个地理位置管理的类型，于是在所有头文件中搜索<code>locationmanager</code>，这次搜索到的结果就比较多了，引起我注意的有两个类，<code>AMapLocationManager</code>和<code>DTALocationManager</code>。</p>
+<p>DTALocationManager应该就是整个钉钉中用于位置管理的类型了，DTALocationManager头文件部分代码如下所示:</p>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">@interface</span> <span class="title">DTALocationManager</span> : <span class="title">NSObject</span> &lt;<span class="title">AMapLocationManagerDelegate</span>, <span class="title">DTLocationManager</span>&gt;</span></span><br><span class="line">&#123;</span><br><span class="line">    AMapLocationManager *_locationManager;</span><br><span class="line">    <span class="keyword">double</span> _dt_distanceFilter;</span><br><span class="line">    <span class="keyword">double</span> _dt_desiredAccuracy;</span><br><span class="line">    _Bool _dt_pausesLocationUpdatesAutomatically;</span><br><span class="line">    _Bool _dt_allowBackgroundLocationUpdates;</span><br><span class="line">    <span class="keyword">id</span> &lt;DTLocationManagerDelegate&gt; _dt_delegate;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">@property</span>(<span class="keyword">nonatomic</span>) <span class="keyword">double</span> dt_desiredAccuracy; <span class="comment">// @synthesize dt_desiredAccuracy=_dt_desiredAccuracy;</span></span><br><span class="line"><span class="keyword">@property</span>(<span class="keyword">nonatomic</span>) __<span class="keyword">weak</span> <span class="keyword">id</span> &lt;DTLocationManagerDelegate&gt; dt_delegate; <span class="comment">// @synthesize dt_delegate=_dt_delegate;</span></span><br><span class="line"></span><br><span class="line">- (<span class="keyword">void</span>)amapLocationManager:(<span class="keyword">id</span>)arg1 didUpdateLocation:(<span class="keyword">id</span>)arg2;</span><br><span class="line">- (<span class="keyword">void</span>)amapLocationManager:(<span class="keyword">id</span>)arg1 didFailWithError:(<span class="keyword">id</span>)arg2;</span><br><span class="line">- (<span class="keyword">id</span>)locationManager;</span><br><span class="line"><span class="keyword">@end</span></span><br></pre></td></tr></table></figure>
+
+<p>既然DTALocationManager是通过AMapLocationManager进行定位的，那么我们就直接hook AMapLocationManager就可以了。</p>
+<p>通过查看分析AMapLocationManager头文件，我们发现了这个方法<code>- (void)locationManager:(id)arg1 didUpdateLocations:(id)arg2;</code>，使用theos建立tweak工程，hook <code>locationManager:didUpdateLocation:</code>，指定自己想要的坐标，运行，成功！</p>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#import <span class="meta-string">&lt;CoreLocation/CoreLocation.h&gt;</span></span></span><br><span class="line">%hook AMapLocationManager</span><br><span class="line">- (<span class="keyword">void</span>)locationManager:(<span class="keyword">id</span>)arg1 didUpdateLocations:(<span class="keyword">id</span>)arg2 &#123; </span><br><span class="line">	<span class="keyword">double</span> latitude = <span class="number">39.135972</span>;</span><br><span class="line">	<span class="keyword">double</span> longitude = <span class="number">117.261949</span>;</span><br><span class="line">	<span class="built_in">CLLocation</span> *location = [[<span class="built_in">CLLocation</span> alloc]initWithLatitude:latitude longitude:longitude];</span><br><span class="line">    %orig(arg1, @[location]);</span><br><span class="line">&#125;</span><br><span class="line">%end</span><br></pre></td></tr></table></figure>
+
+<p>怎么也没想到逆向钉钉的定位功能这么简单😂。</p>
+<h1 id="4-优化"><a href="#4-优化" class="headerlink" title="4. 优化"></a>4. 优化</h1><h2 id="4-1-签到-gt-地点微调页面"><a href="#4-1-签到-gt-地点微调页面" class="headerlink" title="4.1 签到&gt;地点微调页面"></a>4.1 签到&gt;地点微调页面</h2><p>经过上一步的操作，签到页面和打卡页面已经能够展示我们期望的目标地理位置了，但是我们发现签<code>到&gt;地点微调</code>页面还是当前真实的地理位置。</p>
+<p>经过分析我们发现，地址微调使用的地理位置是由<code>MAMapView</code>类提供的，于是乎，使用应用在<code>AMapLocationManager</code>相同的方式hook完美解决这个问题。</p>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">%hook MAMapView</span><br><span class="line">- (<span class="keyword">void</span>)locationManager:(<span class="keyword">id</span>)arg1 didUpdateLocations:(<span class="keyword">id</span>)arg2 &#123; </span><br><span class="line">	<span class="keyword">double</span> latitude = <span class="number">39.135972</span>;</span><br><span class="line">	<span class="keyword">double</span> longitude = <span class="number">117.261949</span>;</span><br><span class="line">	<span class="built_in">CLLocation</span> *location = [[<span class="built_in">CLLocation</span> alloc]initWithLatitude:latitude longitude:longitude];</span><br><span class="line">    %orig(arg1, @[location]);</span><br><span class="line">&#125;</span><br><span class="line">%end</span><br></pre></td></tr></table></figure>
+
+<h2 id="4-2-输入并保存任意坐标"><a href="#4-2-输入并保存任意坐标" class="headerlink" title="4.2 输入并保存任意坐标"></a>4.2 输入并保存任意坐标</h2><p>在<strong>工作</strong>菜单栏页面添加修改定位的按钮，点击可以修改成你想要的位置。</p>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">@interface</span> <span class="title">DTWorkWebViewController</span></span></span><br><span class="line">- (<span class="keyword">void</span>)presentViewController:(<span class="built_in">UIViewController</span> *)viewControllerToPresent animated: (<span class="built_in">BOOL</span>)flag completion:(<span class="keyword">void</span> (^ __<span class="keyword">nullable</span>)(<span class="keyword">void</span>))completion;</span><br><span class="line">- (<span class="keyword">void</span>)addModifyLocationItem;</span><br><span class="line"><span class="keyword">@property</span> <span class="built_in">UINavigationItem</span> *navigationItem;</span><br><span class="line"><span class="keyword">@property</span> <span class="built_in">UIView</span> *view;</span><br><span class="line"><span class="keyword">@end</span></span><br><span class="line"></span><br><span class="line">%hook DTWorkWebViewController</span><br><span class="line"><span class="comment">//修改打卡经纬度alert弹窗以及保存目标坐标</span></span><br><span class="line">%new</span><br><span class="line">- (<span class="keyword">void</span>)modifyLocation &#123;</span><br><span class="line">    <span class="built_in">UIAlertController</span> *alert = [<span class="built_in">UIAlertController</span> alertControllerWithTitle:<span class="string">@"请输入自定义经纬度"</span> message:<span class="literal">nil</span> preferredStyle:<span class="built_in">UIAlertControllerStyleAlert</span>];</span><br><span class="line">    <span class="built_in">UIAlertAction</span> *cancelAction = [<span class="built_in">UIAlertAction</span> actionWithTitle:<span class="string">@"取消"</span> style:<span class="built_in">UIAlertActionStyleCancel</span> handler:<span class="literal">nil</span>];</span><br><span class="line">    <span class="built_in">UIAlertAction</span> *confirmAction = [<span class="built_in">UIAlertAction</span> actionWithTitle:<span class="string">@"确认"</span> style:<span class="built_in">UIAlertActionStyleDefault</span> handler:^(<span class="built_in">UIAlertAction</span> * _Nonnull action) &#123;</span><br><span class="line">        <span class="built_in">NSString</span> *latitute = alert.textFields[<span class="number">0</span>].text;</span><br><span class="line">        <span class="built_in">NSString</span> *longtitute = alert.textFields[<span class="number">1</span>].text;</span><br><span class="line">        <span class="keyword">if</span> (latitute != <span class="literal">nil</span> &amp;&amp; longtitute != <span class="literal">nil</span>) &#123;</span><br><span class="line">            <span class="built_in">NSString</span> *customLocation = [<span class="built_in">NSString</span> stringWithFormat:<span class="string">@"%@,%@"</span>, latitute, longtitute];</span><br><span class="line">            [[<span class="built_in">NSUserDefaults</span> standardUserDefaults] setObject:customLocation forKey:<span class="string">@"custom_user_location"</span>];</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;];</span><br><span class="line">    </span><br><span class="line">    [alert addTextFieldWithConfigurationHandler:^(<span class="built_in">UITextField</span> * _Nonnull textField) &#123;</span><br><span class="line">        textField.placeholder = <span class="string">@"请输入纬度"</span>;</span><br><span class="line">		textField.keyboardType = <span class="built_in">UIKeyboardTypeNumbersAndPunctuation</span>;</span><br><span class="line">    &#125;];</span><br><span class="line">    [alert addTextFieldWithConfigurationHandler:^(<span class="built_in">UITextField</span> * _Nonnull textField) &#123;</span><br><span class="line">        textField.placeholder = <span class="string">@"请输入经度"</span>;</span><br><span class="line">		textField.keyboardType = <span class="built_in">UIKeyboardTypeNumbersAndPunctuation</span>;</span><br><span class="line">    &#125;];</span><br><span class="line">    </span><br><span class="line">    [alert addAction:cancelAction];</span><br><span class="line">    [alert addAction:confirmAction];</span><br><span class="line">    [<span class="keyword">self</span> presentViewController:alert animated:<span class="literal">true</span> completion:<span class="literal">nil</span>];</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//添加修改地理位置坐标的按钮</span></span><br><span class="line">%new</span><br><span class="line">- (<span class="keyword">void</span>)addModifyLocationItem &#123;</span><br><span class="line">	<span class="built_in">UIButton</span> *modifyBtn = [<span class="built_in">UIButton</span> buttonWithType:<span class="built_in">UIButtonTypeCustom</span>];</span><br><span class="line">    modifyBtn.frame = <span class="built_in">CGRectMake</span>(<span class="number">6</span>, <span class="number">6</span>, <span class="number">80</span>, <span class="number">35</span>);</span><br><span class="line">	[modifyBtn setTitleColor:<span class="built_in">UIColor</span>.redColor forState:<span class="built_in">UIControlStateNormal</span>];</span><br><span class="line">    [modifyBtn setTitle:<span class="string">@"修改定位"</span> forState:<span class="built_in">UIControlStateNormal</span>];</span><br><span class="line">    [modifyBtn addTarget:<span class="keyword">self</span> action:<span class="keyword">@selector</span>(modifyLocation) forControlEvents:<span class="built_in">UIControlEventTouchUpInside</span>];</span><br><span class="line">    [<span class="keyword">self</span>.view addSubview:modifyBtn];</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//hook并添加修改位置按钮</span></span><br><span class="line">- (<span class="keyword">void</span>)viewDidLoad &#123;</span><br><span class="line">	%orig;</span><br><span class="line">	[<span class="keyword">self</span> addModifyLocationItem];</span><br><span class="line">&#125;</span><br><span class="line">%end</span><br></pre></td></tr></table></figure>
+
+<p>修改地理位置效果如下图所示：</p>
+<p><img src="http://img.weidongfang.online/imgbed/IMG_0007.PNG" alt></p>
+<p>完整的tweak代码可以<a href="/resource/files/dingtalktweak.zip">点这里</a>下载。</p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/posts/2020-02/13093.html" rel="prev" title="【译】不安全的Swift：Swift指针与C交互">
+      <i class="fa fa-chevron-left"></i> 【译】不安全的Swift：Swift指针与C交互
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/posts/2020-03/6589.html" rel="next" title="《人月神话》— 阅读笔记">
+      《人月神话》— 阅读笔记 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+    <div class="comments" id="valine-comments"></div>
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#1-脱壳"><span class="nav-number">1.</span> <span class="nav-text">1. 脱壳</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#2-工具"><span class="nav-number">2.</span> <span class="nav-text">2.工具</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#3-分析"><span class="nav-number">3.</span> <span class="nav-text">3. 分析</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#4-优化"><span class="nav-number">4.</span> <span class="nav-text">4. 优化</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#4-1-签到-gt-地点微调页面"><span class="nav-number">4.1.</span> <span class="nav-text">4.1 签到&gt;地点微调页面</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-2-输入并保存任意坐标"><span class="nav-number">4.2.</span> <span class="nav-text">4.2 输入并保存任意坐标</span></a></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="韦东方"
+      src="/resource/images/head_icon180.jpg">
+  <p class="site-author-name" itemprop="name">韦东方</p>
+  <div class="site-description" itemprop="description">You never know where your limitation is without trying.</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">24</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+        <span class="site-state-item-count">10</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">1</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="http://readingnote.weidongfang.online" title="Reading → http://readingnote.weidongfang.online" rel="noopener" target="_blank"><i class="fa fa-book-reader fa-fw"></i>Reading</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:dev.dongfang@gmail.com" title="E-mail → mailto:dev.dongfang@gmail.com" rel="noopener" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-mail</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="/atom.xml" title="RSS → /atom.xml"><i class="fa fa-rss fa-fw"></i>RSS</a>
+      </span>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+  <div class="beian"><a href="https://beian.miit.gov.cn" rel="noopener" target="_blank">京ICP备20017039号-1 </a>
+  </div>
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">@dev.dongfang</span>
+</div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+<script src="/js/utils.js"></script><script src="/js/motion.js"></script>
+<script src="/js/schemes/pisces.js"></script>
+<script src="/js/next-boot.js"></script>
+
+
+
+  
+  <script>
+    (function(){
+      var canonicalURL, curProtocol;
+      //Get the <link> tag
+      var x=document.getElementsByTagName("link");
+		//Find the last canonical URL
+		if(x.length > 0){
+			for (i=0;i<x.length;i++){
+				if(x[i].rel.toLowerCase() == 'canonical' && x[i].href){
+					canonicalURL=x[i].href;
+				}
+			}
+		}
+    //Get protocol
+	    if (!canonicalURL){
+	    	curProtocol = window.location.protocol.split(':')[0];
+	    }
+	    else{
+	    	curProtocol = canonicalURL.split(':')[0];
+	    }
+      //Get current URL if the canonical URL does not exist
+	    if (!canonicalURL) canonicalURL = window.location.href;
+	    //Assign script content. Replace current URL with the canonical URL
+      !function(){var e=/([http|https]:\/\/[a-zA-Z0-9\_\.]+\.baidu\.com)/gi,r=canonicalURL,t=document.referrer;if(!e.test(r)){var n=(String(curProtocol).toLowerCase() === 'https')?"https://sp0.baidu.com/9_Q4simg2RQJ8t7jm9iCKT-xh_/s.gif":"//api.share.baidu.com/s.gif";t?(n+="?r="+encodeURIComponent(document.referrer),r&&(n+="&l="+r)):r&&(n+="?l="+r);var i=new Image;i.src=n}}(window);})();
+  </script>
+
+
+
+
+  <script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+
+<script>
+NexT.utils.loadComments(document.querySelector('#valine-comments'), () => {
+  NexT.utils.getScript('//unpkg.com/valine/dist/Valine.min.js', () => {
+    var GUEST = ['nick', 'mail', 'link'];
+    var guest = 'nick,mail,link';
+    guest = guest.split(',').filter(item => {
+      return GUEST.includes(item);
+    });
+    new Valine({
+      el         : '#valine-comments',
+      verify     : false,
+      notify     : true,
+      appId      : 'vMrO1hYoNr03pjrQ0iIUSSLL-gzGzoHsz',
+      appKey     : 'iyTSJjyCkkOSrXToutmor7ru',
+      placeholder: "欢迎留言！",
+      avatar     : 'mm',
+      meta       : guest,
+      pageSize   : '15' || 10,
+      visitor    : false,
+      lang       : 'zh-cn' || 'zh-cn',
+      path       : location.pathname,
+      recordIP   : false,
+      serverURLs : ''
+    });
+  }, window.Valine);
+});
+</script>
+
+</body>
+</html>

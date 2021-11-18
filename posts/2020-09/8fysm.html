@@ -1,0 +1,603 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 3.9.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/resource/images/head_icon180.jpg">
+  <link rel="icon" type="image/png" sizes="32x32" href="/resource/images/head_icon180.jpg">
+  <link rel="icon" type="image/png" sizes="16x16" href="/resource/images/head_icon32.jpg">
+  <link rel="mask-icon" href="/resource/images/head_icon180.jpg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"blog.weidongfang.online","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":true,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":"valine","storage":true,"lazyload":false,"nav":null,"activeClass":"valine"},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="算法中的排列组合问题说难也不难，只要掌握排列组合的技巧，实际上所有相关的问题都会迎刃而解，本篇将循序渐进的破解排列组合问题中的经典算法。">
+<meta name="keywords" content="iOS, 逆向与安全, swift, flutter, linux">
+<meta property="og:type" content="article">
+<meta property="og:title" content="【算法】全排列&#x2F;组合问题全解">
+<meta property="og:url" content="http://blog.weidongfang.online/posts/2020-09/8fysm.html">
+<meta property="og:site_name" content="Dev-Dongfang">
+<meta property="og:description" content="算法中的排列组合问题说难也不难，只要掌握排列组合的技巧，实际上所有相关的问题都会迎刃而解，本篇将循序渐进的破解排列组合问题中的经典算法。">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="http://img.weidongfang.online/imgbed/20200926001929.png">
+<meta property="og:image" content="http://img.weidongfang.online/imgbed/20200929120922.gif">
+<meta property="og:updated_time" content="2020-09-29T05:06:09.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="【算法】全排列&#x2F;组合问题全解">
+<meta name="twitter:description" content="算法中的排列组合问题说难也不难，只要掌握排列组合的技巧，实际上所有相关的问题都会迎刃而解，本篇将循序渐进的破解排列组合问题中的经典算法。">
+<meta name="twitter:image" content="http://img.weidongfang.online/imgbed/20200926001929.png">
+
+<link rel="canonical" href="http://blog.weidongfang.online/posts/2020-09/8fysm.html">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>【算法】全排列/组合问题全解 | Dev-Dongfang</title>
+  
+
+
+  <script>
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?9973e9eaf1485d0719cd19d7436e2fea";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+<link rel="alternate" href="/atom.xml" title="Dev-Dongfang" type="application/atom+xml">
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Dev-Dongfang</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">iOS、逆向与安全、swift、flutter、linux，爱生活、爱代码、爱分享。</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-learning">
+
+    <a href="/learning/" rel="section"><i class="fa fa-book fa-fw"></i>笔记</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签<span class="badge">1</span></a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档<span class="badge">24</span></a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://blog.weidongfang.online/posts/2020-09/8fysm.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/resource/images/head_icon180.jpg">
+      <meta itemprop="name" content="韦东方">
+      <meta itemprop="description" content="You never know where your limitation is without trying.">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Dev-Dongfang">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          【算法】全排列/组合问题全解
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-09-25 20:13:21" itemprop="dateCreated datePublished" datetime="2020-09-25T20:13:21+08:00">2020-09-25</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2020-09-29 13:06:09" itemprop="dateModified" datetime="2020-09-29T13:06:09+08:00">2020-09-29</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/算法/" itemprop="url" rel="index"><span itemprop="name">算法</span></a>
+                </span>
+            </span>
+
+          
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Valine：</span>
+    
+    <a title="valine" href="/posts/2020-09/8fysm.html#valine-comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/posts/2020-09/8fysm.html" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>算法中的排列组合问题说难也不难，只要掌握排列组合的技巧，实际上所有相关的问题都会迎刃而解，本篇将循序渐进的破解排列组合问题中的经典算法。</p>
+<a id="more"></a>
+
+<p>首先先明确几个概念：</p>
+<ul>
+<li>组合：指从给定个数的元素中仅仅取出指定个数的元素，不考虑排序。</li>
+<li><a href="[https://baike.baidu.com/item/%E5%85%A8%E6%8E%92%E5%88%97/4022220?fr=aladdin](https://baike.baidu.com/item/全排列/4022220?fr=aladdin)">全排列</a>：从n个不同元素中任取m（m≤n）个元素，按照一定的顺序排列起来，叫做从n个不同元素中取出m个元素的一个排列。当m=n时所有的排列情况叫全排列。</li>
+<li><a href="[https://baike.baidu.com/item/%E5%9B%9E%E6%BA%AF%E7%AE%97%E6%B3%95/9258495?fr=aladdin](https://baike.baidu.com/item/回溯算法/9258495?fr=aladdin)">回溯算法</a>：溯算法实际上一个类似枚举的搜索尝试过程，主要是在搜索尝试过程中寻找问题的解，当发现已不满足求解条件时，就“回溯”返回，尝试别的路径。</li>
+<li>递归算法：在计算机中指通过重复将大问题分解为同类型小问题，从而解决大问题的解法。</li>
+</ul>
+<h1 id="1-排列问题"><a href="#1-排列问题" class="headerlink" title="1.排列问题"></a>1.排列问题</h1><h2 id="问题1：给定一个没有重复数字的序列，返回其所有可能的全排列。"><a href="#问题1：给定一个没有重复数字的序列，返回其所有可能的全排列。" class="headerlink" title="问题1：给定一个没有重复数字的序列，返回其所有可能的全排列。"></a>问题1：给定一个没有重复数字的序列，返回其所有可能的全排列。</h2><p>分析：这个问题我们可以看成是为长度为n的数组填充数据的过程，我们循环遍历所有可能出现在第1位的数字，然后是可能出现在第二位的数字，以此类推，直到将整个数组填充完毕，得到的结果就是可能的一种排列，所有这些可能性组成的结果就是给定数组的全排列。</p>
+<p>具体应该怎么控制这个过程呢？当我们填充第一位后，问题实际上变成了求2-n位的全排列，以此类推，直到最后一位。这种能够将大问题分解成相同类型的小问题，并且当问题足够小很容易求解的问题，用<strong>递归</strong>解决简直不要太爽！</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">func</span> <span class="title">permute</span><span class="params">(<span class="number">_</span> nums: [Int])</span></span> -&gt; [[<span class="type">Int</span>]] &#123;</span><br><span class="line">        <span class="keyword">guard</span> nums.<span class="built_in">count</span> &gt; <span class="number">0</span> <span class="keyword">else</span> &#123; <span class="keyword">return</span> [] &#125;</span><br><span class="line">        <span class="keyword">guard</span> nums.<span class="built_in">count</span> &gt; <span class="number">1</span> <span class="keyword">else</span> &#123; <span class="keyword">return</span> [nums] &#125;</span><br><span class="line">        <span class="keyword">var</span> res = [[<span class="type">Int</span>]]()</span><br><span class="line">        <span class="keyword">var</span> nums = nums</span><br><span class="line">        alignment(res: &amp;res, arr: &amp;nums, loc: <span class="number">0</span>)</span><br><span class="line">        <span class="keyword">return</span> res</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">private</span> <span class="function"><span class="keyword">func</span> <span class="title">alignment</span><span class="params">(res: <span class="keyword">inout</span> [[Int]], arr: <span class="keyword">inout</span> [Int], loc: Int)</span></span> &#123;</span><br><span class="line">        <span class="keyword">if</span> loc == arr.<span class="built_in">count</span> - <span class="number">1</span> &#123;</span><br><span class="line">            res.append(arr)</span><br><span class="line">            <span class="keyword">return</span></span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">for</span> i <span class="keyword">in</span> loc..&lt;arr.<span class="built_in">count</span> &#123;</span><br><span class="line">            arr.swapAt(i, loc)</span><br><span class="line">            alignment(res: &amp;res, arr: &amp;arr, loc: loc + <span class="number">1</span>)</span><br><span class="line">            arr.swapAt(i, loc)</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>在上述代码中，由于我们没有借助临时的数组来存放排列的结果，而是在原数组上采用了交换位置的方式，因此当我们每个深度搜索完毕后需要将对应位置的数据复原，这是使用回溯算法的原因。</p>
+</blockquote>
+<h2 id="问题2：给定一个可包含重复数字的序列，返回所有不重复的全排列。"><a href="#问题2：给定一个可包含重复数字的序列，返回所有不重复的全排列。" class="headerlink" title="问题2：给定一个可包含重复数字的序列，返回所有不重复的全排列。"></a>问题2：给定一个可<strong>包含重复数字</strong>的序列，返回所有不重复的全排列。</h2><p>如果给定的数组中存在重复的数字，问题1中的解法给出的结果中一定是包含重复序列的。例如给定序列中第三位和第四位都是5，在问题1中，第三位第四位的5分别放在第一位和第二位与放在第二位第一位是两个排列，但是事实上他们是完全相同的。如下图所示：</p>
+<p><img src="http://img.weidongfang.online/imgbed/20200926001929.png" alt></p>
+<p>那么如何才能得到不重复的结果呢？这里主要有两种方法。</p>
+<ol>
+<li><p><strong>Set去重。</strong>我们可以将每次排列的结果存放到一个Set集合中，利用Set集合的特性帮我们去重。</p>
+</li>
+<li><p><strong>排列中某一位出现相同值则略过。</strong>用Set集合或者哈希表统计某一位是否出现过某个数字。</p>
+</li>
+</ol>
+<p>第二种方法的swift代码如下所示：</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">func</span> <span class="title">permuteUnique</span><span class="params">(<span class="number">_</span> nums: [Int])</span></span> -&gt; [[<span class="type">Int</span>]] &#123;</span><br><span class="line">        <span class="keyword">var</span> arr = nums</span><br><span class="line">        <span class="keyword">guard</span> arr.<span class="built_in">count</span> &gt; <span class="number">0</span> <span class="keyword">else</span> &#123; <span class="keyword">return</span> [] &#125;</span><br><span class="line">        <span class="keyword">guard</span> arr.<span class="built_in">count</span> &gt; <span class="number">1</span> <span class="keyword">else</span> &#123; <span class="keyword">return</span> [arr] &#125;</span><br><span class="line">        <span class="keyword">var</span> res = [[<span class="type">Int</span>]]()</span><br><span class="line">        alignment(res: &amp;res, arr: &amp;arr, loc: <span class="number">0</span>)</span><br><span class="line">        <span class="keyword">return</span> res</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">private</span> <span class="function"><span class="keyword">func</span> <span class="title">alignment</span><span class="params">(res: <span class="keyword">inout</span> [[Int]], arr: <span class="keyword">inout</span> [Int], loc: Int)</span></span> &#123;</span><br><span class="line">        <span class="keyword">if</span> loc == arr.<span class="built_in">count</span> - <span class="number">1</span> &#123;</span><br><span class="line">            res.append(arr)</span><br><span class="line">            <span class="keyword">return</span></span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">var</span> <span class="keyword">set</span> = <span class="type">Set</span>&lt;<span class="type">Int</span>&gt;()	<span class="comment">//set集合记录某个值是否使用过</span></span><br><span class="line">        <span class="keyword">for</span> i <span class="keyword">in</span> loc..&lt;arr.<span class="built_in">count</span> &#123;</span><br><span class="line">            <span class="keyword">if</span> <span class="keyword">set</span>.<span class="built_in">contains</span>(arr[i]) &#123;</span><br><span class="line">                <span class="keyword">continue</span></span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">set</span>.insert(arr[i])</span><br><span class="line">            </span><br><span class="line">            arr.swapAt(i, loc)</span><br><span class="line">            alignment(res: &amp;res, arr: &amp;arr, loc: loc + <span class="number">1</span>)</span><br><span class="line">            arr.swapAt(i, loc)</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="问题3：给定两个整数-n-和-k，返回-1-…-n-中所有可能的-k-个数的排列。"><a href="#问题3：给定两个整数-n-和-k，返回-1-…-n-中所有可能的-k-个数的排列。" class="headerlink" title="问题3：给定两个整数 n 和 k，返回 1 … n 中所有可能的 k 个数的排列。"></a>问题3：给定两个整数 <em>n</em> 和 <em>k</em>，返回 1 … <em>n</em> 中所有可能的 <em>k</em> 个数的排列。</h2><p>问题3中组合是无序的，因此我们无需关心结果中数字顺序。假如题目要求我们给出k个数的排列，该怎么解决呢？</p>
+<p>好办！还是全排列的解题思路，我们将已经使用的数字放置到数组的前部分，然后遍历后面的数字放在对应的目标数组中即可。</p>
+<p>代码如下所示：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">func permutationAll(str: String) -&gt; [String] &#123;</span><br><span class="line">    guard str.count &gt; 1 else &#123; return [str] &#125;</span><br><span class="line"></span><br><span class="line">    var res = [String]()</span><br><span class="line">    var strArr = Array(str)</span><br><span class="line">    var tmp = [Character]()</span><br><span class="line">    func backtrace(loc: Int) &#123;</span><br><span class="line">        if tmp.isEmpty == false &#123;</span><br><span class="line">            res.append(String(tmp))</span><br><span class="line">        &#125;</span><br><span class="line">        if loc &gt;= strArr.count &#123; return &#125;</span><br><span class="line"></span><br><span class="line">        for i in loc..&lt;strArr.count &#123;</span><br><span class="line">            tmp.append(strArr[i])</span><br><span class="line">            strArr.swapAt(i, loc)</span><br><span class="line">            backtrace(loc: loc + 1)</span><br><span class="line">            strArr.swapAt(i, loc)</span><br><span class="line">            tmp.removeLast()</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    backtrace(loc: 0)</span><br><span class="line">    return res</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h1 id="2-组合问题"><a href="#2-组合问题" class="headerlink" title="2.组合问题"></a>2.组合问题</h1><h2 id="问题4：给定两个整数-n-和-k，返回-1-…-n-中所有可能的-k-个数的组合。"><a href="#问题4：给定两个整数-n-和-k，返回-1-…-n-中所有可能的-k-个数的组合。" class="headerlink" title="问题4：给定两个整数 n 和 k，返回 1 … n 中所有可能的 k 个数的组合。"></a>问题4：给定两个整数 <em>n</em> 和 <em>k</em>，返回 1 … <em>n</em> 中所有可能的 <em>k</em> 个数的组合。</h2><p>这个问题和上面的全排列问题解法类似。区别在于，全排列问题中我们在原数组通过数字交换来实现回溯，组合问题中我们需要创建长度为k的数组，然后计算数组中每一个位置可能出现的数字，当目标数组填充满时候记录下当前值，然后回溯继续尝试下个可能性。</p>
+<p>swift代码如下所示：</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">func</span> <span class="title">combine</span><span class="params">(<span class="number">_</span> n: Int, <span class="number">_</span> k: Int)</span></span> -&gt; [[<span class="type">Int</span>]] &#123;</span><br><span class="line">        <span class="keyword">if</span> k == <span class="number">0</span> || k &gt; n &#123; <span class="keyword">return</span> [] &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">var</span> combine = [[<span class="type">Int</span>]]()</span><br><span class="line">        <span class="keyword">var</span> tmp = [<span class="type">Int</span>]()</span><br><span class="line">        <span class="function"><span class="keyword">func</span> <span class="title">backdate</span><span class="params">(start: Int, end: Int, targetCount: Int)</span></span> &#123;</span><br><span class="line">            <span class="comment">//退出条件</span></span><br><span class="line">            <span class="keyword">if</span> tmp.<span class="built_in">count</span> == targetCount &#123;</span><br><span class="line">                combine.append(tmp)</span><br><span class="line">                <span class="keyword">return</span></span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">for</span> val <span class="keyword">in</span> start..&lt;end &#123;</span><br><span class="line">                <span class="comment">//添加数字</span></span><br><span class="line">                tmp.append(val)</span><br><span class="line">                <span class="comment">//回溯</span></span><br><span class="line">                backdate(start: val + <span class="number">1</span>, end: end, targetCount: targetCount)</span><br><span class="line">                <span class="comment">//删除数字</span></span><br><span class="line">                tmp.removeLast()</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        backdate(start: <span class="number">1</span>, end: n + <span class="number">1</span>, targetCount: k)</span><br><span class="line">        <span class="keyword">return</span> combine</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="问题5：给定一个没有重复数字的序列，返回这个序列所有可能组合。"><a href="#问题5：给定一个没有重复数字的序列，返回这个序列所有可能组合。" class="headerlink" title="问题5：给定一个没有重复数字的序列，返回这个序列所有可能组合。"></a>问题5：给定一个没有重复数字的序列，返回这个序列所有可能组合。</h2><p>分析：题目要求返回所有可能的组合，那么也就是说，组合的长度可能是1、2…n位，于是，这个问题就分解成了给定长度为n的没有重复数字的序列，返回长度为k的子序列，k的取值违反为<code>1-n</code>。</p>
+<p>因此，第一种解法就是利用问题4中的解法，循环的指定k的长度，将最终得到的结果连接起来即可。但是这种方法会出现重复计算的情况。</p>
+<p>事实上我们只需要计算给定序列的全排列，然后记录每次给目标序列添加内容后的新序列即可。</p>
+<p>swift代码如下所示：</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">permutationAll</span><span class="params">(str: String)</span></span> -&gt; [<span class="type">String</span>] &#123;</span><br><span class="line">    <span class="keyword">guard</span> str.<span class="built_in">count</span> &gt; <span class="number">1</span> <span class="keyword">else</span> &#123; <span class="keyword">return</span> [str] &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">var</span> res = [<span class="type">String</span>]()</span><br><span class="line">    <span class="keyword">let</span> strArr = <span class="type">Array</span>(str)</span><br><span class="line">    <span class="keyword">var</span> tmp = [<span class="type">Character</span>]()</span><br><span class="line">    <span class="function"><span class="keyword">func</span> <span class="title">backtrace</span><span class="params">(loc: Int)</span></span> &#123;</span><br><span class="line">        <span class="keyword">if</span> tmp.isEmpty == <span class="literal">false</span> &#123;</span><br><span class="line">            res.append(<span class="type">String</span>(tmp))</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span> loc &gt;= strArr.<span class="built_in">count</span> &#123; <span class="keyword">return</span> &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">for</span> i <span class="keyword">in</span> loc..&lt;strArr.<span class="built_in">count</span> &#123;</span><br><span class="line">            tmp.append(strArr[i])</span><br><span class="line">            backtrace(loc: i + <span class="number">1</span>)</span><br><span class="line">            tmp.removeLast()</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    backtrace(loc: <span class="number">0</span>)</span><br><span class="line">    <span class="keyword">return</span> res</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h1 id="3-其它相关问题"><a href="#3-其它相关问题" class="headerlink" title="3.其它相关问题"></a>3.其它相关问题</h1><h2 id="问题6：下一个-排列（leetcode-31）"><a href="#问题6：下一个-排列（leetcode-31）" class="headerlink" title="问题6：下一个 排列（leetcode 31）"></a>问题6：下一个 排列（<a href="https://leetcode-cn.com/problems/next-permutation/" target="_blank" rel="noopener">leetcode 31</a>）</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">题目描述:</span><br><span class="line">实现获取下一个排列的函数，算法需要将给定数字序列重新排列成字典序中下一个更大的排列。</span><br><span class="line">如果不存在下一个更大的排列，则将数字重新排列成最小的排列（即升序排列）。</span><br><span class="line">必须原地修改，只允许使用额外常数空间。</span><br></pre></td></tr></table></figure>
+
+<p><strong>方法一 ：</strong>暴力法。最容易想到的就是按照字典序遍历排序，当得到结果为给定序列值时候，返回下一个得到的序列。但是这样做算法的时间复杂度将会是O(n!)，作为算法题目，肯定会有更好的方法。</p>
+<p><strong>方法二：</strong>查找下个较大的序列。我们知道，字典序是按照从小到大的序列排列的，因此我们只要找到一个方法，生成下一个大于当前序列的序列即可。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">1,2,3 → 1,3,2</span><br><span class="line">1,1,5 → 1,5,1</span><br><span class="line">2,5,4,3 → 3,2,4,5</span><br><span class="line">3,2,1 → 1,2,3</span><br></pre></td></tr></table></figure>
+
+<p>实际上，要想找到下一个序列，需要三个步骤：</p>
+<ol>
+<li>从后向前找到第一个相邻的左边小于右边的位置i；</li>
+<li>从i向后查找最小的大于当前位置数字的数字，并交换位置（交换后i之后的序列是递减的序列）；</li>
+<li>将i后面的数字全部反转，得到当前序列的下一个字典序序列。</li>
+</ol>
+<p><img src="http://img.weidongfang.online/imgbed/20200929120922.gif" alt></p>
+<p style="color:gray;text-align:center">图片来自网络</p>
+
+<p>否则序列就是一个降序的序列 ，不存在更大的值，下一个序列就是升序排列的序列，反转整个序列即可。</p>
+<p>swift代码如下所示：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line">class Problem31Solution &#123;</span><br><span class="line">    func nextPermutation(_ nums: inout [Int]) &#123;</span><br><span class="line">        guard nums.count &gt; 1 else &#123; return &#125;</span><br><span class="line">        //第一步</span><br><span class="line">        var i = nums.count - 2</span><br><span class="line">        while i &gt;= 0 &amp;&amp; nums[i] &gt;= nums[i + 1] &#123;</span><br><span class="line">            i -= 1</span><br><span class="line">        &#125;</span><br><span class="line">        if i &gt;= 0 &#123;</span><br><span class="line">            //第二步</span><br><span class="line">            var j = i</span><br><span class="line">            while j &lt; nums.count - 1 &amp;&amp;  nums[j + 1] &gt; nums[i] &#123;</span><br><span class="line">                j += 1</span><br><span class="line">            &#125;</span><br><span class="line">            nums.swapAt(i, j)</span><br><span class="line">        &#125;</span><br><span class="line">        //第三步</span><br><span class="line">        reverse(nums: &amp;nums, start: i + 1, end: nums.count - 1)</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    //反转序列指定范围</span><br><span class="line">    private func reverse(nums: inout [Int], start: Int, end: Int) &#123;</span><br><span class="line">        var start = start, end = end</span><br><span class="line">        while start &lt; end &#123;</span><br><span class="line">            nums.swapAt(start, end)</span><br><span class="line">            start += 1</span><br><span class="line">            end -= 1</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><strong>leetcode相关题目：</strong></p>
+<p>【Leetcode 46】没有重复数字的全排列：<a href="https://leetcode-cn.com/problems/permutations/" target="_blank" rel="noopener">https://leetcode-cn.com/problems/permutations/</a></p>
+<p>【Leetcode 47】有重复数字的全排列：<a href="https://leetcode-cn.com/problems/permutations-ii/" target="_blank" rel="noopener">https://leetcode-cn.com/problems/permutations-ii/</a></p>
+<p>【Leetcode 77】组合-求1-n中k个数可能的组合：<a href="https://leetcode-cn.com/problems/combinations/" target="_blank" rel="noopener">https://leetcode-cn.com/problems/combinations/</a></p>
+<p>【Leetcode 31】下一个排列：<a href="https://leetcode-cn.com/problems/next-permutation/" target="_blank" rel="noopener">https://leetcode-cn.com/problems/next-permutation/</a></p>
+<p>【Leetcode 60】第k个排列：<a href="https://leetcode-cn.com/problems/permutation-sequence/" target="_blank" rel="noopener">https://leetcode-cn.com/problems/permutation-sequence/</a></p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/posts/2020-05/58865.html" rel="prev" title="Raspberry挂载移动硬盘的坑：解决挂载失败导致raspberry系统无法启动的问题">
+      <i class="fa fa-chevron-left"></i> Raspberry挂载移动硬盘的坑：解决挂载失败导致raspberry系统无法启动的问题
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/posts/2020-11/2dya62uis2.html" rel="next" title="【译】SwiftUI中常见的8个错误以及解决方案">
+      【译】SwiftUI中常见的8个错误以及解决方案 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+    <div class="comments" id="valine-comments"></div>
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#1-排列问题"><span class="nav-number">1.</span> <span class="nav-text">1.排列问题</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#问题1：给定一个没有重复数字的序列，返回其所有可能的全排列。"><span class="nav-number">1.1.</span> <span class="nav-text">问题1：给定一个没有重复数字的序列，返回其所有可能的全排列。</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#问题2：给定一个可包含重复数字的序列，返回所有不重复的全排列。"><span class="nav-number">1.2.</span> <span class="nav-text">问题2：给定一个可包含重复数字的序列，返回所有不重复的全排列。</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#问题3：给定两个整数-n-和-k，返回-1-…-n-中所有可能的-k-个数的排列。"><span class="nav-number">1.3.</span> <span class="nav-text">问题3：给定两个整数 n 和 k，返回 1 … n 中所有可能的 k 个数的排列。</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#2-组合问题"><span class="nav-number">2.</span> <span class="nav-text">2.组合问题</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#问题4：给定两个整数-n-和-k，返回-1-…-n-中所有可能的-k-个数的组合。"><span class="nav-number">2.1.</span> <span class="nav-text">问题4：给定两个整数 n 和 k，返回 1 … n 中所有可能的 k 个数的组合。</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#问题5：给定一个没有重复数字的序列，返回这个序列所有可能组合。"><span class="nav-number">2.2.</span> <span class="nav-text">问题5：给定一个没有重复数字的序列，返回这个序列所有可能组合。</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#3-其它相关问题"><span class="nav-number">3.</span> <span class="nav-text">3.其它相关问题</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#问题6：下一个-排列（leetcode-31）"><span class="nav-number">3.1.</span> <span class="nav-text">问题6：下一个 排列（leetcode 31）</span></a></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="韦东方"
+      src="/resource/images/head_icon180.jpg">
+  <p class="site-author-name" itemprop="name">韦东方</p>
+  <div class="site-description" itemprop="description">You never know where your limitation is without trying.</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">24</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+        <span class="site-state-item-count">10</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">1</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="http://readingnote.weidongfang.online" title="Reading → http://readingnote.weidongfang.online" rel="noopener" target="_blank"><i class="fa fa-book-reader fa-fw"></i>Reading</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:dev.dongfang@gmail.com" title="E-mail → mailto:dev.dongfang@gmail.com" rel="noopener" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-mail</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="/atom.xml" title="RSS → /atom.xml"><i class="fa fa-rss fa-fw"></i>RSS</a>
+      </span>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+  <div class="beian"><a href="https://beian.miit.gov.cn" rel="noopener" target="_blank">京ICP备20017039号-1 </a>
+  </div>
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">@dev.dongfang</span>
+</div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+<script src="/js/utils.js"></script><script src="/js/motion.js"></script>
+<script src="/js/schemes/pisces.js"></script>
+<script src="/js/next-boot.js"></script>
+
+
+
+  
+  <script>
+    (function(){
+      var canonicalURL, curProtocol;
+      //Get the <link> tag
+      var x=document.getElementsByTagName("link");
+		//Find the last canonical URL
+		if(x.length > 0){
+			for (i=0;i<x.length;i++){
+				if(x[i].rel.toLowerCase() == 'canonical' && x[i].href){
+					canonicalURL=x[i].href;
+				}
+			}
+		}
+    //Get protocol
+	    if (!canonicalURL){
+	    	curProtocol = window.location.protocol.split(':')[0];
+	    }
+	    else{
+	    	curProtocol = canonicalURL.split(':')[0];
+	    }
+      //Get current URL if the canonical URL does not exist
+	    if (!canonicalURL) canonicalURL = window.location.href;
+	    //Assign script content. Replace current URL with the canonical URL
+      !function(){var e=/([http|https]:\/\/[a-zA-Z0-9\_\.]+\.baidu\.com)/gi,r=canonicalURL,t=document.referrer;if(!e.test(r)){var n=(String(curProtocol).toLowerCase() === 'https')?"https://sp0.baidu.com/9_Q4simg2RQJ8t7jm9iCKT-xh_/s.gif":"//api.share.baidu.com/s.gif";t?(n+="?r="+encodeURIComponent(document.referrer),r&&(n+="&l="+r)):r&&(n+="?l="+r);var i=new Image;i.src=n}}(window);})();
+  </script>
+
+
+
+
+  <script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+
+<script>
+NexT.utils.loadComments(document.querySelector('#valine-comments'), () => {
+  NexT.utils.getScript('//unpkg.com/valine/dist/Valine.min.js', () => {
+    var GUEST = ['nick', 'mail', 'link'];
+    var guest = 'nick,mail,link';
+    guest = guest.split(',').filter(item => {
+      return GUEST.includes(item);
+    });
+    new Valine({
+      el         : '#valine-comments',
+      verify     : false,
+      notify     : true,
+      appId      : 'vMrO1hYoNr03pjrQ0iIUSSLL-gzGzoHsz',
+      appKey     : 'iyTSJjyCkkOSrXToutmor7ru',
+      placeholder: "欢迎留言！",
+      avatar     : 'mm',
+      meta       : guest,
+      pageSize   : '15' || 10,
+      visitor    : false,
+      lang       : 'zh-cn' || 'zh-cn',
+      path       : location.pathname,
+      recordIP   : false,
+      serverURLs : ''
+    });
+  }, window.Valine);
+});
+</script>
+
+</body>
+</html>

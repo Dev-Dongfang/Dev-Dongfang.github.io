@@ -1,0 +1,745 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 3.9.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/resource/images/head_icon180.jpg">
+  <link rel="icon" type="image/png" sizes="32x32" href="/resource/images/head_icon180.jpg">
+  <link rel="icon" type="image/png" sizes="16x16" href="/resource/images/head_icon32.jpg">
+  <link rel="mask-icon" href="/resource/images/head_icon180.jpg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"blog.weidongfang.online","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":true,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":"valine","storage":true,"lazyload":false,"nav":null,"activeClass":"valine"},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="RxSwift是一个可以帮助我们简化异步编程的框架，它拓展了观察者模式，能够帮助你自由组合多个异步事件，而不需要去关心线程、同步、线程安全等问题、并发等问题。RxSwift属于函数响应式编程，它通过构建函数操作数据序列，然后对这些序列做出响应的编程方式。">
+<meta name="keywords" content="iOS, 逆向与安全, swift, flutter, linux">
+<meta property="og:type" content="article">
+<meta property="og:title" content="【笔记】RxSwift简介">
+<meta property="og:url" content="http://blog.weidongfang.online/posts/2019-10/31385.html">
+<meta property="og:site_name" content="Dev-Dongfang">
+<meta property="og:description" content="RxSwift是一个可以帮助我们简化异步编程的框架，它拓展了观察者模式，能够帮助你自由组合多个异步事件，而不需要去关心线程、同步、线程安全等问题、并发等问题。RxSwift属于函数响应式编程，它通过构建函数操作数据序列，然后对这些序列做出响应的编程方式。">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2020-05-30T15:04:28.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="【笔记】RxSwift简介">
+<meta name="twitter:description" content="RxSwift是一个可以帮助我们简化异步编程的框架，它拓展了观察者模式，能够帮助你自由组合多个异步事件，而不需要去关心线程、同步、线程安全等问题、并发等问题。RxSwift属于函数响应式编程，它通过构建函数操作数据序列，然后对这些序列做出响应的编程方式。">
+
+<link rel="canonical" href="http://blog.weidongfang.online/posts/2019-10/31385.html">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>【笔记】RxSwift简介 | Dev-Dongfang</title>
+  
+
+
+  <script>
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?9973e9eaf1485d0719cd19d7436e2fea";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+<link rel="alternate" href="/atom.xml" title="Dev-Dongfang" type="application/atom+xml">
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Dev-Dongfang</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">iOS、逆向与安全、swift、flutter、linux，爱生活、爱代码、爱分享。</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-learning">
+
+    <a href="/learning/" rel="section"><i class="fa fa-book fa-fw"></i>笔记</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签<span class="badge">1</span></a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档<span class="badge">24</span></a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://blog.weidongfang.online/posts/2019-10/31385.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/resource/images/head_icon180.jpg">
+      <meta itemprop="name" content="韦东方">
+      <meta itemprop="description" content="You never know where your limitation is without trying.">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Dev-Dongfang">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          【笔记】RxSwift简介
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2019-10-16 15:22:35" itemprop="dateCreated datePublished" datetime="2019-10-16T15:22:35+08:00">2019-10-16</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2020-05-30 23:04:28" itemprop="dateModified" datetime="2020-05-30T23:04:28+08:00">2020-05-30</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Swift/" itemprop="url" rel="index"><span itemprop="name">Swift</span></a>
+                </span>
+            </span>
+
+          
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Valine：</span>
+    
+    <a title="valine" href="/posts/2019-10/31385.html#valine-comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/posts/2019-10/31385.html" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>RxSwift是一个可以帮助我们简化异步编程的框架，它拓展了观察者模式，能够帮助你自由组合多个异步事件，而不需要去关心线程、同步、线程安全等问题、并发等问题。RxSwift属于函数响应式编程，它通过构建函数操作数据序列，然后对这些序列做出响应的编程方式。</p>
+<a id="more"></a>
+
+<h2 id="1-RxSwift能帮助我们做什么"><a href="#1-RxSwift能帮助我们做什么" class="headerlink" title="1. RxSwift能帮助我们做什么?"></a>1. RxSwift能帮助我们做什么?</h2><h3 id="1-1-Target-Action"><a href="#1-1-Target-Action" class="headerlink" title="1.1 Target Action"></a>1.1 Target Action</h3><p>在iOS开发中, 我们经常给UIbutton或者UIView添加交互事件, 引入RxSwift之后, 我们可以换一种方式了. 这种方式无需使用Target Action, 这样使代码逻辑更加清晰.</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">redButton.rx.tap.subscribe(onNext:&#123;</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">"redbutton"</span>)</span><br><span class="line">&#125;).disposed(by: disposeBag)</span><br></pre></td></tr></table></figure>
+
+<h3 id="1-2-代理"><a href="#1-2-代理" class="headerlink" title="1.2 代理"></a>1.2 代理</h3><p>传统的代理, 需要实现代理方法, 在代理方法中处理逻辑代码, 引入RxSwift后, 直接就能得到想要的结果. 常用的UIscrollView, UITableView代理在RxSwift中都有相关的实现, 我们在声明自己代理时候, 可以使用类似的方法. </p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">scrollView.rx.contentOffset.subscribe &#123; (contentOffset) <span class="keyword">in</span></span><br><span class="line">    <span class="built_in">print</span>(contentOffset)</span><br><span class="line">&#125;.disposed(by: disposeBag)</span><br></pre></td></tr></table></figure>
+
+<h3 id="1-3-闭包回掉"><a href="#1-3-闭包回掉" class="headerlink" title="1.3 闭包回掉"></a>1.3 闭包回掉</h3><p>使用回掉RxSwift中订阅代理回掉闭包, 在订阅中处理相关的网络状态.</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">URLSession</span>.shared.rx.data(request: <span class="type">URLRequest</span>(url: url))</span><br><span class="line">.subscribe(onNext: &#123; data <span class="keyword">in</span></span><br><span class="line">    <span class="built_in">print</span>(<span class="string">"Data Task Success with count: \(data.count)"</span>)</span><br><span class="line">&#125;, onError: &#123; error <span class="keyword">in</span></span><br><span class="line">    <span class="built_in">print</span>(<span class="string">"Data Task Error: \(error)"</span>)</span><br><span class="line">&#125;)</span><br><span class="line">.disposed(by: disposeBag)</span><br></pre></td></tr></table></figure>
+
+<h3 id="1-4-通知"><a href="#1-4-通知" class="headerlink" title="1.4 通知"></a>1.4 通知</h3><p>使用RxSwift订阅通知, 无需管理观测者的声明周期, 这样可以有更多的精力去关注业务逻辑代码.</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">NotificationCenter.default.rx</span><br><span class="line">	.notification(.UIApplicationWillEnterForeground)</span><br><span class="line">	.subscribe(onNext: &#123; (notification) in</span><br><span class="line">	    print(&quot;Application Will Enter Foreground&quot;)</span><br><span class="line">	&#125;).disposed(by: disposeBag)</span><br></pre></td></tr></table></figure>
+
+<h3 id="1-5-KVO"><a href="#1-5-KVO" class="headerlink" title="1.5 KVO"></a>1.5 KVO</h3><p>RxSwift可以直接使用KVO, 在subscribe中监听相关属性的变化.</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">scrollView.rx.observe(CGRect.self, #keyPath(UIScrollView.frame))</span><br><span class="line">    .subscribe(onNext: &#123; (frame) in</span><br><span class="line">        print(frame?.debugDescription)</span><br><span class="line">&#125;).disposed(by: disposeBag)</span><br></pre></td></tr></table></figure>
+
+<h3 id="1-6-多个任务之间有依赖关系"><a href="#1-6-多个任务之间有依赖关系" class="headerlink" title="1.6 多个任务之间有依赖关系"></a>1.6 多个任务之间有依赖关系</h3><p>使用RxSwift实现多个任务的依赖关系, 无需嵌套多层, 容易维护.</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">/// 用 Rx 封装接口</span><br><span class="line">enum Api &#123;</span><br><span class="line">    /// 通过用户名密码取得一个 token</span><br><span class="line">    static func token(username: String, password: String) -&gt; Observable&lt;String&gt; &#123; ... &#125;</span><br><span class="line"></span><br><span class="line">    /// 通过 token 取得用户信息</span><br><span class="line">    static func userInfo(token: String) -&gt; Observable&lt;UserInfo&gt; &#123; ... &#125;</span><br><span class="line">&#125;</span><br><span class="line">/// 通过用户名和密码获取用户信息</span><br><span class="line">Api.token(username: &quot;beeth0ven&quot;, password: &quot;987654321&quot;)</span><br><span class="line">    .flatMapLatest(Api.userInfo)</span><br><span class="line">    .subscribe(onNext: &#123; userInfo in</span><br><span class="line">        print(&quot;获取用户信息成功: \(userInfo)&quot;)</span><br><span class="line">    &#125;, onError: &#123; error in</span><br><span class="line">        print(&quot;获取用户信息失败: \(error)&quot;)</span><br><span class="line">    &#125;).disposed(by: disposeBag)</span><br></pre></td></tr></table></figure>
+
+<h3 id="1-7-等待多个并发任务完成后处理结果"><a href="#1-7-等待多个并发任务完成后处理结果" class="headerlink" title="1.7 等待多个并发任务完成后处理结果"></a>1.7 等待多个并发任务完成后处理结果</h3><p>并发任务, 可以通过zip方法来统一调用.</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">/// 用 Rx 封装接口</span><br><span class="line">enum Api &#123;</span><br><span class="line"></span><br><span class="line">    /// 取得老师的详细信息</span><br><span class="line">    static func teacher(teacherId: Int) -&gt; Observable&lt;Teacher&gt; &#123; ... &#125;</span><br><span class="line"></span><br><span class="line">    /// 取得老师的评论</span><br><span class="line">    static func teacherComments(teacherId: Int) -&gt; Observable&lt;[Comment]&gt; &#123; ... &#125;</span><br><span class="line">&#125;</span><br><span class="line">/// 同时取得老师信息和老师评论</span><br><span class="line">Observable.zip(</span><br><span class="line">      Api.teacher(teacherId: teacherId),</span><br><span class="line">      Api.teacherComments(teacherId: teacherId)</span><br><span class="line">    ).subscribe(onNext: &#123; (teacher, comments) in</span><br><span class="line">        print(&quot;获取老师信息成功: \(teacher)&quot;)</span><br><span class="line">        print(&quot;获取老师评论成功: \(comments.count) 条&quot;)</span><br><span class="line">    &#125;, onError: &#123; error in</span><br><span class="line">        print(&quot;获取老师信息或评论失败: \(error)&quot;)</span><br><span class="line">    &#125;).disposed(by: disposeBag)</span><br></pre></td></tr></table></figure>
+
+<h2 id="2-一个简单的输入验证dmeo"><a href="#2-一个简单的输入验证dmeo" class="headerlink" title="2. 一个简单的输入验证dmeo"></a>2. 一个简单的输入验证dmeo</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line">private func setupViewModel() &#123;</span><br><span class="line">    </span><br><span class="line">    let usernameValid = username.rx.text.orEmpty.map&#123;$0.count &gt;= 6&#125;.share(replay: 1)</span><br><span class="line">    usernameValid.bind(to: password.rx.isEnabled).disposed(by: disposeBag)</span><br><span class="line">    usernameValid.bind(to: usernameNotice.rx.isHidden).disposed(by: disposeBag)</span><br><span class="line">    </span><br><span class="line">    let passwdValid = password.rx.text.orEmpty.map&#123;$0.count &gt;= 6&#125;.share(replay: 1)</span><br><span class="line">    passwdValid.bind(to: passwordNotice.rx.isHidden).disposed(by: disposeBag)</span><br><span class="line">    </span><br><span class="line">    </span><br><span class="line">    let everythingValid = Observable.combineLatest(usernameValid, passwdValid) &#123; $0 &amp;&amp; $1 &#125;.share(replay: 1)    //??</span><br><span class="line">    everythingValid.bind(to: confirmButton.rx.isEnabled).disposed(by: disposeBag)</span><br><span class="line">    </span><br><span class="line">    confirmButton.rx.tap.subscribe(onNext: &#123;[weak self] in</span><br><span class="line">        self?.showAlert()</span><br><span class="line">    &#125;).disposed(by: disposeBag)</span><br><span class="line">&#125;</span><br><span class="line">    </span><br><span class="line">private func showAlert() &#123;</span><br><span class="line">    let alertController = UIAlertController(title: &quot;Rx Helloworld&quot;, message: nil, preferredStyle: .alert)</span><br><span class="line">    let action = UIAlertAction(title: &quot;confirm&quot;, style: .default, handler: nil)</span><br><span class="line">    alertController.addAction(action)</span><br><span class="line">    present(alertController, animated: true, completion: nil)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="3-函数响应式编程"><a href="#3-函数响应式编程" class="headerlink" title="3. 函数响应式编程"></a>3. 函数响应式编程</h2><p><strong>函数式编程:</strong>是一种编程范式, 他需要我们将函数作为参数传递, 或者作为返回值返还. 我们可以通过组合不同的函数得到想要的结果. 函数式编程更加的灵活/高复用性/简洁/易维护/适应各种需求变化.</p>
+<p>我们通过不同的构建函数来创建所需要的数据序列. 最后通过适当的方式来响应这个序列. 这就是<strong>函数响应式编程</strong>.</p>
+<p>在RxSwift中有个比较重要的概念就是<strong>数据绑定(订阅)</strong>. 就是指可被监听的序列绑定到观察者上. </p>
+<h2 id="4-RxSwift核心"><a href="#4-RxSwift核心" class="headerlink" title="4. RxSwift核心"></a>4. RxSwift核心</h2><ol>
+<li>Observable - 产生事件</li>
+<li>Observer - 响应事件</li>
+<li>Operator - 创建变化组合事件</li>
+<li>Disposable - 管理绑定(订阅)的生命周期</li>
+<li>Schedulers - 线程队列调配</li>
+</ol>
+<h3 id="4-1-1-Observable-可被监听的序列"><a href="#4-1-1-Observable-可被监听的序列" class="headerlink" title="4.1.1 Observable - 可被监听的序列"></a>4.1.1 Observable - 可被监听的序列</h3><p>所有的事物都是序列. Observable可以用来描述元素异步产生的序列. 我们生活中许多事物都可以通过它来表示, 例如: 温度变化的序列(Observable<double>), 网络请求JSON序列(Observable<json>). </json></double></p>
+<p><strong>Event - 事件</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">public enum Event&lt;Element&gt; &#123;</span><br><span class="line">    case next(Element)</span><br><span class="line">    case error(Swift.Error)</span><br><span class="line">    case completed</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>next - 序列产生一个新的元素;</li>
+<li>error - 创建序列时候产生一个错误,导致序列终止;</li>
+<li>completed - 序列的所有元素都已经成功产生,整个序列已经完成;</li>
+</ul>
+<p><strong>特征序列</strong></p>
+<p>RxSwift中, Observable也存在一些特征序列, 这些特征序列可以帮助我们更准确的描述序列. 并且他们还可以给我们提供语法糖, 让我们使用更优雅的方式书写代码.分别有: Single, Completable, Maybe, Driver, ControlEvent. </p>
+<h3 id="4-1-2-Single"><a href="#4-1-2-Single" class="headerlink" title="4.1.2 Single"></a>4.1.2 Single</h3><p>Singles=使Observable的另一个版本. 不像Observable可以发出多个元素, 它要么只发出一个元素, 要么产生一个error事件.</p>
+<ul>
+<li>发出一个元素, 或者一个error事件</li>
+<li>不会共享状态变化</li>
+</ul>
+<p>一个常见的例子使执行http请求, 然后返回一个应答或者错误. 不过你<strong>可以使用Single来描述任何只有一个元素的序列</strong>.</p>
+<p><code>SingleEvent</code>的枚举:</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">enum</span> <span class="title">SingleEvent</span>&lt;<span class="title">Element</span>&gt; </span>&#123;</span><br><span class="line">    <span class="keyword">case</span> success(<span class="type">Element</span>)</span><br><span class="line">    <span class="keyword">case</span> error(<span class="type">Swift</span>.<span class="type">Error</span>)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="4-1-3-Completable"><a href="#4-1-3-Completable" class="headerlink" title="4.1.3 Completable"></a>4.1.3 Completable</h3><p>Completable是Observale的另一个版本. 它要么产生一个completed事件, 要么产生一个error事件. </p>
+<ul>
+<li>发出零个元素</li>
+<li>发出一个completed事件或者一个error事件</li>
+<li>不会共享状态变化</li>
+</ul>
+<p>Completable适用于那种只关心任务是否完成, 而不需要在意任务返回值的情况. 他和Observable<void>有点相似.</void></p>
+<p><strong>CompletableEvent的枚举:</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">public enum CompletableEvent &#123;</span><br><span class="line">    case error(Swift.Error)</span><br><span class="line">    case completed</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="4-1-4-Maybe"><a href="#4-1-4-Maybe" class="headerlink" title="4.1.4 Maybe"></a>4.1.4 Maybe</h3><p>Maybe是Observable的另一个版本. 介于Single和Completable之间, 它要么只能发出一个元素, 要么产生一个completed事件, 要么产生一个error事件.</p>
+<ul>
+<li>发出一个元素或者一个completed事件或者一个error事件</li>
+<li>不会共享状态变化</li>
+</ul>
+<h3 id="4-1-5-Driver"><a href="#4-1-5-Driver" class="headerlink" title="4.1.5 Driver"></a>4.1.5 Driver</h3><p>Driver是一个精心准备的特征序列. 它主要是为了简化UI层代码. 不过如果你遇到的序列具有以下特征, 你也可以使用它:</p>
+<ul>
+<li>不会产生error事件</li>
+<li>一定会在MainScheduler监听(主线程监听)</li>
+<li>共享状态变化</li>
+</ul>
+<p>这些都是驱动UI的序列所具有的特征.</p>
+<p><strong>示例代码:</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">/// 模拟根据shu用户输入,产生一个网络请求,网络请求结果绑定到UI上,一个UI空间展示数量,另一个产生结果</span><br><span class="line">private func testDriver() &#123;</span><br><span class="line">    let results = username.rx.text.asDriver().distinctUntilChanged()        // 将普通序列转换为 Driver</span><br><span class="line">        .throttle(0.03)</span><br><span class="line">        .flatMapLatest &#123; query in</span><br><span class="line">            return self.fetchAutoCompleteItems(keyword: query).asDriver(onErrorJustReturn: [])</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    results.map&#123;&quot;\($0.count)&quot;&#125;.drive(usernameNotice.rx.text).disposed(by: disposeBag)</span><br><span class="line">    </span><br><span class="line">    results.map&#123;&quot;\($0.description)&quot;&#125;.drive(passwordNotice.rx.text).disposed(by: disposeBag)</span><br><span class="line">&#125;</span><br><span class="line">    </span><br><span class="line">private func fetchAutoCompleteItems(keyword: String?) -&gt; Observable&lt;[String]&gt; &#123;</span><br><span class="line">    return Observable&lt;[String]&gt;.create(&#123; (observable) -&gt; Disposable in</span><br><span class="line">        DispatchQueue.global().asyncAfter(deadline: DispatchTime.now() + 0.5, execute: &#123;</span><br><span class="line">            observable.onNext([keyword!])</span><br><span class="line">        &#125;)</span><br><span class="line">        return Disposables.create()</span><br><span class="line">    &#125;)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>任何被监听的序列都可以呗转换为Driver, 只要满足三个条件: 不会产生error事件;一定在MainScheduler监听(主线程监听);共享状态变化;</p>
+<p>drive方法只能被Driver调用. 这意味着, 如果你发现代码存在driver, 那么这个序列不会产生错误事件并且一定在主线程监听. 这样你可以安全的绑定UI元素.</p>
+<h3 id="4-1-6-ControlEvent"><a href="#4-1-6-ControlEvent" class="headerlink" title="4.1.6 ControlEvent"></a>4.1.6 ControlEvent</h3><p>ControlEvent专门用于描述UI控件所产生的事件, 它具有以下特征:</p>
+<ul>
+<li>不会产生error事件</li>
+<li>一定在MainScheduler订阅(主线程订阅)</li>
+<li>一定在MainScheduler监听(主线程监听)</li>
+<li>共享状态变化</li>
+</ul>
+<h3 id="4-2-Observer-观察者"><a href="#4-2-Observer-观察者" class="headerlink" title="4.2 Observer - 观察者"></a>4.2 Observer - 观察者</h3><p>观察者是用来监听事件, 然后它需要这个事件做出响应. 例如: 弹出提示框就是观察者, 它对点击按钮这个事件做出响应.</p>
+<p><strong>如何创建观察者</strong></p>
+<p>和Observable一样, 框架已经帮我们创建好很多的观察者. 例如: view是否隐藏, button是否可点击, label当前文本, imageView的当前图片等.</p>
+<p>另外, 有一些自定义的观察者是需要我们自己创建的. 例如:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">tap.subscribe(onNext: &#123; [weak self] in</span><br><span class="line">    self?.showAlert()</span><br><span class="line">&#125;, onError: &#123; error in</span><br><span class="line">    print(&quot;发生错误： \(error.localizedDescription)&quot;)</span><br><span class="line">&#125;, onCompleted: &#123;</span><br><span class="line">    print(&quot;任务完成&quot;)</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+
+<p>创建观察者最直接的方法就是Observable的subscribe方法后面的描述, 事件发生时, 需要如何做出响应. 而观察者就是由后面的onNext, onError, onCompleted等这些闭包构建出来的.</p>
+<h3 id="4-2-1-AnyObserver"><a href="#4-2-1-AnyObserver" class="headerlink" title="4.2.1 AnyObserver"></a>4.2.1 AnyObserver</h3><p>AnyObservable可以用来描述任意一种观察者.</p>
+<p><strong>根据逻辑判断是否显示usernameNotice:</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">usernameValid.bind(to: usernameNotice.rx.isHidden).disposed(by: disposeBag)</span><br><span class="line"></span><br><span class="line">相当于下面代码:</span><br><span class="line"></span><br><span class="line">let usernameNoticeObserver: AnyObserver&lt;Bool&gt; = AnyObserver &#123; [weak self] (event) in</span><br><span class="line">    switch event &#123;</span><br><span class="line">    case .next(let isHidden):</span><br><span class="line">        self?.usernameNotice.isHidden = isHidden</span><br><span class="line">    case .error(let error):</span><br><span class="line">        print(error)</span><br><span class="line">    case .completed:</span><br><span class="line">        print(&quot;completed&quot;)</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line">    </span><br><span class="line">usernameValid.bind(to: usernameNoticeObserver).disposed(by: disposeBag)</span><br></pre></td></tr></table></figure>
+
+<p><strong>对网络请求结果的处理:</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line">URLSession.shared.rx.data(request: URLRequest(url: url))</span><br><span class="line">    .subscribe(onNext: &#123; data in</span><br><span class="line">        print(&quot;Data Task Success with count: \(data.count)&quot;)</span><br><span class="line">    &#125;, onError: &#123; error in</span><br><span class="line">        print(&quot;Data Task Error: \(error)&quot;)</span><br><span class="line">    &#125;)</span><br><span class="line">    .disposed(by: disposeBag)</span><br><span class="line">    </span><br><span class="line">相当于下面拆分后的代码:</span><br><span class="line"></span><br><span class="line">let observer: AnyObserver&lt;Data&gt; = AnyObserver &#123; (event) in</span><br><span class="line">    switch event &#123;</span><br><span class="line">    case .next(let data):</span><br><span class="line">        print(&quot;Data Task Success with count: \(data.count)&quot;)</span><br><span class="line">    case .error(let error):</span><br><span class="line">        print(&quot;Data Task Error: \(error)&quot;)</span><br><span class="line">    default:</span><br><span class="line">        break</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">URLSession.shared.rx.data(request: URLRequest(url: url))</span><br><span class="line">    .subscribe(observer)</span><br><span class="line">    .disposed(by: disposeBag)</span><br></pre></td></tr></table></figure>
+
+<h3 id="4-2-2-Binder"><a href="#4-2-2-Binder" class="headerlink" title="4.2.2 Binder"></a>4.2.2 Binder</h3><p>和Observable一样, Observer也存在特征观察者, 例如: <code>Binder</code>.</p>
+<p>Binder主要有以下两个特征:</p>
+<ul>
+<li>不会处理错误事件</li>
+<li>确保绑定都是在给定Scheduler上执行(默认MainScheduler)</li>
+</ul>
+<p>一旦产生错误事件, 在调试环境下将执行fatalError, 在发布环境将打印错误信息.</p>
+<p>如上<code>4.2.1-根据逻辑判断是否显示usernameNotice</code>代码所示, 观察者是一个UI观察者, 所以它在响应事件时候, 只会处理next事件, 并且更新UI的操作需要在主线程上执行. 因此更好的方案就是使用Binder:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">let observer: Binder&lt;Bool&gt; = Binder.init(usernameNotice) &#123; (usernameNotice, isHidden) in</span><br><span class="line">    usernameNotice.isHidden = isHidden</span><br><span class="line">&#125;</span><br><span class="line">usernameValid.bind(to: observer).disposed(by: disposeBag)</span><br></pre></td></tr></table></figure>
+
+<p>Binder只处理next事件, 并且保证响应next事件的代码一定在Scheduler上执行, 这里采用默认的MainScheduler.</p>
+<p>由于页面是否隐藏式一个常用的观察者, 所以应该让所有的UIView都提供这种观察者:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">extension Reactive where Base: UIView &#123;</span><br><span class="line">    fileprivate var isVisible: Binder&lt;Bool&gt; &#123;</span><br><span class="line">        return Binder(self.base, binding: &#123; (view, hidden) in</span><br><span class="line">            view.isHidden = hidden</span><br><span class="line">        &#125;)</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="4-3-Observable-amp-Observer既是可被监听的序列也是观察者"><a href="#4-3-Observable-amp-Observer既是可被监听的序列也是观察者" class="headerlink" title="4.3 Observable &amp; Observer既是可被监听的序列也是观察者"></a>4.3 Observable &amp; Observer既是可被监听的序列也是观察者</h3><p>我们所遇到的事务中, 有一部分非常特别, 他们既是可被监听的序列, 也是由外部文本序列来控制的当前显示内容的观察者. 许多的UI控件都有这种特性, 比如switch开关的状态, segmentControl的选中索引, datePicker的选中日期等等.</p>
+<p>RxSwift中定义了一些辅助类型, 他们既是可被监听的序列, 也是观察者. 使用合适的辅助类型, 能够帮助你更加准确的描述事物的特征: AsyncSubject, PublishSubject, ReplaySubject, BehaviorSubject, Variable, ControlProperty.</p>
+<h3 id="4-3-1-AsyncSubject"><a href="#4-3-1-AsyncSubject" class="headerlink" title="4.3.1 AsyncSubject"></a>4.3.1 AsyncSubject</h3><p>AsyncSubject将在源Observable产生完成事件后, 发出最后一个元素(仅仅只有最后一个元素), 如果源Observable没有发出任何元素, 只有一个完成事件. 那么AsyncSubject也只有一个完成事件.</p>
+<p>它会对随后的观察者发出最终元素. 如果源Observable产生了一个error事件而终止, AsnycSubject就不会发出任何元素, 而是将这个error事件发送出来.</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">private func testAsyncSubject() &#123;</span><br><span class="line">    let subject = AsyncSubject&lt;String&gt;()</span><br><span class="line">    subject.subscribe(onNext: &#123; (element) in</span><br><span class="line">        print(element)</span><br><span class="line">    &#125;, onError: &#123; (error) in</span><br><span class="line">        print(error)</span><br><span class="line">    &#125;, onCompleted: &#123;</span><br><span class="line">        print(&quot;on completed&quot;)</span><br><span class="line">    &#125;).disposed(by: disposeBag)</span><br><span class="line">    </span><br><span class="line">    subject.onNext(&quot;111&quot;)</span><br><span class="line">    subject.onNext(&quot;222&quot;)</span><br><span class="line">    subject.onNext(&quot;333&quot;)</span><br><span class="line">    subject.onCompleted()   //只会发出最后一个元素 &quot;333&quot;, 调用onCompleted才会发出元素,不调用这不会发出任何元素.</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="4-3-2-PublishSubject"><a href="#4-3-2-PublishSubject" class="headerlink" title="4.3.2 PublishSubject"></a>4.3.2 PublishSubject</h3><p>PublishSubject将对观察者发送订阅后产生的元素, 而在订阅前发出的元素将不会发送给观察者. 如果你希望观察者接受所有的元素, 你可以通过Observale的create方法来创建Observale或者使用ReplaySubject.</p>
+<p>如果Observable因为产生一个error事件而终止, 则PublishSibject就不会发出任何元素, 而将这个error事件发送出来.</p>
+<h3 id="4-3-3-ReplaySubject"><a href="#4-3-3-ReplaySubject" class="headerlink" title="4.3.3 ReplaySubject"></a>4.3.3 ReplaySubject</h3><p>ReplaySubject将对观察者发送全部的元素, 无论观察者何时进行订阅的.</p>
+<p>这里有多个版本的ReplaySubject, 有的只会将最新的n歌元素发送给观察者, 有的只会将限定时间段内最新的元素发送给观察者.</p>
+<p>如果把ReplaySubject当做观察者来使用, 注意不要再多个县城调用onNext, onError或者onCompleted. 这样会导致无需调用, 造成意想不到的结果.</p>
+<h3 id="4-3-4-BehaviorSubject"><a href="#4-3-4-BehaviorSubject" class="headerlink" title="4.3.4 BehaviorSubject"></a>4.3.4 BehaviorSubject</h3><p>当观察者对BehaviorSubject进行订阅时候, 它会将源Observable中最新的元素发送出来(如果不存在就发出默认元素). 然后将随后产生的元素发送出来.</p>
+<p>如果源产生一个error事件而终止, BehaviorSubject就不会发出任何元素, 而是将这个error事件发送出来.</p>
+<h3 id="4-3-5-Variable"><a href="#4-3-5-Variable" class="headerlink" title="4.3.5 Variable"></a>4.3.5 Variable</h3><p>即将废弃, 使用<code>BehaviorRelay</code>代替.</p>
+<h3 id="4-3-6-ControlProperty"><a href="#4-3-6-ControlProperty" class="headerlink" title="4.3.6 ControlProperty"></a>4.3.6 ControlProperty</h3><p>ControlProperty专门用来描述UI控件的, 具有以下特征:</p>
+<ul>
+<li>不会产生error事件</li>
+<li>一定在MainScheduler订阅</li>
+<li>一定在MainScheduler监听</li>
+<li>共享状态变化</li>
+</ul>
+<h3 id="4-4-Operator-操作符"><a href="#4-4-Operator-操作符" class="headerlink" title="4.4 Operator - 操作符"></a>4.4 Operator - 操作符</h3><p>操作符可以帮助我们创建新的序列, 或者变化组合原有的序列, 从而生成一个新的序列. 例如map和combineLatest都是操作符, 它们可以帮助我们构建所需要的序列.</p>
+<ul>
+<li>filter: 过滤, 符合条件的元素生成新的序列;</li>
+<li>map: 变形, 将序列中所有的元素进行变形操作;</li>
+<li>zip: 配对, 将两个或者多个Observable序列匹配起来, 例如等待两个事情完成后处理结果;</li>
+</ul>
+<p>Rx提供了充分的操作符帮助我们来创建序列. 如果内置操作符无法满足你的需求, 你也可以自定义操作符.</p>
+<p>如果你不知道该如何选择操作符, 可以参考决策树: <a href="https://beeth0ven.github.io/RxSwift-Chinese-Documentation/content/decision_tree.html" target="_blank" rel="noopener">如何选择操作符?</a></p>
+<h3 id="4-5-Disposable-可被清除的资源"><a href="#4-5-Disposable-可被清除的资源" class="headerlink" title="4.5 Disposable - 可被清除的资源"></a>4.5 Disposable - 可被清除的资源</h3><p>通常来说, 一个<strong>序列如果发出了error或者completed事件, 那么所有的内部资源都会被释放</strong>. 如果你需要提前释放那些资源或取消订阅的话, 那么你可以对返回的<code>可被清除的资源</code>调用dispose方法.</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">self.disposable = textField.rx.text.orEmpty</span><br><span class="line">        .subscribe(onNext: &#123; text in print(text) &#125;)</span><br><span class="line">self.disposable?.dispose()</span><br></pre></td></tr></table></figure>
+
+<p>调用dispose方法后, 订阅将被取消, 并且内存资源会被释放. 通常情况下, 你是不需要手动调用dispose方法的. 推荐使用清楚包(DisposeBag)或者takeUntil操作符来管理订阅的声明周期.</p>
+<p>Swift中我们习惯使用ARC管理内存. 我们可以使用ARC来管理订阅的声明周期. 在实例对象中声明DisposeBag类型的属性, 使用disposeBag属性管理订阅的声明周期.</p>
+<p>另一种实现自动取消订阅的方法就是使用takeUntil操作符, 这会使得订阅一直持续到控制器的dealloc事件产生为止.</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">override</span> <span class="function"><span class="keyword">func</span> <span class="title">viewDidLoad</span><span class="params">()</span></span> &#123;</span><br><span class="line">    <span class="keyword">super</span>.viewDidLoad()</span><br><span class="line"></span><br><span class="line">    ...</span><br><span class="line"></span><br><span class="line">    <span class="number">_</span> = usernameValid</span><br><span class="line">        .takeUntil(<span class="keyword">self</span>.rx.deallocated)</span><br><span class="line">        .bind(to: passwordOutlet.rx.isEnabled)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="4-6-Schedulers-调度器"><a href="#4-6-Schedulers-调度器" class="headerlink" title="4.6 Schedulers - 调度器"></a>4.6 Schedulers - 调度器</h3><p>Schedulers是Rx实现多线程得核心模块, 它主要用于控制任务在哪个线程或者队列运行.</p>
+<p><strong>GCD实现多线程实例:</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">DispatchQueue.global(qos: .userInitiated).async &#123;</span><br><span class="line">    let data = try? Data(contentsOf: url)</span><br><span class="line">    DispatchQueue.main.async &#123;</span><br><span class="line">        self.data = data</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><strong>RxSwift实现多线程示例:</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">let rxData: Observable&lt;Data&gt; = ...</span><br><span class="line"></span><br><span class="line">rxData</span><br><span class="line">    .subscribeOn(ConcurrentDispatchQueueScheduler(qos: .userInitiated))</span><br><span class="line">    .observeOn(MainScheduler.instance)</span><br><span class="line">    .subscribe(onNext: &#123; [weak self] data in</span><br><span class="line">        self?.data = data</span><br><span class="line">    &#125;)</span><br><span class="line">    .disposed(by: disposeBag)</span><br></pre></td></tr></table></figure>
+
+<p><strong>subscribeOn:</strong>我们使用subscribeOn来决定数据序列的构建函数在哪个Scheduler上运行. 以上例子中, 由于获取Data需要花费很长时间, 所以subscribeOn切换到后台Scheduler来获取Data. 这样可以避免主线程被阻塞.</p>
+<p><strong>observeOn:</strong>我们用observeOn来决定在哪个Scheduler监听这个数据序列. 上面例子中我们使用observeOn方法切换到主线程来监听并且处理结果.</p>
+<p>一个典型的例子就是, 在后台发起网络请求, 然后解析数据, 最后在主线程刷新页面. 你就可以先用subcribeOn切换到后台去发送网络请求并解析数据, 最后使用observeOn切换到主线程更新页面.</p>
+<ul>
+<li><strong>MainScheduler:</strong> 主线程, 如果你需要执行一些UI相关任务, 就需要切换到该Scheduler运行.</li>
+<li><strong>SerialDispatchQueueScheduler:</strong> 抽象了串行DispatchQueue, 如果你需要执行一些串行任务, 可以切换到这个Scheduler运行.</li>
+<li><strong>ConcurrentDispatchQueueScheduler:</strong> 抽象了并行DispatchQueue, 如果你需要执行一些并发任务, 可以切换到这个Scheduler运行.</li>
+<li><strong>OperationQueueScheduler:</strong> 抽象了NSOperationQueue. 具备NSOperationQueue的一些特定,例如你可以设置maxConcurrentOperationCount来控制同时执行并发任务的最大数量.</li>
+</ul>
+<h3 id="4-7-Error-Handling-错误处理"><a href="#4-7-Error-Handling-错误处理" class="headerlink" title="4.7 Error Handling - 错误处理"></a>4.7 Error Handling - 错误处理</h3><p>一旦序列产生了一个error事件, 整个序列将被终止. RxSwift主要有两种错误处理机制: retry, catch</p>
+<h4 id="1-retry-重试"><a href="#1-retry-重试" class="headerlink" title="1. retry - 重试"></a>1. retry - 重试</h4><p>retry可以让序列在发生错误后重试,如果<code>query.retry(3)</code>, 表示当序列发生错误时候, 进行重试操作, 并且最多重试3次.</p>
+<h4 id="2-retryWhen"><a href="#2-retryWhen" class="headerlink" title="2. retryWhen"></a>2. retryWhen</h4><p>当发生错误时候, 经过一端延时后进行重试. </p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">// 请求 JSON 失败时，等待 5 秒后重试，</span><br><span class="line">let retryDelay: Double = 5  // 重试延时 5 秒</span><br><span class="line"></span><br><span class="line">rxJson</span><br><span class="line">    .retryWhen &#123; (rxError: Observable&lt;Error&gt;) -&gt; Observable&lt;Int&gt; in</span><br><span class="line">        return Observable.timer(retryDelay, scheduler: MainScheduler.instance)</span><br><span class="line">    &#125;</span><br><span class="line">    .subscribe(...)</span><br><span class="line">    .disposed(by: disposeBag)</span><br></pre></td></tr></table></figure>
+
+<h4 id="3-catchError-恢复"><a href="#3-catchError-恢复" class="headerlink" title="3. catchError - 恢复"></a>3. catchError - 恢复</h4><p>catchError可以在错误产生时候, 用一个备用元素或者一组备用元素将错误替换掉: </p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">searchBar.rx.text.orEmpty</span><br><span class="line">    ...</span><br><span class="line">    .flatMapLatest &#123; query -&gt; Observable&lt;[Repository]&gt; in</span><br><span class="line">        ...</span><br><span class="line">        return searchGitHub(query)</span><br><span class="line">            .catchErrorJustReturn([])</span><br><span class="line">    &#125;</span><br><span class="line">    ...</span><br><span class="line">    .bind(to: ...)</span><br><span class="line">    .disposed(by: disposeBag)</span><br></pre></td></tr></table></figure>
+
+<p>如上所示, 当产生错误时候, 就返回一个空数组, 于是就会显示一个空列表页面.</p>
+<h4 id="4-Result"><a href="#4-Result" class="headerlink" title="4. Result"></a>4. Result</h4><p>我们可以使用<code>Result</code>类型包装序列的结果, 如果发生错误则使用failure包装错误类型, 如果成功则使用success包装需要返回的元素. 这样即使序列产生错误也不会终止这个那个序列. 就算网络请求失败, 整个订阅依然存在. 如果用户再次点击更新按钮, 也是能够发起网络请求进行更新操作的.</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">// 自定义一个枚举类型 Result</span><br><span class="line">public enum Result&lt;T&gt; &#123;</span><br><span class="line">    case success(T)</span><br><span class="line">    case failure(Swift.Error)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h1 id="5-一些问题以及解答"><a href="#5-一些问题以及解答" class="headerlink" title="5.一些问题以及解答"></a>5.一些问题以及解答</h1><p>什么是函数式编程?</p>
+<blockquote>
+<p><strong>函数式编程</strong>是一种编程范式, 它需要我们将函数作为参数进行传递, 或者作为返回值返还. 我们可以通过组合不同的函数来得到想要的结果. 举例swift提供的高阶函数:filter,map,reduce,flatMap等.</p>
+</blockquote>
+<p>什么是响应式编程?</p>
+<blockquote>
+<p>我们通过不同的构建函数, 来创建所需要的数据序列. 最后通过适当的方式来响应这个序列. 这就是<strong>函数响应式编程</strong>.</p>
+</blockquote>
+<p>使用RxSwift有什么好处?</p>
+<blockquote>
+<p>1.更加方便的实现数据绑定，构建清晰的数据流。结合MVVM使用RxSwift实现数据绑定，代码逻辑也更加清晰。</p>
+<p>2.将复杂业务代码分离到ViewModel中，减轻Controller的负担。（通过官方示例Demo来说明）</p>
+</blockquote>
+<p>RxSwift常用变形函数？</p>
+<blockquote>
+<p>map：变形，flatMapLeatest：只接受最新的一个，比如一次发出2个，只会对最新发出的一个做响应。</p>
+</blockquote>
+<p>bind和subscribe的区别是什么?</p>
+<blockquote>
+<p>bind需要保证一定不会出错，一定发生在主线程上，主要用来绑定UI视图。</p>
+</blockquote>
+<p>RxSwift内部实现原理是什么？</p>
+<blockquote>
+<p>通过观察者设计模式来实现的，建立订阅实际上可以看成是添加监听的过程。Observable可以看成是自动提供包含监听方法的一个对象，调用方法传入参数即可完成添加监听这样的 功能；Disposable相当于一个移除观察者的过程，也因此在RxSwift中，DisposeBag是必须的。</p>
+<p>在OC中，RxSwift可以通过KVO来实现监听，实质上和使用通知模式实现监听是一模一样的。</p>
+</blockquote>
+<p><strong>相关关键字：</strong></p>
+<blockquote>
+<p>函数式编程、响应式编程、数据绑定、任务依赖、Obervable、Observer、disposable、Single、Completable、Maybe、Driver、bind、subscribe、变形函数、RxDataSources</p>
+</blockquote>
+<p>Reference: <a href="https://beeth0ven.github.io/RxSwift-Chinese-Documentation" target="_blank" rel="noopener">https://beeth0ven.github.io/RxSwift-Chinese-Documentation</a></p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/posts/2019-09/56414.html" rel="prev" title="【算法】Leetcode精选-持续更新中">
+      <i class="fa fa-chevron-left"></i> 【算法】Leetcode精选-持续更新中
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/posts/2019-11/52136.html" rel="next" title="【译】如何在Set集合中避免重复元素">
+      【译】如何在Set集合中避免重复元素 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+    <div class="comments" id="valine-comments"></div>
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-RxSwift能帮助我们做什么"><span class="nav-number">1.</span> <span class="nav-text">1. RxSwift能帮助我们做什么?</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-1-Target-Action"><span class="nav-number">1.1.</span> <span class="nav-text">1.1 Target Action</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-2-代理"><span class="nav-number">1.2.</span> <span class="nav-text">1.2 代理</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-3-闭包回掉"><span class="nav-number">1.3.</span> <span class="nav-text">1.3 闭包回掉</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-4-通知"><span class="nav-number">1.4.</span> <span class="nav-text">1.4 通知</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-5-KVO"><span class="nav-number">1.5.</span> <span class="nav-text">1.5 KVO</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-6-多个任务之间有依赖关系"><span class="nav-number">1.6.</span> <span class="nav-text">1.6 多个任务之间有依赖关系</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-7-等待多个并发任务完成后处理结果"><span class="nav-number">1.7.</span> <span class="nav-text">1.7 等待多个并发任务完成后处理结果</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-一个简单的输入验证dmeo"><span class="nav-number">2.</span> <span class="nav-text">2. 一个简单的输入验证dmeo</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-函数响应式编程"><span class="nav-number">3.</span> <span class="nav-text">3. 函数响应式编程</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-RxSwift核心"><span class="nav-number">4.</span> <span class="nav-text">4. RxSwift核心</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#4-1-1-Observable-可被监听的序列"><span class="nav-number">4.1.</span> <span class="nav-text">4.1.1 Observable - 可被监听的序列</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-1-2-Single"><span class="nav-number">4.2.</span> <span class="nav-text">4.1.2 Single</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-1-3-Completable"><span class="nav-number">4.3.</span> <span class="nav-text">4.1.3 Completable</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-1-4-Maybe"><span class="nav-number">4.4.</span> <span class="nav-text">4.1.4 Maybe</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-1-5-Driver"><span class="nav-number">4.5.</span> <span class="nav-text">4.1.5 Driver</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-1-6-ControlEvent"><span class="nav-number">4.6.</span> <span class="nav-text">4.1.6 ControlEvent</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-2-Observer-观察者"><span class="nav-number">4.7.</span> <span class="nav-text">4.2 Observer - 观察者</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-2-1-AnyObserver"><span class="nav-number">4.8.</span> <span class="nav-text">4.2.1 AnyObserver</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-2-2-Binder"><span class="nav-number">4.9.</span> <span class="nav-text">4.2.2 Binder</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-3-Observable-amp-Observer既是可被监听的序列也是观察者"><span class="nav-number">4.10.</span> <span class="nav-text">4.3 Observable &amp; Observer既是可被监听的序列也是观察者</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-3-1-AsyncSubject"><span class="nav-number">4.11.</span> <span class="nav-text">4.3.1 AsyncSubject</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-3-2-PublishSubject"><span class="nav-number">4.12.</span> <span class="nav-text">4.3.2 PublishSubject</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-3-3-ReplaySubject"><span class="nav-number">4.13.</span> <span class="nav-text">4.3.3 ReplaySubject</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-3-4-BehaviorSubject"><span class="nav-number">4.14.</span> <span class="nav-text">4.3.4 BehaviorSubject</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-3-5-Variable"><span class="nav-number">4.15.</span> <span class="nav-text">4.3.5 Variable</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-3-6-ControlProperty"><span class="nav-number">4.16.</span> <span class="nav-text">4.3.6 ControlProperty</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-4-Operator-操作符"><span class="nav-number">4.17.</span> <span class="nav-text">4.4 Operator - 操作符</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-5-Disposable-可被清除的资源"><span class="nav-number">4.18.</span> <span class="nav-text">4.5 Disposable - 可被清除的资源</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-6-Schedulers-调度器"><span class="nav-number">4.19.</span> <span class="nav-text">4.6 Schedulers - 调度器</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-7-Error-Handling-错误处理"><span class="nav-number">4.20.</span> <span class="nav-text">4.7 Error Handling - 错误处理</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-retry-重试"><span class="nav-number">4.20.1.</span> <span class="nav-text">1. retry - 重试</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-retryWhen"><span class="nav-number">4.20.2.</span> <span class="nav-text">2. retryWhen</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-catchError-恢复"><span class="nav-number">4.20.3.</span> <span class="nav-text">3. catchError - 恢复</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#4-Result"><span class="nav-number">4.20.4.</span> <span class="nav-text">4. Result</span></a></li></ol></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#5-一些问题以及解答"><span class="nav-number"></span> <span class="nav-text">5.一些问题以及解答</span></a></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="韦东方"
+      src="/resource/images/head_icon180.jpg">
+  <p class="site-author-name" itemprop="name">韦东方</p>
+  <div class="site-description" itemprop="description">You never know where your limitation is without trying.</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">24</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+        <span class="site-state-item-count">10</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">1</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="http://readingnote.weidongfang.online" title="Reading → http://readingnote.weidongfang.online" rel="noopener" target="_blank"><i class="fa fa-book-reader fa-fw"></i>Reading</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:dev.dongfang@gmail.com" title="E-mail → mailto:dev.dongfang@gmail.com" rel="noopener" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-mail</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="/atom.xml" title="RSS → /atom.xml"><i class="fa fa-rss fa-fw"></i>RSS</a>
+      </span>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+  <div class="beian"><a href="https://beian.miit.gov.cn" rel="noopener" target="_blank">京ICP备20017039号-1 </a>
+  </div>
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">@dev.dongfang</span>
+</div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+<script src="/js/utils.js"></script><script src="/js/motion.js"></script>
+<script src="/js/schemes/pisces.js"></script>
+<script src="/js/next-boot.js"></script>
+
+
+
+  
+  <script>
+    (function(){
+      var canonicalURL, curProtocol;
+      //Get the <link> tag
+      var x=document.getElementsByTagName("link");
+		//Find the last canonical URL
+		if(x.length > 0){
+			for (i=0;i<x.length;i++){
+				if(x[i].rel.toLowerCase() == 'canonical' && x[i].href){
+					canonicalURL=x[i].href;
+				}
+			}
+		}
+    //Get protocol
+	    if (!canonicalURL){
+	    	curProtocol = window.location.protocol.split(':')[0];
+	    }
+	    else{
+	    	curProtocol = canonicalURL.split(':')[0];
+	    }
+      //Get current URL if the canonical URL does not exist
+	    if (!canonicalURL) canonicalURL = window.location.href;
+	    //Assign script content. Replace current URL with the canonical URL
+      !function(){var e=/([http|https]:\/\/[a-zA-Z0-9\_\.]+\.baidu\.com)/gi,r=canonicalURL,t=document.referrer;if(!e.test(r)){var n=(String(curProtocol).toLowerCase() === 'https')?"https://sp0.baidu.com/9_Q4simg2RQJ8t7jm9iCKT-xh_/s.gif":"//api.share.baidu.com/s.gif";t?(n+="?r="+encodeURIComponent(document.referrer),r&&(n+="&l="+r)):r&&(n+="?l="+r);var i=new Image;i.src=n}}(window);})();
+  </script>
+
+
+
+
+  <script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+
+<script>
+NexT.utils.loadComments(document.querySelector('#valine-comments'), () => {
+  NexT.utils.getScript('//unpkg.com/valine/dist/Valine.min.js', () => {
+    var GUEST = ['nick', 'mail', 'link'];
+    var guest = 'nick,mail,link';
+    guest = guest.split(',').filter(item => {
+      return GUEST.includes(item);
+    });
+    new Valine({
+      el         : '#valine-comments',
+      verify     : false,
+      notify     : true,
+      appId      : 'vMrO1hYoNr03pjrQ0iIUSSLL-gzGzoHsz',
+      appKey     : 'iyTSJjyCkkOSrXToutmor7ru',
+      placeholder: "欢迎留言！",
+      avatar     : 'mm',
+      meta       : guest,
+      pageSize   : '15' || 10,
+      visitor    : false,
+      lang       : 'zh-cn' || 'zh-cn',
+      path       : location.pathname,
+      recordIP   : false,
+      serverURLs : ''
+    });
+  }, window.Valine);
+});
+</script>
+
+</body>
+</html>

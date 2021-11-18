@@ -1,0 +1,454 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <title>Dev-Dongfang</title>
+  
+  <subtitle>iOS、逆向与安全、swift、flutter、linux，爱生活、爱代码、爱分享。</subtitle>
+  <link href="/atom.xml" rel="self"/>
+  
+  <link href="http://blog.weidongfang.online/"/>
+  <updated>2021-06-01T07:08:13.294Z</updated>
+  <id>http://blog.weidongfang.online/</id>
+  
+  <author>
+    <name>韦东方</name>
+    
+  </author>
+  
+  <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>《如何做好一场技术演讲》— 学习与总结</title>
+    <link href="http://blog.weidongfang.online/posts/2021-06/6350866.html"/>
+    <id>http://blog.weidongfang.online/posts/2021-06/6350866.html</id>
+    <published>2021-06-01T06:53:58.000Z</published>
+    <updated>2021-06-01T07:08:13.294Z</updated>
+    
+    <summary type="html">
+    
+      &lt;p&gt;演讲和当众讲话是每个人都无法避免的事情，也是当今世界非常重要的个人技能。纵然你有天纵之才，你也需要表达出来，别人才能够知道，表达出来你才会有更多的机会和资源表现自己，实现自己。TED掌门人克里斯安德森曾说，&lt;strong&gt;无论今天公众演讲有多么重要，未来只会更加重要。&lt;/strong&gt;&lt;/p&gt;
+    
+    </summary>
+    
+    
+      <category term="极客时间" scheme="http://blog.weidongfang.online/categories/%E6%9E%81%E5%AE%A2%E6%97%B6%E9%97%B4/"/>
+    
+    
+  </entry>
+  
+  <entry>
+    <title>《将心注入-一杯咖啡成就星巴克传奇》— 阅读与总结</title>
+    <link href="http://blog.weidongfang.online/posts/2021-05/591hsi.html"/>
+    <id>http://blog.weidongfang.online/posts/2021-05/591hsi.html</id>
+    <published>2021-05-22T05:00:24.000Z</published>
+    <updated>2021-06-01T09:30:15.466Z</updated>
+    
+    <summary type="html">
+    
+      &lt;p&gt;星巴克在国内的定价算是比较贵的，至少对于我来讲是比较贵的，为了做本次的阅读总结，我专程跑到附近的星巴克咖啡店体验了一番。看完这本书后再去体验，对星巴克的文化有了更深理解，这不是第一次去，但这次喝星巴克有了不一样的感觉。
+    
+    </summary>
+    
+    
+      <category term="reading" scheme="http://blog.weidongfang.online/categories/reading/"/>
+    
+    
+  </entry>
+  
+  <entry>
+    <title>《随机漫步的傻瓜》— 阅读与总结</title>
+    <link href="http://blog.weidongfang.online/posts/2021-05/ueysksioajd.html"/>
+    <id>http://blog.weidongfang.online/posts/2021-05/ueysksioajd.html</id>
+    <published>2021-05-15T18:13:58.000Z</published>
+    <updated>2021-06-01T09:38:53.278Z</updated>
+    
+    <summary type="html">
+    
+      &lt;p&gt;这应该不是我第一次阅读这本书，早几年就阅读过一次，当时没有做系统的总结，所以给我留下的印象并不多。这次阅读这本书源自于吴军老师的《硅谷来信》上看到的书名，吴军老师对书中的观点信手拈来，因此我觉得自己是时候重读一遍了。&lt;/p&gt;
+&lt;p&gt;本次阅读，感觉这本书部分章节的观点是比较晦涩的，有的章节很努力的想要搞清楚作者想要表达什么，但是阅读下来根本搞不清楚作者想要表达的点。不过，按照主题分类，作者几个重要观点叙述还是非常清晰明白的，很容易理解。阅读的意义就在于能从中学到什么，哪怕只有一句话，那么阅读都是有益的。本次阅读加上今天的总结，还是给我留下很多宝贵的观点的。例如随机性和黑天鹅、归纳法的局限性、幸存者偏差、生活中的非对称和非线性事件、我们都是概率盲、如何生活再随机世界中等。有些是我已经拥有的观点了，不过通过阅读本书还是能够加深自己对观点的理解和认识，总体上看，受益匪浅。&lt;/p&gt;
+    
+    </summary>
+    
+    
+      <category term="reading" scheme="http://blog.weidongfang.online/categories/reading/"/>
+    
+    
+  </entry>
+  
+  <entry>
+    <title>【iOS】如何实现弱引用字典，并在对象释放时自动移除？</title>
+    <link href="http://blog.weidongfang.online/posts/2021-04/ye238s3iweir3.html"/>
+    <id>http://blog.weidongfang.online/posts/2021-04/ye238s3iweir3.html</id>
+    <published>2021-04-28T03:10:55.000Z</published>
+    <updated>2021-04-28T07:33:37.218Z</updated>
+    
+    <summary type="html">
+    
+      &lt;blockquote&gt;
+&lt;p&gt;这个问题来自一道面试题，去年换工作时候碰到的一个问题，现场并没有想到完整的解决方案，面试结束后想到了可行的解决方案。&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;我们知道，在objc中，数组和字典中必须存放真实存在的对象，如果存储nil就会导致崩溃，当数组或者字典持有一个对象时候，会自动对对象的引用计数做+1操作。在一些实际开发场景，一方面我们希望保存对象的引用，另一方并不想干预对象的正常释放流程，这时候使用NSArray或者NSDictionary就会有问题了。&lt;/p&gt;
+&lt;p&gt;幸运的是，objc中也提供了几个可以存储弱引用的序列，NSMapTable、NSHashTable、NSPointerArray。在开发中如果有需要存储弱引用的场景，可以使用这些序列。&lt;/p&gt;
+&lt;p&gt;那么，我们应该如何实现一个弱引用序列？如何存储对象的弱引用？对象释放后，又是如何将对象从序列中移除掉？这些个问题也是本文需要解决的关键问题。&lt;/p&gt;
+    
+    </summary>
+    
+    
+      <category term="iOS" scheme="http://blog.weidongfang.online/categories/iOS/"/>
+    
+    
+  </entry>
+  
+  <entry>
+    <title>【译】优化签名流程——为编译提速</title>
+    <link href="http://blog.weidongfang.online/posts/2020-12/83620274.html"/>
+    <id>http://blog.weidongfang.online/posts/2020-12/83620274.html</id>
+    <published>2020-12-26T08:59:41.000Z</published>
+    <updated>2021-02-14T13:36:36.613Z</updated>
+    
+    <summary type="html">
+    
+      &lt;p&gt;原文链接：&lt;a href=&quot;https://eisel.me/signing&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;https://eisel.me/signing&lt;/a&gt; &lt;/p&gt;
+&lt;h2 id=&quot;介绍&quot;&gt;&lt;a href=&quot;#介绍&quot; class=&quot;headerlink&quot; title=&quot;介绍&quot;&gt;&lt;/a&gt;介绍&lt;/h2&gt;&lt;p&gt;不管你的项目使用的是增量编译还是全量编译，代码签名所占用时间都是相同的。App体积越大签名时间也越长，因此，签名有时候会成为你编译耗时的瓶颈。这里有几个可以减少代码签名耗时的技巧，严格的说，这些技巧并没有文档记录可考证，在将来也有可能被禁用，但是也有大公司在使用，目前并没有发现明显的劣势。&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;注意&lt;/strong&gt;：这些技巧只能用于开发环境。&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;注意&lt;/strong&gt;：请查看代码签名的耗时，即你能够节省的时间，并确定这些时间对你来说是否重要。&lt;/p&gt;
+    
+    </summary>
+    
+    
+      <category term="翻译" scheme="http://blog.weidongfang.online/categories/%E7%BF%BB%E8%AF%91/"/>
+    
+    
+  </entry>
+  
+  <entry>
+    <title>【译】SwiftUI中常见的8个错误以及解决方案</title>
+    <link href="http://blog.weidongfang.online/posts/2020-11/2dya62uis2.html"/>
+    <id>http://blog.weidongfang.online/posts/2020-11/2dya62uis2.html</id>
+    <published>2020-11-15T07:07:45.000Z</published>
+    <updated>2020-11-15T07:35:01.374Z</updated>
+    
+    <summary type="html">
+    
+      &lt;blockquote&gt;
+&lt;p&gt;原文：&lt;a href=&quot;https://www.hackingwithswift.com/articles/224/common-swiftui-mistakes-and-how-to-fix-them&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;8 Common SwiftUI Mistakes - and how to fix them&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;作者：&lt;a href=&quot;https://www.hackingwithswift.com/about&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;Paul Hudson&lt;/a&gt;  2020/10/9   twitter：&lt;a href=&quot;https://twitter.com/twostraws&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;@twostraws&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;翻译：韦东方&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;img src=&quot;https://www.hackingwithswift.com/uploads/swiftui.jpg&quot; style=&quot;width:1000%&quot;&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;用更少的代码做更多的事情。&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;SwiftUI是一个大型的、复杂的框架，也是一个非常有意思的框架，不过对于初学者很多地方都很容易出错。这篇文章我将介绍8个初学者常犯的错误，以及其解决方案。&lt;/p&gt;
+&lt;p&gt;有些错误实际上是误解，因为SwiftUI是如此的复杂，某些细节上很容易造成误解。另外一些错误是由于对SwiftUI工作原理理解不够透彻，或者思维习惯还留在UIKit时代而造成的。例如有时候你会花费大量的时间写视图和修饰器，而没有预留足够的时间去简化最终的代码。&lt;/p&gt;
+    
+    </summary>
+    
+    
+      <category term="翻译" scheme="http://blog.weidongfang.online/categories/%E7%BF%BB%E8%AF%91/"/>
+    
+    
+  </entry>
+  
+  <entry>
+    <title>【算法】全排列/组合问题全解</title>
+    <link href="http://blog.weidongfang.online/posts/2020-09/8fysm.html"/>
+    <id>http://blog.weidongfang.online/posts/2020-09/8fysm.html</id>
+    <published>2020-09-25T12:13:21.000Z</published>
+    <updated>2020-09-29T05:06:09.000Z</updated>
+    
+    <summary type="html">
+    
+      &lt;p&gt;算法中的排列组合问题说难也不难，只要掌握排列组合的技巧，实际上所有相关的问题都会迎刃而解，本篇将循序渐进的破解排列组合问题中的经典算法。&lt;/p&gt;
+    
+    </summary>
+    
+    
+      <category term="算法" scheme="http://blog.weidongfang.online/categories/%E7%AE%97%E6%B3%95/"/>
+    
+    
+  </entry>
+  
+  <entry>
+    <title>Raspberry挂载移动硬盘的坑：解决挂载失败导致raspberry系统无法启动的问题</title>
+    <link href="http://blog.weidongfang.online/posts/2020-05/58865.html"/>
+    <id>http://blog.weidongfang.online/posts/2020-05/58865.html</id>
+    <published>2020-05-26T10:19:17.000Z</published>
+    <updated>2021-04-28T06:56:49.635Z</updated>
+    
+    <summary type="html">
+    
+      &lt;p&gt;第一次玩raspberry，踩了不少的坑，在挂载移动硬盘上走了不少的弯路，同时也学到了很多。关于挂载移动硬盘，主要遇到两个问题，第一个问题是挂载后的移动硬盘目录权限和所属关系无法修改；第二个问题是挂载失败导致raspberry系统无法启动的问题。&lt;/p&gt;
+&lt;p&gt;关于第一个问题的解决方法，上篇博客已经有了解释，详情请&lt;a href=&quot;http://blog.weidongfang.online/posts/2020-05/50924.html&quot;&gt;点这里&lt;/a&gt;。这里主要讲解挂载失败导致系统无法重启的探索发现过程。&lt;/p&gt;
+    
+    </summary>
+    
+    
+      <category term="Linux" scheme="http://blog.weidongfang.online/categories/Linux/"/>
+    
+    
+  </entry>
+  
+  <entry>
+    <title>linux/raspberry中挂载外接硬盘</title>
+    <link href="http://blog.weidongfang.online/posts/2020-05/50924.html"/>
+    <id>http://blog.weidongfang.online/posts/2020-05/50924.html</id>
+    <published>2020-05-24T16:54:56.000Z</published>
+    <updated>2021-04-28T03:09:58.764Z</updated>
+    
+    <summary type="html">
+    
+      &lt;p&gt;最近在学一个linux课程，于是就入手了一个raspberry开始折腾，在挂载外接硬盘过程中走了不少的弯路，希望记下来能够帮助更多的人。这里我写的可能并不太详细，但是尽可能的系统，具体到挂载的每个技术点上，更多的详情可以自行google。如果操作上有任何问题和疑问可以和我联系，一起探讨。&lt;/p&gt;
+&lt;p&gt;实践中，我是在树莓派&lt;code&gt;Raspbian&lt;/code&gt;系统中操作的，但是我认为其他linux操作系统都是一样的道理。&lt;/p&gt;
+    
+    </summary>
+    
+    
+      <category term="Linux" scheme="http://blog.weidongfang.online/categories/Linux/"/>
+    
+    
+  </entry>
+  
+  <entry>
+    <title>【笔记】ngrok搭建你自己的内网穿透</title>
+    <link href="http://blog.weidongfang.online/posts/2020-05/40324.html"/>
+    <id>http://blog.weidongfang.online/posts/2020-05/40324.html</id>
+    <published>2020-05-21T04:36:57.000Z</published>
+    <updated>2021-04-28T06:55:38.891Z</updated>
+    
+    <summary type="html">
+    
+      &lt;p&gt;大概两周前，入手了一块树莓派，然后就开始各种折腾，安装了php环境，安装了nginx、部署了静态博客、安装了Django环境，部署了Django项目、安装了Owncloud+aria私人网盘和下载器。接下来想要探索一下外网访问，第一个想到的是花生壳，花生壳的内网穿透还算稳定，官方使用教程也比较详细，很快就搭建好了。&lt;/p&gt;
+&lt;p&gt;可是，作为一个技术人，不自己动手搭建内网穿透怎么过瘾？网上有很多关于内网穿透的技术，最终我选择两种来实操了一下。其一是ngrok，其二是ssh反向代理。&lt;/p&gt;
+    
+    </summary>
+    
+    
+      <category term="Linux" scheme="http://blog.weidongfang.online/categories/Linux/"/>
+    
+    
+  </entry>
+  
+  <entry>
+    <title>【笔记】区块链技术</title>
+    <link href="http://blog.weidongfang.online/posts/2020-04/8260.html"/>
+    <id>http://blog.weidongfang.online/posts/2020-04/8260.html</id>
+    <published>2020-04-08T11:16:07.000Z</published>
+    <updated>2020-05-30T15:04:28.000Z</updated>
+    
+    <summary type="html">
+    
+      &lt;p&gt;不可否认，区块链技术是一个很有想象力的新技术，区块链技术的革命性在于去中心化，但区块链技术的发展却越来约中心化，这像极了整个人类历史的发展。人类的聚集形式从部落到村落再到国家、全球化，区块链技术也从Pow到Pos再到DPos，区块链的发展似乎再次证明了中心化的优越性。&lt;/p&gt;
+&lt;p&gt;区块链技术到底是怎么回事呢？&lt;/p&gt;
+    
+    </summary>
+    
+    
+      <category term="区块链" scheme="http://blog.weidongfang.online/categories/%E5%8C%BA%E5%9D%97%E9%93%BE/"/>
+    
+    
+  </entry>
+  
+  <entry>
+    <title>【算法】手撕五花八门的字符串匹配算法</title>
+    <link href="http://blog.weidongfang.online/posts/2020-04/41401.html"/>
+    <id>http://blog.weidongfang.online/posts/2020-04/41401.html</id>
+    <published>2020-04-03T04:29:49.000Z</published>
+    <updated>2020-05-30T15:04:28.000Z</updated>
+    
+    <summary type="html">
+    
+      &lt;p&gt;字符串匹配在计算机领域是个老生常谈的问题，对于任何一个开发工程师来说应该都不陌生，我们常用的各种语言一般都提供有字符串查找相关的方法，比如swift语言String相关的&lt;code&gt;contains&lt;/code&gt;、&lt;code&gt;hasPrefix&lt;/code&gt;、&lt;code&gt;first(where:)&lt;/code&gt;等方法，他们底层的实现就是依赖字符串匹配算法的。&lt;/p&gt;
+&lt;p&gt;字符串匹配算法有很多，这里只讲单模式串匹配算法，包括：BF算法、RK算法、BM算法、KMP算法。&lt;/p&gt;
+    
+    </summary>
+    
+    
+    
+      <category term="算法" scheme="http://blog.weidongfang.online/tags/%E7%AE%97%E6%B3%95/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>《设计模式》— 阅读笔记</title>
+    <link href="http://blog.weidongfang.online/posts/2020-03/62842.html"/>
+    <id>http://blog.weidongfang.online/posts/2020-03/62842.html</id>
+    <published>2020-03-03T02:55:15.000Z</published>
+    <updated>2020-05-30T15:53:42.000Z</updated>
+    
+    <summary type="html">
+    
+      &lt;blockquote&gt;
+&lt;p&gt;这篇设计模式笔记内容，绝大部分来自于&lt;a href=&quot;https://blog.csdn.net/LoveLion/article/details/17517213&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;刘伟老师的博客&lt;/a&gt;，部分来自书本《精通swift设计模式》（Adam Freeman著，邱元乐译）。同时也参考了其它关于设计模式的博客与书籍，相形之下，刘伟老师关于设计模式的讲解最令人印象深刻，真正的深入浅出，详细了讲述了设计模式相关的方方面面。&lt;/p&gt;
+&lt;/blockquote&gt;
+    
+    </summary>
+    
+    
+      <category term="reading" scheme="http://blog.weidongfang.online/categories/reading/"/>
+    
+    
+  </entry>
+  
+  <entry>
+    <title>《人月神话》— 阅读笔记</title>
+    <link href="http://blog.weidongfang.online/posts/2020-03/6589.html"/>
+    <id>http://blog.weidongfang.online/posts/2020-03/6589.html</id>
+    <published>2020-03-01T16:55:15.000Z</published>
+    <updated>2020-05-30T15:53:29.000Z</updated>
+    
+    <summary type="html">
+    
+      &lt;blockquote&gt;
+&lt;p&gt;原文摘录：&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;乐观主义：&lt;/strong&gt;所有的编程人员都是乐观主义者。… “这次她肯定会运行的” “我刚刚找到了最后一个错误”。&lt;strong&gt;人月：&lt;/strong&gt;第二个谬误是在估计和进度安排中使用的工作单位﹣人月。暗示着时间和人员可以相互替换。 —— 引自章节：chapter 2-人月神话&lt;/p&gt;
+&lt;p&gt;统开发的时间安排 1／3 计划 1／6 编码 1／4 构件测试和早期系统测试 1／4 系统测试，所有构件已完成 需要特别指出的是，不为系统测试安排足够的时间简直就是一场灾难。—— 引自章节：chapter 2-人月神话&lt;/p&gt;
+&lt;/blockquote&gt;
+    
+    </summary>
+    
+    
+      <category term="reading" scheme="http://blog.weidongfang.online/categories/reading/"/>
+    
+    
+  </entry>
+  
+  <entry>
+    <title>【逆】逆向分析实践-钉钉打卡/钉钉签到/钉钉定位/远程打卡功能</title>
+    <link href="http://blog.weidongfang.online/posts/2020-02/42423.html"/>
+    <id>http://blog.weidongfang.online/posts/2020-02/42423.html</id>
+    <published>2020-02-24T15:41:34.000Z</published>
+    <updated>2020-05-30T15:04:28.000Z</updated>
+    
+    <summary type="html">
+    
+      &lt;blockquote&gt;
+&lt;p&gt;本文内容仅为iOS逆向技术研究，请勿用作非法用途。&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;在家隔离的日子过得还是比较漫长的，每天宅在家里，吃饭睡觉写代码挺无聊的。因为笔者所在公司使用钉钉打卡，于是钉钉便成了笔者本次逆向练习的目标😏。&lt;/p&gt;
+    
+    </summary>
+    
+    
+      <category term="逆向" scheme="http://blog.weidongfang.online/categories/%E9%80%86%E5%90%91/"/>
+    
+    
+  </entry>
+  
+  <entry>
+    <title>【译】不安全的Swift：Swift指针与C交互</title>
+    <link href="http://blog.weidongfang.online/posts/2020-02/13093.html"/>
+    <id>http://blog.weidongfang.online/posts/2020-02/13093.html</id>
+    <published>2020-02-14T14:42:54.000Z</published>
+    <updated>2020-05-30T15:04:28.000Z</updated>
+    
+    <summary type="html">
+    
+      &lt;blockquote&gt;
+&lt;p&gt;原文链接：&lt;a href=&quot;https://www.raywenderlich.com/7181017-unsafe-swift-using-pointers-and-interacting-with-c&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;https://www.raywenderlich.com/7181017-unsafe-swift-using-pointers-and-interacting-with-c&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;在这个教程中，你将学会如何在swift中使用指针直接操作内存。&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;默认情况下，Swift是内存安全的：Swift禁止直接的内存访问并确保你定义的变量在使用之前必须初始化。但是，这只是“默认情况下”。在 Swift中你也可以使用指针来直接访问内存。&lt;/p&gt;
+&lt;p&gt;本教程将带你快速浏览一下Swift所谓“不安全”的特性。&lt;/p&gt;
+&lt;p&gt;这里的 “不安全”并不意味着危险的错误代码，而是说编写这部分代码需要格外的小心，因为编译器并不会为这部分代码做全面的检查。&lt;/p&gt;
+    
+    </summary>
+    
+    
+      <category term="翻译" scheme="http://blog.weidongfang.online/categories/%E7%BF%BB%E8%AF%91/"/>
+    
+    
+  </entry>
+  
+  <entry>
+    <title>【算法】二分查找全解</title>
+    <link href="http://blog.weidongfang.online/posts/2020-02/56414.html"/>
+    <id>http://blog.weidongfang.online/posts/2020-02/56414.html</id>
+    <published>2020-02-13T02:49:34.000Z</published>
+    <updated>2021-05-22T17:00:04.293Z</updated>
+    
+    <summary type="html">
+    
+      
+      
+        
+        
+          &lt;p&gt;[TOC]&lt;/p&gt;
+&lt;p&gt;二分查找也称折半查找，是一种效率较高的查找方法，但是，二分查找要求线性表必须采取顺序存储结构，而且表中元素需按关键字有序排列。&lt;/p&gt;
+&lt;h1 id=&quot;1-高效的二分查找&quot;&gt;&lt;a href=&quot;#1-高效的二分查找&quot;
+        
+      
+    
+    </summary>
+    
+    
+      <category term="算法" scheme="http://blog.weidongfang.online/categories/%E7%AE%97%E6%B3%95/"/>
+    
+    
+  </entry>
+  
+  <entry>
+    <title>【逆】如何将App打包成deb安装包</title>
+    <link href="http://blog.weidongfang.online/posts/2020-01/9045.html"/>
+    <id>http://blog.weidongfang.online/posts/2020-01/9045.html</id>
+    <published>2020-01-10T12:21:45.000Z</published>
+    <updated>2021-04-28T03:10:24.702Z</updated>
+    
+    <summary type="html">
+    
+      &lt;blockquote&gt;
+&lt;p&gt;我们通过Cydia只能安装deb格式的插件，无法直接安装ipa。如果我们想要在Cydia发布应用程序类型的插件，那么必须将App打包成deb才能进行发布。&lt;/p&gt;
+&lt;/blockquote&gt;
+    
+    </summary>
+    
+    
+      <category term="逆向" scheme="http://blog.weidongfang.online/categories/%E9%80%86%E5%90%91/"/>
+    
+    
+  </entry>
+  
+  <entry>
+    <title>为什么浮点数在运算过程中会造成精度损失</title>
+    <link href="http://blog.weidongfang.online/posts/2020-01/47451.html"/>
+    <id>http://blog.weidongfang.online/posts/2020-01/47451.html</id>
+    <published>2020-01-03T12:21:45.000Z</published>
+    <updated>2020-05-30T15:04:28.000Z</updated>
+    
+    <summary type="html">
+    
+      &lt;p&gt;在日常程序开发中，很多时候我们需要用到实数，这时候我们就需要使用浮点数来表示了。现在我们先来看下面的代码：&lt;/p&gt;
+&lt;figure class=&quot;highlight swift&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;2&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;3&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;4&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;keyword&quot;&gt;let&lt;/span&gt; a: &lt;span class=&quot;type&quot;&gt;Float&lt;/span&gt; = &lt;span class=&quot;number&quot;&gt;0.2&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;keyword&quot;&gt;let&lt;/span&gt; b: &lt;span class=&quot;type&quot;&gt;Float&lt;/span&gt; = &lt;span class=&quot;number&quot;&gt;0.3&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;keyword&quot;&gt;let&lt;/span&gt; num = a * b&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;built_in&quot;&gt;print&lt;/span&gt;(num)&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;
+
+&lt;p&gt;这是一个最简单的Float乘法，你觉得打印结果是多少，0.06吗？实际上打印结果是&lt;code&gt;0.060000002&lt;/code&gt;，看到这个结果你有没有吃惊，聪明的计算机竟然连最简单的小数乘法都算不好。&lt;/p&gt;
+    
+    </summary>
+    
+    
+      <category term="其它" scheme="http://blog.weidongfang.online/categories/%E5%85%B6%E5%AE%83/"/>
+    
+    
+  </entry>
+  
+  <entry>
+    <title>【译】SwiftUI入门教程</title>
+    <link href="http://blog.weidongfang.online/posts/2019-11/57431.html"/>
+    <id>http://blog.weidongfang.online/posts/2019-11/57431.html</id>
+    <published>2019-11-06T10:23:49.000Z</published>
+    <updated>2020-05-30T15:04:28.000Z</updated>
+    
+    <summary type="html">
+    
+      &lt;p&gt;&lt;a href=&quot;https://www.hackingwithswift.com/about&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;Paul Hudson&lt;/a&gt;    October 14th 2019     &lt;a href=&quot;https://twitter.com/twostraws&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;@twostraws&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;http://img.weidongfang.online/imgbed/ios-13-1.jpg&quot; alt=&quot;img&quot;&gt;&lt;/p&gt;
+&lt;p&gt;SwiftUI是苹果公司新发布的用于构建UI界面的框架，它可以用于搭建iOS、macOS、tvOS、watchOS系统的UI界面。它采用声明式的方式进行构建，相比UIKit，使用SwiftUI搭建App更快、更安全。&lt;/p&gt;
+    
+    </summary>
+    
+    
+      <category term="翻译" scheme="http://blog.weidongfang.online/categories/%E7%BF%BB%E8%AF%91/"/>
+    
+    
+  </entry>
+  
+</feed>
