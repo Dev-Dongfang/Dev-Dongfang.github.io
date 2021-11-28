@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://blog.weidongfang.online/"/>
-  <updated>2021-06-01T07:08:13.294Z</updated>
+  <updated>2021-04-28T07:33:37.218Z</updated>
   <id>http://blog.weidongfang.online/</id>
   
   <author>
@@ -15,64 +15,6 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
-  
-  <entry>
-    <title>《如何做好一场技术演讲》— 学习与总结</title>
-    <link href="http://blog.weidongfang.online/posts/2021-06/6350866.html"/>
-    <id>http://blog.weidongfang.online/posts/2021-06/6350866.html</id>
-    <published>2021-06-01T06:53:58.000Z</published>
-    <updated>2021-06-01T07:08:13.294Z</updated>
-    
-    <summary type="html">
-    
-      &lt;p&gt;演讲和当众讲话是每个人都无法避免的事情，也是当今世界非常重要的个人技能。纵然你有天纵之才，你也需要表达出来，别人才能够知道，表达出来你才会有更多的机会和资源表现自己，实现自己。TED掌门人克里斯安德森曾说，&lt;strong&gt;无论今天公众演讲有多么重要，未来只会更加重要。&lt;/strong&gt;&lt;/p&gt;
-    
-    </summary>
-    
-    
-      <category term="极客时间" scheme="http://blog.weidongfang.online/categories/%E6%9E%81%E5%AE%A2%E6%97%B6%E9%97%B4/"/>
-    
-    
-  </entry>
-  
-  <entry>
-    <title>《将心注入-一杯咖啡成就星巴克传奇》— 阅读与总结</title>
-    <link href="http://blog.weidongfang.online/posts/2021-05/591hsi.html"/>
-    <id>http://blog.weidongfang.online/posts/2021-05/591hsi.html</id>
-    <published>2021-05-22T05:00:24.000Z</published>
-    <updated>2021-06-01T09:30:15.466Z</updated>
-    
-    <summary type="html">
-    
-      &lt;p&gt;星巴克在国内的定价算是比较贵的，至少对于我来讲是比较贵的，为了做本次的阅读总结，我专程跑到附近的星巴克咖啡店体验了一番。看完这本书后再去体验，对星巴克的文化有了更深理解，这不是第一次去，但这次喝星巴克有了不一样的感觉。
-    
-    </summary>
-    
-    
-      <category term="reading" scheme="http://blog.weidongfang.online/categories/reading/"/>
-    
-    
-  </entry>
-  
-  <entry>
-    <title>《随机漫步的傻瓜》— 阅读与总结</title>
-    <link href="http://blog.weidongfang.online/posts/2021-05/ueysksioajd.html"/>
-    <id>http://blog.weidongfang.online/posts/2021-05/ueysksioajd.html</id>
-    <published>2021-05-15T18:13:58.000Z</published>
-    <updated>2021-06-01T09:38:53.278Z</updated>
-    
-    <summary type="html">
-    
-      &lt;p&gt;这应该不是我第一次阅读这本书，早几年就阅读过一次，当时没有做系统的总结，所以给我留下的印象并不多。这次阅读这本书源自于吴军老师的《硅谷来信》上看到的书名，吴军老师对书中的观点信手拈来，因此我觉得自己是时候重读一遍了。&lt;/p&gt;
-&lt;p&gt;本次阅读，感觉这本书部分章节的观点是比较晦涩的，有的章节很努力的想要搞清楚作者想要表达什么，但是阅读下来根本搞不清楚作者想要表达的点。不过，按照主题分类，作者几个重要观点叙述还是非常清晰明白的，很容易理解。阅读的意义就在于能从中学到什么，哪怕只有一句话，那么阅读都是有益的。本次阅读加上今天的总结，还是给我留下很多宝贵的观点的。例如随机性和黑天鹅、归纳法的局限性、幸存者偏差、生活中的非对称和非线性事件、我们都是概率盲、如何生活再随机世界中等。有些是我已经拥有的观点了，不过通过阅读本书还是能够加深自己对观点的理解和认识，总体上看，受益匪浅。&lt;/p&gt;
-    
-    </summary>
-    
-    
-      <category term="reading" scheme="http://blog.weidongfang.online/categories/reading/"/>
-    
-    
-  </entry>
   
   <entry>
     <title>【iOS】如何实现弱引用字典，并在对象释放时自动移除？</title>
@@ -274,7 +216,7 @@
     <link href="http://blog.weidongfang.online/posts/2020-03/62842.html"/>
     <id>http://blog.weidongfang.online/posts/2020-03/62842.html</id>
     <published>2020-03-03T02:55:15.000Z</published>
-    <updated>2020-05-30T15:53:42.000Z</updated>
+    <updated>2021-11-28T06:52:07.400Z</updated>
     
     <summary type="html">
     
@@ -284,31 +226,6 @@
     
     </summary>
     
-    
-      <category term="reading" scheme="http://blog.weidongfang.online/categories/reading/"/>
-    
-    
-  </entry>
-  
-  <entry>
-    <title>《人月神话》— 阅读笔记</title>
-    <link href="http://blog.weidongfang.online/posts/2020-03/6589.html"/>
-    <id>http://blog.weidongfang.online/posts/2020-03/6589.html</id>
-    <published>2020-03-01T16:55:15.000Z</published>
-    <updated>2020-05-30T15:53:29.000Z</updated>
-    
-    <summary type="html">
-    
-      &lt;blockquote&gt;
-&lt;p&gt;原文摘录：&lt;/p&gt;
-&lt;p&gt;&lt;strong&gt;乐观主义：&lt;/strong&gt;所有的编程人员都是乐观主义者。… “这次她肯定会运行的” “我刚刚找到了最后一个错误”。&lt;strong&gt;人月：&lt;/strong&gt;第二个谬误是在估计和进度安排中使用的工作单位﹣人月。暗示着时间和人员可以相互替换。 —— 引自章节：chapter 2-人月神话&lt;/p&gt;
-&lt;p&gt;统开发的时间安排 1／3 计划 1／6 编码 1／4 构件测试和早期系统测试 1／4 系统测试，所有构件已完成 需要特别指出的是，不为系统测试安排足够的时间简直就是一场灾难。—— 引自章节：chapter 2-人月神话&lt;/p&gt;
-&lt;/blockquote&gt;
-    
-    </summary>
-    
-    
-      <category term="reading" scheme="http://blog.weidongfang.online/categories/reading/"/>
     
     
   </entry>
@@ -447,6 +364,86 @@
     
     
       <category term="翻译" scheme="http://blog.weidongfang.online/categories/%E7%BF%BB%E8%AF%91/"/>
+    
+    
+  </entry>
+  
+  <entry>
+    <title>【译】如何在Set集合中避免重复元素</title>
+    <link href="http://blog.weidongfang.online/posts/2019-11/52136.html"/>
+    <id>http://blog.weidongfang.online/posts/2019-11/52136.html</id>
+    <published>2019-11-03T10:23:49.000Z</published>
+    <updated>2020-05-30T15:04:28.000Z</updated>
+    
+    <summary type="html">
+    
+      &lt;blockquote&gt;
+&lt;p&gt;文章翻译自 &lt;a href=&quot;https://www.hackingwithswift.com/articles/199/avoiding-near-duplicates-in-sets&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;Avoiding near-duplicates in sets&lt;/a&gt;, 作者&lt;a href=&quot;https://www.hackingwithswift.com/about&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;Paul Hudson&lt;/a&gt; &lt;a href=&quot;https://twitter.com/twostraws&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;@twostraws&lt;/a&gt;是一名优秀的Swifter。&lt;br&gt;这是我第一次翻译，可能有翻译不到位的地方，如果有任何问题，欢迎反馈。学习学习再学习，加油💪！&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;&lt;img src=&quot;http://img.weidongfang.online/imgbed/coding-man-2.jpg&quot; alt=&quot;img&quot;&gt;&lt;/p&gt;
+&lt;p&gt;Julian Schiavo写道：我想用Set集合来保证我的Array中元素是唯一的，但是Set集合中每个元素都包含一个Date类型的变量，当两个不同元素仅仅是Date变量不同的时候，实际上Set中可以同时保存这两个元素，这就出现了重复元素。这种问题该怎么解决呢？&lt;/p&gt;
+    
+    </summary>
+    
+    
+      <category term="翻译" scheme="http://blog.weidongfang.online/categories/%E7%BF%BB%E8%AF%91/"/>
+    
+    
+  </entry>
+  
+  <entry>
+    <title>【笔记】RxSwift简介</title>
+    <link href="http://blog.weidongfang.online/posts/2019-10/31385.html"/>
+    <id>http://blog.weidongfang.online/posts/2019-10/31385.html</id>
+    <published>2019-10-16T07:22:35.000Z</published>
+    <updated>2020-05-30T15:04:28.000Z</updated>
+    
+    <summary type="html">
+    
+      &lt;p&gt;RxSwift是一个可以帮助我们简化异步编程的框架，它拓展了观察者模式，能够帮助你自由组合多个异步事件，而不需要去关心线程、同步、线程安全等问题、并发等问题。RxSwift属于函数响应式编程，它通过构建函数操作数据序列，然后对这些序列做出响应的编程方式。&lt;/p&gt;
+    
+    </summary>
+    
+    
+      <category term="Swift" scheme="http://blog.weidongfang.online/categories/Swift/"/>
+    
+    
+  </entry>
+  
+  <entry>
+    <title>【算法】Leetcode精选-持续更新中</title>
+    <link href="http://blog.weidongfang.online/posts/2019-09/56414.html"/>
+    <id>http://blog.weidongfang.online/posts/2019-09/56414.html</id>
+    <published>2019-09-10T02:09:23.000Z</published>
+    <updated>2020-05-30T15:04:28.000Z</updated>
+    
+    <summary type="html">
+    
+      &lt;p&gt;本篇记录leetcode上优秀的算法题目，持续更新中…&lt;/p&gt;
+    
+    </summary>
+    
+    
+      <category term="算法" scheme="http://blog.weidongfang.online/categories/%E7%AE%97%E6%B3%95/"/>
+    
+    
+  </entry>
+  
+  <entry>
+    <title>【算法】Swift实现线程安全的栈和队列</title>
+    <link href="http://blog.weidongfang.online/posts/2019-08/43383.html"/>
+    <id>http://blog.weidongfang.online/posts/2019-08/43383.html</id>
+    <published>2019-08-22T10:16:35.000Z</published>
+    <updated>2020-09-23T07:29:47.000Z</updated>
+    
+    <summary type="html">
+    
+      &lt;h1 id=&quot;实现一个线程安全的栈&quot;&gt;&lt;a href=&quot;#实现一个线程安全的栈&quot; class=&quot;headerlink&quot; title=&quot;实现一个线程安全的栈&quot;&gt;&lt;/a&gt;实现一个线程安全的栈&lt;/h1&gt;&lt;p&gt;这里使用数组来存储栈的数据。不足之处在于本例中的Stack可以无限扩容，更好的是初始化时候指定一个最大容量，防止不断扩容申请内存导致内存不够的问题。这里通过信号量保证线程安全。&lt;/p&gt;
+    
+    </summary>
+    
+    
+      <category term="算法" scheme="http://blog.weidongfang.online/categories/%E7%AE%97%E6%B3%95/"/>
     
     
   </entry>
